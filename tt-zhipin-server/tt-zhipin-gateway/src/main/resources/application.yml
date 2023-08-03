@@ -1,0 +1,35 @@
+server:
+  port: 80
+spring:
+  application:
+    name: tt-zhipin-gateway
+  cloud:
+    nacos:
+      server-addr: 106.13.7.251:8848
+      config:
+        server-addr: 106.13.7.251:8848
+        file-extension: yaml
+
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: tt-zhipin-admin_router
+          uri: lb://tt-zhipin-admin
+          predicates:
+            - Path=/admin/**
+          filters:
+            - StripPrefix=1
+
+        - id: test_router
+          uri: https://github.com/whoiszxl
+          predicates:
+            - Path=/test
