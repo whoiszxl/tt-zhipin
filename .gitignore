@@ -1,24 +1,90 @@
-# Compiled class file
-*.class
+# Spring Boot / Spring Cloud
+target/
+bin/
+build/
+.gradle/
+mvnw
+mvnw.cmd
+.idea/
+.settings/
+*.iml
+*.ipr
+*.iws
 
-# Log file
+# Vue.js
+/node_modules/
+/dist/
+npm-debug.log*
+yarn-error.log*
+
+# React Native
+node_modules/
+android/build/
+android/app/build/
+ios/Pods/
+ios/build/
+
+# IDE
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.idea/
+*.iml
+*.ipr
+*.iws
+
+# macOS
+.DS_Store
+
+# Logs
+logs/
 *.log
 
-# BlueJ files
-*.ctxt
-
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
+# Compiled binary files
+*.class
 *.jar
 *.war
-*.nar
-*.ear
-*.zip
-*.tar.gz
-*.rar
+*.dll
+*.exe
+*.o
+*.so
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-replay_pid*
+# Package files
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Gradle Wrapper
+!gradle/wrapper/gradle-wrapper.jar
+
+# Maven Wrapper
+!.mvn/wrapper/maven-wrapper.jar
+
+# .idea files (used by IntelliJ IDEA)
+*.iws
+*.iml
+*.ipr
+
+# Compiled files
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Eclipse
+.project
+.classpath
+.settings/
