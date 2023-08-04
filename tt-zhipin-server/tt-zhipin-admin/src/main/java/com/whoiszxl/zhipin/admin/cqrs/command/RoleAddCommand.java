@@ -1,5 +1,6 @@
 package com.whoiszxl.zhipin.admin.cqrs.command;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -16,6 +17,7 @@ import java.util.List;
  * @since 2023-03-02
  */
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Schema(description = "角色添加命令")
 public class RoleAddCommand implements Serializable {
 

@@ -15,8 +15,8 @@ import java.io.Serializable;
  * @since 2023-03-02
  */
 @Data
-@Schema(description = "系统菜单更新命令")
 @JsonIgnoreProperties(ignoreUnknown = true)
+@Schema(description = "系统菜单更新命令")
 public class MenuUpdateCommand implements Serializable {
 
     @Schema(description = "主键")

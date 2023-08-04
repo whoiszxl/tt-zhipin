@@ -1,5 +1,6 @@
 package com.whoiszxl.zhipin.admin.cqrs.command;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -11,6 +12,7 @@ import java.util.List;
  * @author whoiszxl
  */
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Schema(description = "管理员角色修改命令")
 public class AdminRoleUpdateCommand {
 
