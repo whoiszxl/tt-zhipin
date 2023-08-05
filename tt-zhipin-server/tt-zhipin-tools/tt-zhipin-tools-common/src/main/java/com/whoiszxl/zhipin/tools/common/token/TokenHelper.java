@@ -1,5 +1,6 @@
 package com.whoiszxl.zhipin.tools.common.token;
 
+import com.whoiszxl.zhipin.tools.common.token.entity.AppLoginMember;
 import com.whoiszxl.zhipin.tools.common.token.entity.LoginMember;
 
 /**
@@ -13,6 +14,19 @@ public interface TokenHelper {
      * @param loginMember 登录用户信息
      */
     void login(LoginMember loginMember);
+
+    /**
+     * C端用户登录
+     * @param appLoginMember 登录用户信息
+     */
+    void appLogin(AppLoginMember appLoginMember);
+
+    /**
+     * 获取当前登录APP用户信息
+     * @return 登录APP用户信息
+     */
+    AppLoginMember getAppLoginMember();
+
 
     /**
      * 获取当前登录用户信息

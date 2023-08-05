@@ -45,7 +45,7 @@ public class OnlineController {
         loginMemberList = tokenKeyList.stream().map(tokenKey -> {
             String token = StrUtil.subAfter(tokenKey, ":", true);
             SaSession saSession = StpUtil.getTokenSessionByToken(token);
-            return saSession.get(LoginConstants.LOGIN_MEMBER_KEY, new LoginMember());
+            return saSession.get(LoginConstants.LOGIN_ADMIN_MEMBER_KEY, new LoginMember());
         }).collect(Collectors.toList());
 
         CollUtil.sort(loginMemberList, Comparator.comparing(LoginMember::getLastLoginTime).reversed());

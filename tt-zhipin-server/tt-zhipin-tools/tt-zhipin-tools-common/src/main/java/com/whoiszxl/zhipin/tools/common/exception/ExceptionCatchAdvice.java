@@ -28,15 +28,17 @@ public class ExceptionCatchAdvice {
         return ResponseResult.buildError(e.getMessage());
     }
 
+    @ResponseBody
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseResult<String> catchHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException e, HttpServletRequest request) {
         return ResponseResult.buildError(HttpStatus.METHOD_NOT_ALLOWED.value(), e.getMessage());
     }
 
+    @ResponseBody
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(ServiceException.class)
-    public ResponseResult<String> catchServiceException(HttpRequestMethodNotSupportedException e, HttpServletRequest request) {
+    public ResponseResult<String> catchServiceException(ServiceException e, HttpServletRequest request) {
         return ResponseResult.buildError(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
     }
 }

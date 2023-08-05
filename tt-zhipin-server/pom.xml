@@ -12,6 +12,11 @@
         <module>tt-zhipin-admin</module>
         <module>tt-zhipin-tools</module>
         <module>tt-zhipin-gateway</module>
+        <module>tt-zhipin-im</module>
+        <module>tt-zhipin-member</module>
+        <module>tt-zhipin-discovery</module>
+        <module>tt-zhipin-job</module>
+        <module>tt-zhipin-file</module>
     </modules>
 
     <name>${project.artifactId}</name>

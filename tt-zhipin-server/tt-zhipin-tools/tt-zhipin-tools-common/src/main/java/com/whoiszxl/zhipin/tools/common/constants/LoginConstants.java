@@ -6,6 +6,8 @@ package com.whoiszxl.zhipin.tools.common.constants;
  */
 public interface LoginConstants {
 
-    String LOGIN_MEMBER_KEY = "login_member_key";
+    String LOGIN_ADMIN_MEMBER_KEY = "login_admin_member_key";
+
+    String LOGIN_APP_MEMBER_KEY = "login_app_member_key";
 
 }

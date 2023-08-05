@@ -5,6 +5,7 @@ import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.extra.servlet.ServletUtil;
 import com.whoiszxl.zhipin.tools.common.constants.LoginConstants;
 import com.whoiszxl.zhipin.tools.common.token.TokenHelper;
+import com.whoiszxl.zhipin.tools.common.token.entity.AppLoginMember;
 import com.whoiszxl.zhipin.tools.common.token.entity.LoginMember;
 import com.whoiszxl.zhipin.tools.common.utils.IpUtils;
 import com.whoiszxl.zhipin.tools.common.utils.MyServletUtil;
@@ -37,26 +38,55 @@ public class SaTokenHelper implements TokenHelper {
 
         StpUtil.login(loginMember.getId());
         loginMember.setToken(StpUtil.getTokenValue());
-        SaHolder.getStorage().set(LoginConstants.LOGIN_MEMBER_KEY, loginMember);
-        StpUtil.getTokenSession().set(LoginConstants.LOGIN_MEMBER_KEY, loginMember);
+        SaHolder.getStorage().set(LoginConstants.LOGIN_ADMIN_MEMBER_KEY, loginMember);
+        StpUtil.getTokenSession().set(LoginConstants.LOGIN_ADMIN_MEMBER_KEY, loginMember);
+    }
+
+    @Override
+    public void appLogin(AppLoginMember appLoginMember) {
+        if(appLoginMember == null) {
+            return;
+        }
+
+        HttpServletRequest request = MyServletUtil.getRequest();
+        appLoginMember.setIp(ServletUtil.getClientIP(request));
+        appLoginMember.setLocation(IpUtils.getCityInfo(appLoginMember.getIp()));
+        appLoginMember.setBrowser(MyServletUtil.getBrowser(request));
+
+        StpUtil.login(appLoginMember.getId());
+        appLoginMember.setToken(StpUtil.getTokenValue());
+        SaHolder.getStorage().set(LoginConstants.LOGIN_APP_MEMBER_KEY, appLoginMember);
+        StpUtil.getTokenSession().set(LoginConstants.LOGIN_APP_MEMBER_KEY, appLoginMember);
     }
 
     @Override
     public LoginMember getLoginMember() {
-        LoginMember loginMember = (LoginMember) SaHolder.getStorage().get(LoginConstants.LOGIN_MEMBER_KEY);
+        LoginMember loginMember = (LoginMember) SaHolder.getStorage().get(LoginConstants.LOGIN_ADMIN_MEMBER_KEY);
         if(loginMember != null) {
             return loginMember;
         }
-        loginMember = (LoginMember) StpUtil.getTokenSession().get(LoginConstants.LOGIN_MEMBER_KEY);
-        SaHolder.getStorage().set(LoginConstants.LOGIN_MEMBER_KEY, loginMember);
+        loginMember = (LoginMember) StpUtil.getTokenSession().get(LoginConstants.LOGIN_ADMIN_MEMBER_KEY);
+        SaHolder.getStorage().set(LoginConstants.LOGIN_ADMIN_MEMBER_KEY, loginMember);
 
         return loginMember;
     }
 
     @Override
+    public AppLoginMember getAppLoginMember() {
+        AppLoginMember appLoginMember = (AppLoginMember) SaHolder.getStorage().get(LoginConstants.LOGIN_APP_MEMBER_KEY);
+        if(appLoginMember != null) {
+            return appLoginMember;
+        }
+        appLoginMember = (AppLoginMember) StpUtil.getTokenSession().get(LoginConstants.LOGIN_APP_MEMBER_KEY);
+        SaHolder.getStorage().set(LoginConstants.LOGIN_APP_MEMBER_KEY, appLoginMember);
+
+        return appLoginMember;
+    }
+
+    @Override
     public void updateLoginMember(LoginMember loginMember) {
-        SaHolder.getStorage().set(LoginConstants.LOGIN_MEMBER_KEY, loginMember);
-        StpUtil.getTokenSession().set(LoginConstants.LOGIN_MEMBER_KEY, loginMember);
+        SaHolder.getStorage().set(LoginConstants.LOGIN_ADMIN_MEMBER_KEY, loginMember);
+        StpUtil.getTokenSession().set(LoginConstants.LOGIN_ADMIN_MEMBER_KEY, loginMember);
     }
 
     @Override
