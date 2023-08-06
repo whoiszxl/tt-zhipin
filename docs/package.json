@@ -1,0 +1,37 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "node collect-article-data.mjs && vitepress dev docs",
+    "preview": "node collect-article-data.mjs && vitepress preview docs",
+    "build": "node collect-article-data.mjs && vitepress build docs"
+  },
+  "devDependencies": {
+    "@arco-design/web-vue": "^2.43.1",
+    "flexsearch": "^0.7.31",
+    "markdown-it": "^13.0.1",
+    "mermaid": "^9.4.0",
+    "unplugin-vue-components": "^0.23.0",
+    "vite": "^4.1.4",
+    "vitepress": "1.0.0-alpha.44",
+    "vitepress-plugin-mermaid": "2.0.8",
+    "vitepress-plugin-search": "1.0.4-alpha.19",
+    "vue": "^3.2.47"
+  },
+  "dependencies": {
+    "@antv/g2plot": "^2.4.25",
+    "axios": "^1.3.4",
+    "blueimp-md5": "^2.19.0",
+    "dayjs": "^1.11.7",
+    "fast-glob": "^3.2.12",
+    "gitalk": "^1.8.0",
+    "gray-matter": "^4.0.3",
+    "jquery": "^3.6.3"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "@algolia/client-search"
+      ]
+    }
+  }
+}
