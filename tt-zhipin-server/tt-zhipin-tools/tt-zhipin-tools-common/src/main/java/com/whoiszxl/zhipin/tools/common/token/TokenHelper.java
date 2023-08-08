@@ -41,6 +41,12 @@ public interface TokenHelper {
     void updateLoginMember(LoginMember loginMember);
 
     /**
+     * 更新APP登录用户信息
+     * @param appLoginMember 登录APP用户信息
+     */
+    void updateAppLoginMember(AppLoginMember appLoginMember);
+
+    /**
      * 获取当前登录用户id
      * @return 用户id
      */

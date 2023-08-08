@@ -90,6 +90,12 @@ public class SaTokenHelper implements TokenHelper {
     }
 
     @Override
+    public void updateAppLoginMember(AppLoginMember appLoginMember) {
+        SaHolder.getStorage().set(LoginConstants.LOGIN_APP_MEMBER_KEY, appLoginMember);
+        StpUtil.getTokenSession().set(LoginConstants.LOGIN_APP_MEMBER_KEY, appLoginMember);
+    }
+
+    @Override
     public Long getMemberId() {
         return getLoginMember().getId();
     }

@@ -108,7 +108,6 @@ public class LoginServiceImpl implements ILoginService {
             HttpServletRequest request = MyServletUtil.getRequest();
             member.setIp(ServletUtil.getClientIP(request));
             member.setCity(IpUtils.getCityInfo(member.getIp()));
-            member.setIsInit(FlagEnum.FALSE.getCode());
             memberService.save(member);
         }
 

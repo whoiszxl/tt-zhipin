@@ -5,6 +5,7 @@ import com.whoiszxl.zhipin.tools.common.exception.custom.ServiceException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -39,6 +40,14 @@ public class ExceptionCatchAdvice {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(ServiceException.class)
     public ResponseResult<String> catchServiceException(ServiceException e, HttpServletRequest request) {
+        return ResponseResult.buildError(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
+    }
+
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseResult<String> catchMethodArgumentNotValidException(MethodArgumentNotValidException e, HttpServletRequest request) {
         return ResponseResult.buildError(HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage());
     }
 }
