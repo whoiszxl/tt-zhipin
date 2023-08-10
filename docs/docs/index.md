@@ -14,7 +14,7 @@ hero:
   actions:
     - theme: brand
       text: 项目文档 💫
-      link: /tt-zhipin/01-快速开始/01-tt-zhipin招聘项目架构设计
+      link: /tt-zhipin/01-快速开始/01-招聘项目架构设计
     - theme: alt
       text: GitHub地址 🤖
       link: https://github.com/whoiszxl/tt-zhipin
