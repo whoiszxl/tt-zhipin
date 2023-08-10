@@ -1,8 +1,14 @@
 package com.whoiszxl.zhipin.member.controller;
 
 
+import com.whoiszxl.zhipin.member.cqrs.command.ToutouSubmitCommand;
+import com.whoiszxl.zhipin.member.service.IMemberToutouService;
+import com.whoiszxl.zhipin.tools.common.entity.ResponseResult;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -21,5 +27,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/member-toutou")
 public class MemberToutouApiController {
 
+    private final IMemberToutouService memberToutouService;
+
+    @Operation(summary = "注册头头", description = "提交公司名和营业执照，审核通过后成为头头")
+    @PostMapping("/submit")
+    public ResponseResult<Boolean> toutouSubmit(@RequestBody ToutouSubmitCommand toutouSubmitCommand) {
+        memberToutouService.toutouSubmit(toutouSubmitCommand);
+        return ResponseResult.buildSuccess();
+    }
 }
 
