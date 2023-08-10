@@ -308,7 +308,6 @@
 import {getCurrentInstance, reactive, ref, toRefs} from 'vue';
 import {useI18n} from 'vue-i18n';
 import useLoading from '@/hooks/loading';
-import {PolicyRecord} from '@/api/list';
 import {
   addRole,
   getRole,
@@ -324,7 +323,6 @@ import {listRoleDict} from "@/api/system/role";
 import {DictResponseState} from "@/store/modules/dict/types";
 import {TreeNodeData} from "@arco-design/web-vue";
 import {treeMenu} from "@/api/system/menu";
-import {AdminResponse, switchAdminStatus} from "@/api/system/admin";
 
 const showQuery = ref(true);
 
@@ -332,7 +330,6 @@ type SizeProps = 'mini' | 'small' | 'medium' | 'large';
 const { proxy } = getCurrentInstance() as any;
 const { loading, setLoading } = useLoading(true);
 const { t } = useI18n();
-const renderData = ref<PolicyRecord[]>([]);
 
 const size = ref<SizeProps>('medium');
 const checkedIds = ref<Array<number>>([]);

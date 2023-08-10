@@ -451,7 +451,6 @@
   import {getCurrentInstance, reactive, ref, toRefs} from 'vue';
   import {useI18n} from 'vue-i18n';
   import useLoading from '@/hooks/loading';
-  import {PolicyRecord} from '@/api/list';
   import {
     addAdmin,
     getAdmin,
@@ -477,7 +476,6 @@
   const { proxy } = getCurrentInstance() as any;
   const { loading, setLoading } = useLoading(true);
   const { t } = useI18n();
-  const renderData = ref<PolicyRecord[]>([]);
 
   const size = ref<SizeProps>('medium');
   const checkedIds = ref<Array<number>>([]);
