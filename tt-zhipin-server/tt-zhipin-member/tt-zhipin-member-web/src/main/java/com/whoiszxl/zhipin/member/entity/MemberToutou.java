@@ -33,18 +33,6 @@ public class MemberToutou implements Serializable {
     @Schema(description = "接收简历邮箱(选填)")
     private String resumeEmail;
 
-    @Schema(description = "公司名称")
-    private String company;
-
-    @Schema(description = "公司规模")
-    private String companyScale;
-
-    @Schema(description = "融资阶段")
-    private String financingStage;
-
-    @Schema(description = "所属行业")
-    private String industry;
-
     @Schema(description = "营业执照")
     private String businessLicense;
 

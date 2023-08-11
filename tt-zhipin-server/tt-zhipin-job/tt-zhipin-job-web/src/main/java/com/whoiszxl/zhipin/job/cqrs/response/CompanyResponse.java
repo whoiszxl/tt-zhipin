@@ -42,6 +42,15 @@ public class CompanyResponse implements Serializable {
     @Schema(description = "公司描述")
     private String companyDescription;
 
+    @Schema(description = "公司规模")
+    private String companyScale;
+
+    @Schema(description = "融资阶段")
+    private String financingStage;
+
+    @Schema(description = "所属行业")
+    private String industry;
+
     @Schema(description = "上班时间")
     private LocalDateTime workDateStart;
 

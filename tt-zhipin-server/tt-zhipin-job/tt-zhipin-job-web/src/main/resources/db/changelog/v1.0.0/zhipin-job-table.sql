@@ -6,6 +6,7 @@
 DROP TABLE IF EXISTS `jms_job`;
 CREATE TABLE `jms_job` (
   `id` bigint(11) NOT NULL COMMENT '主键ID',
+  `member_info` json DEFAULT NULL COMMENT '职位发布人基础信息(字段冗余,避免跨服务查询): 头像|岗位|姓名',
   `member_id` bigint(11) NOT NULL COMMENT '职位发布人ID',
   `company_id` bigint(11) NOT NULL COMMENT '职位所属公司ID',
   `job_name` varchar(32) NOT NULL COMMENT '职位名称',
@@ -43,6 +44,9 @@ CREATE TABLE `jms_company` (
   `company_abbr_name` varchar(64) NOT NULL COMMENT '公司缩略名',
   `company_logo` varchar(256) DEFAULT '' COMMENT '公司LOGO',
   `company_description` text COMMENT '公司描述',
+  `company_scale` varchar(64) NOT NULL DEFAULT '' COMMENT '公司规模',
+  `financing_stage` varchar(64) NOT NULL DEFAULT '' COMMENT '融资阶段',
+  `industry` varchar(16) NOT NULL DEFAULT '' COMMENT '所属行业',
   `work_date_start` datetime DEFAULT NULL COMMENT '上班时间',
   `work_date_end` datetime DEFAULT NULL COMMENT '下班时间',
   `rest_way` tinyint(2) DEFAULT '1' COMMENT '休息时间: 1-双休 2-排班轮休',

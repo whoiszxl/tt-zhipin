@@ -30,6 +30,9 @@ public class JobResponse implements Serializable {
     @Schema(description = "职位发布人ID")
     private Long memberId;
 
+    @Schema(description = "职位发布人基础信息(字段冗余,避免跨服务查询): 头像|岗位|姓名")
+    private String memberInfo;
+
     @Schema(description = "职位所属公司ID")
     private Long companyId;
 

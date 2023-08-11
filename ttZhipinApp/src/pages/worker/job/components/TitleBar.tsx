@@ -61,11 +61,17 @@ export default ({ tab, onTabChanged, onAddButtonPress }: Props) => {
             <View style={{flexDirection: 'row', flex: 1, justifyContent: 'flex-end', paddingRight: 10, backgroundColor: 'white'}}>
                     {/** 标题栏-搜索按钮 */}
                     <TouchableOpacity activeOpacity={1} style={styles.searchButton}>
-                        <Text>长沙</Text>
+                        <View style={styles.threeLineTag}>
+                            <Text style={styles.threeLineTagText}>长沙</Text>
+                            <Icon style={styles.clickIcon} name="play" />
+                        </View>
                     </TouchableOpacity>
 
                     <TouchableOpacity activeOpacity={1} style={styles.searchButton}>
-                        <Text>筛选</Text>
+                        <View style={styles.threeLineTag}>
+                            <Text style={styles.threeLineTagText}>筛选</Text>
+                            <Icon style={styles.clickIcon} name="play" />
+                        </View>
                     </TouchableOpacity>
                 </View>
 
@@ -120,7 +126,7 @@ const styles = StyleSheet.create({
 
     tabText: {
         fontSize: 12,
-        color: '#999',
+        color: CommonColor.fontColor,
     },
 
     tabTextSelected: {
@@ -128,4 +134,25 @@ const styles = StyleSheet.create({
         color: '#333',
         fontWeight: 'bold'
     },
+
+    threeLineTag: {
+        backgroundColor: CommonColor.tagBg,
+        borderRadius: 3,
+        paddingVertical: 4,
+        paddingHorizontal: 10,
+        marginRight: 5,
+        flexDirection: "row",
+        justifyContent: "center"
+    },
+
+    threeLineTagText: {
+        color: CommonColor.deepGrey,
+        fontSize: 10
+    },
+
+    clickIcon: {
+        color: CommonColor.normalGrey,
+        fontSize: 8,
+        transform: [{ rotate: '90deg' }],
+    }
 });

@@ -2,7 +2,6 @@ import { METHODS, PARAM_TYPE } from "./methods";
 
 const apis = {
 
-
     recommendList: {url: '/job/api/job/recommend/list', method: METHODS.GET}, //获取推荐职位列表
 
     /** 会员相关接口 */

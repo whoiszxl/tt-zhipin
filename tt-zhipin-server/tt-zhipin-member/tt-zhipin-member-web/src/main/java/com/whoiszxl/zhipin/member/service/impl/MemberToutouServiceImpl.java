@@ -40,7 +40,7 @@ public class MemberToutouServiceImpl extends ServiceImpl<MemberToutouMapper, Mem
 
         MemberToutou toutou = new MemberToutou();
         toutou.setMemberId(memberId);
-        toutou.setCompany(toutouSubmitCommand.getCompany());
+        //toutou.setCompany(toutouSubmitCommand.getCompany());
         toutou.setBusinessLicense(toutouSubmitCommand.getBusinessLicense());
         memberToutouMapper.insert(toutou);
     }

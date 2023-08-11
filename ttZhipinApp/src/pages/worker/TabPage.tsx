@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import {View, Text, StyleSheet, TouchableOpacity, StatusBar} from "react-native";
 
-import Icon from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { launchImageLibrary, ImagePickerResponse } from "react-native-image-picker";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -128,7 +127,9 @@ const styles = StyleSheet.create({
         height: 52,
         flexDirection: 'row',
         alignItems: "center",
-        backgroundColor: "white"
+        backgroundColor: "white",
+        borderTopWidth: 0.5,
+        borderTopColor: CommonColor.tagBg
     },
 
     myTabItem: {
