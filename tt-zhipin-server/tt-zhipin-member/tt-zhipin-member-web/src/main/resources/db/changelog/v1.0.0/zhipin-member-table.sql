@@ -34,7 +34,6 @@ CREATE TABLE `ums_member`(
     `created_at`                        datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at`                        datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
 	PRIMARY KEY (`id`),
-	UNIQUE KEY `idx_full_name` (`full_name`),
 	UNIQUE KEY `idx_phone` (`phone`)
 ) ENGINE = InnoDB CHARSET = utf8mb4 COMMENT '会员表';
 
@@ -71,7 +70,6 @@ CREATE TABLE `ums_member_toutou`(
     `created_at`                        datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at`                        datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
 	PRIMARY KEY (`member_id`),
-	UNIQUE KEY `idx_company` (`company`),
 	UNIQUE KEY `idx_phone` (`phone`)
 ) ENGINE = InnoDB CHARSET = utf8mb4 COMMENT '头头表';
 

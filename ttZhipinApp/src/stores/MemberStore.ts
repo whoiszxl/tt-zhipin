@@ -2,19 +2,32 @@ import ApiService from "../apis/ApiService";
 import { flow } from "mobx";
 import StorageUtil from "../utils/StorageUtil";
 import { CommonConstant } from "../common/CommonConstant";
+import { View, Button, Alert, StyleSheet } from 'react-native';
+
 
 class MemberStore {
 
     token : any;
+
+    loginToken: any;
     
-    requestLogin = flow(function* (this: MemberStore, username: string, password: string, callback: (success: boolean) => void) {
+    requestSmsLogin = flow(function* (this: MemberStore, phone: string, smsCode: string, uuid: string, callback: (success: boolean) => void) {
         try {
             const params = {
-                username: username,
-                password: password,
+                phone: phone,
+                smsCode: smsCode,
+                uuid: uuid
             };
-            const { data } = yield ApiService.request('login', params);
+
+            const { data } = yield ApiService.request('smsLogin', params);
             if (data) {
+                if(data.code !== 0) {
+                    this.token = null;
+                    callback?.(false);
+                    Alert.alert(data.message);
+                    return;
+                }
+
                 this.token = data.data;
                 StorageUtil.setItem(CommonConstant.TOKEN, data.data);
                 callback?.(true);
@@ -23,8 +36,28 @@ class MemberStore {
                 callback?.(false);
             }
         } catch (error) {
-            console.log(error);
             this.token = null;
+            callback?.(false);
+        }
+    });
+
+
+    requestSendSmsCaptcha = flow(function* (this: MemberStore, phone: string, callback: (success: boolean) => void) {
+        try {
+            const params = { phone: phone };
+            
+            const { data } = yield ApiService.request('sendSmsCaptcha', params);
+            if (data) {
+                this.loginToken = data.data;
+                StorageUtil.setItem(CommonConstant.LOGIN_TOKEN, data.data);
+                callback?.(true);
+            } else {
+                this.loginToken = null;
+                callback?.(false);
+            }
+        } catch (error) {
+            console.log(error);
+            this.loginToken = null;
             callback?.(false);
         }
     });

@@ -16,7 +16,7 @@ export default () => {
   //两秒后跳转到登录页面
   useEffect(() => {
     setTimeout(() => {
-      navigation.replace('TabPage');
+      navigation.replace('LoginPage');
     }, 1000);
   }, []);
 

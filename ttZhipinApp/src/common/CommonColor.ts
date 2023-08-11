@@ -7,6 +7,7 @@ export const CommonColor = {
     normalGrey: '#999999',
     normalBg: '#eeeeee',
     line: '#e5e5e5',
-    transparentGreyBg: 'rgba(169, 169, 169, 0.4)'
+    transparentGreyBg: 'rgba(169, 169, 169, 0.4)',
+    wxColor: '#07c160'
 
 };

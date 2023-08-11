@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import SplashPage from './src/pages/splash/SplashPage';
 import LoginPage from './src/pages/login/LoginPage';
+import CheckSmsCaptchaPage from './src/pages/login/CheckSmsCaptchaPage';
 import TabPage from './src/pages/worker/TabPage';
 
 import JobPage from './src/pages/worker/job/JobPage';
@@ -33,6 +34,7 @@ function App(): JSX.Element {
         <Stack.Navigator initialRouteName='SplashPage'>
           <Stack.Screen options={{headerShown: false}} name='SplashPage' component={SplashPage}/>
           <Stack.Screen options={{headerShown: false}} name='LoginPage' component={LoginPage}/>
+          <Stack.Screen options={{headerShown: false}} name='CheckSmsCaptchaPage' component={CheckSmsCaptchaPage}/>
           <Stack.Screen options={{headerShown: false}} name='TabPage' component={TabPage}/>
           <Stack.Screen options={{headerShown: false}} name='JobPage' component={JobPage}/>
 
