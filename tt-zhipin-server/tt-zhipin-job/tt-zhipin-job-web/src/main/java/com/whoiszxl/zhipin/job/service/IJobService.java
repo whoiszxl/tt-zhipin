@@ -23,4 +23,11 @@ public interface IJobService extends IService<Job> {
      * @return 最新的职位列表
      */
     PageResponse<JobResponse> latestList(JobQuery query);
+
+    /**
+     * 通过职位ID获取职位详情
+     * @param jobId 职位ID
+     * @return职位详情
+     */
+    JobResponse jobDetail(Long jobId);
 }

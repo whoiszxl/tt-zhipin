@@ -13,11 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -60,5 +56,11 @@ public class JobController {
         return ResponseResult.buildSuccess(pageResponse);
     }
 
+    @Operation(summary = "获取职位详情", description = "通过职位ID获取职位详情")
+    @GetMapping("/{jobId}")
+    public ResponseResult<JobResponse> jobDetail(@PathVariable Long jobId) {
+        JobResponse pageResponse = jobService.jobDetail(jobId);
+        return ResponseResult.buildSuccess(pageResponse);
+    }
 }
 

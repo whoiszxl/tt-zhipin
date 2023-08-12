@@ -76,4 +76,13 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
         });
         return pageResponse;
     }
+
+    @Override
+    public JobResponse jobDetail(Long jobId) {
+        Job job = jobMapper.selectById(jobId);
+        Company company = companyService.getById(job.getCompanyId());
+        JobResponse jobResponse = BeanUtil.copyProperties(job, JobResponse.class);
+        jobResponse.setCompanyResponse(BeanUtil.copyProperties(company, CompanyResponse.class));
+        return jobResponse;
+    }
 }
