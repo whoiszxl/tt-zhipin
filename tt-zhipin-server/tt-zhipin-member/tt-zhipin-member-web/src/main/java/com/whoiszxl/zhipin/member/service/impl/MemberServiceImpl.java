@@ -1,5 +1,6 @@
 package com.whoiszxl.zhipin.member.service.impl;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjUtil;
 import com.whoiszxl.zhipin.member.cqrs.command.InitBaseInfoCommand;
@@ -13,6 +14,8 @@ import com.whoiszxl.zhipin.tools.common.token.entity.AppLoginMember;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -37,6 +40,24 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
 
         Member updateMember = new Member();
         updateMember.setId(appLoginMember.getId());
+
+        //姓名性别出生年月基本信息更新
+        if(ObjUtil.isNotNull(initBaseInfoCommand.getFullName())
+            && ObjUtil.isNotNull(initBaseInfoCommand.getGender())
+            && ObjUtil.isNotNull(initBaseInfoCommand.getBirthday())) {
+            appLoginMember.setFullName(initBaseInfoCommand.getFullName());
+            appLoginMember.setGender(Integer.valueOf(initBaseInfoCommand.getGender()));
+            appLoginMember.setBirthday(DateUtil.parseLocalDateTime(initBaseInfoCommand.getBirthday()));
+
+            updateMember.setFullName(initBaseInfoCommand.getFullName());
+            updateMember.setGender(Integer.valueOf(initBaseInfoCommand.getGender()));
+            updateMember.setBirthday(DateUtil.parseLocalDateTime(initBaseInfoCommand.getBirthday()));
+
+            tokenHelper.updateAppLoginMember(appLoginMember);
+            this.updateById(updateMember);
+            return;
+        }
+
 
         //身份状态和求职状态更新
         if(ObjUtil.isNotNull(initBaseInfoCommand.getIdentityStatus())

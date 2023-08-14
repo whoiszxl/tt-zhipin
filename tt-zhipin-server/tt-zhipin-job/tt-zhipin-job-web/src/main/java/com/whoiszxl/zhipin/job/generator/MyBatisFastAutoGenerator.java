@@ -35,7 +35,7 @@ public class MyBatisFastAutoGenerator {
     };
 
     private static final String[] DB_TABLES = new String[]{
-            "jms_company", "jms_job"
+            "jms_job_category"
     };
 
     private static final String DB_URL = "jdbc:mysql://106.13.7.251:3300/tt-zhipin?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true&rewriteBatchedStatements=true&autoReconnect=true&maxReconnects=10&failOverReadOnly=false";

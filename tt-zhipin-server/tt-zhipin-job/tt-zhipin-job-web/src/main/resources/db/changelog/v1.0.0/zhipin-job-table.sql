@@ -68,3 +68,19 @@ CREATE TABLE `jms_company` (
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='公司表';
+
+DROP TABLE IF EXISTS `jms_job_category`;
+CREATE TABLE `jms_job_category` (
+  `id`                        bigint(11) NOT NULL AUTO_INCREMENT COMMENT '职位分类id',
+  `name`                      varchar(64) DEFAULT NULL COMMENT '职位名称',
+  `parent_id`                 bigint(11) DEFAULT 0 COMMENT '父类目的主键',
+  `level`                     tinyint(1) DEFAULT NULL COMMENT '分类级别:1->1级; 2->2级 3->3级',
+  `status`                    tinyint(1) DEFAULT NULL COMMENT '是否显示[0-不显示,1显示]',
+  `sort`                      int(11) DEFAULT NULL COMMENT '排序',
+  `version`                   bigint(11) unsigned NOT NULL DEFAULT '1' COMMENT '乐观锁',
+  `is_deleted`                tinyint(3) DEFAULT 0 COMMENT '逻辑删除 1: 已删除, 0: 未删除',
+  `created_at`                datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updated_at`                datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `parent_id` (`parent_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='职位三级分类表';
