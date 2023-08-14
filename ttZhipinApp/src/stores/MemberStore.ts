@@ -62,6 +62,43 @@ class MemberStore {
         }
     });
 
+
+    requestMemberInfo = flow(function* (this: MemberStore, callback: (data?: MemberInfoEntity) => void) {
+        try {
+            
+            const { data } = yield ApiService.request('memberInfo');
+            if (data) {
+                if(data.code === 0) {
+                    callback?.(data.data);
+                }
+            }
+        } catch (error) {
+            console.log(error);
+            this.loginToken = null;
+            callback?.(undefined);
+        }
+    });
+
+    initBaseInfo = flow(function* (this: MemberStore, name: string, gender: number, birthday: string, callback: (success: boolean) => void) {
+        try {
+            const params = {
+                fullName: name,
+                gender: gender,
+                birthday: birthday
+            };
+            const { data } = yield ApiService.request('initBaseInfo', params);
+            if (data) {
+                if(data.code === 0) {
+                    callback?.(true);
+                }
+            }
+        } catch (error) {
+            console.log(error);
+            this.loginToken = null;
+            callback?.(false);
+        }
+    });
+
 }
 
 export default new MemberStore();

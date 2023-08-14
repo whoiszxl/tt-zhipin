@@ -1,5 +1,6 @@
 export const CommonColor = {
     mainColor: '#0050c6',
+    transparentMainColor: 'rgba(0, 80, 198, 0.3)',
     tagBg: '#f2f2f2',
     greyButtonBg: '#f0f0f0',
     fontColor: '#333333',

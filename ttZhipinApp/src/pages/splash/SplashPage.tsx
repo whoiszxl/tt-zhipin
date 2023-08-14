@@ -6,6 +6,10 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 
 import icon_logo from '../../assets/images/logo_bg_transparent.png';
+import StorageUtil from "../../utils/StorageUtil";
+import { CommonConstant } from "../../common/CommonConstant";
+import { useLocalStore } from "mobx-react";
+import MemberStore from "../../stores/MemberStore";
 
 
 //闪屏页
@@ -13,10 +17,22 @@ export default () => {
 
   const navigation = useNavigation<StackNavigationProp<any>>();
 
-  //两秒后跳转到登录页面
+  //两秒后，判断是否登录，未登录跳转登录页面，已登录则需要判断是否已经初始化，未初始化进入初始化页面，已初始化进入APP主页
   useEffect(() => {
-    setTimeout(() => {
-      navigation.replace('LoginPage');
+    setTimeout( async () => {
+      MemberStore.requestMemberInfo((data?:MemberInfoEntity) => {
+        if(data) {
+          if(data.identityStatus === '' || data.workStatus === '' 
+            || data.highestQualification === '' || data.highestQualificationType === '' 
+            || data.fullName === '' || data.gender === '' || data.birthday === '') {
+              navigation.replace('InitMemberInfoPage', {memberInfo: data});
+            }else {
+              navigation.replace('TabPage');
+            }
+        }else {
+          navigation.replace('LoginPage');
+        }
+      });
     }, 1000);
   }, []);
 
