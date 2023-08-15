@@ -15,7 +15,7 @@ const apis = {
     logout: {url: '/member/api/member/logout', method: METHODS.POST}, //登出接口
 
     /** 文件上传相关接口 */
-    fileUpload: {url: '/file/file/upload', method: METHODS.POST}, //文件上传
+    fileUpload: {url: '/file/api/file/upload', method: METHODS.POST}, //文件上传
 
 }
 

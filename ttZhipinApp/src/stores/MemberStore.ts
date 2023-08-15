@@ -99,6 +99,82 @@ class MemberStore {
         }
     });
 
+    initIdentityInfo = flow(function* (this: MemberStore, selectedButtonIdentityStatus: number, workStatus: number, callback: (success: boolean) => void) {
+        try {
+            const params = {
+                identityStatus: selectedButtonIdentityStatus,
+                workStatus: workStatus
+            };
+            
+
+            const { data } = yield ApiService.request('initBaseInfo', params);
+            if (data) {
+                console.log("data", data, params);
+                if(data.code === 0) {
+                    callback?.(true);
+                }
+            }
+        } catch (error) {
+            console.log(error);
+            this.loginToken = null;
+            callback?.(false);
+        }
+    });
+
+
+    initQualificationInfo = flow(function* (this: MemberStore, highestQualification: number, highestQualificationType: number, callback: (success: boolean) => void) {
+        try {
+            const params = {
+                highestQualification: highestQualification,
+                highestQualificationType: highestQualificationType
+            };
+            const { data } = yield ApiService.request('initBaseInfo', params);
+            if (data) {
+                if(data.code === 0) {
+                    callback?.(true);
+                }
+            }
+        } catch (error) {
+            console.log(error);
+            this.loginToken = null;
+            callback?.(false);
+        }
+    });
+
+
+    initAvatar = flow(function* (this: MemberStore, avatar: string, callback: (success: boolean) => void) {
+        try {
+            const params = {
+                avatar: avatar
+            };
+            const { data } = yield ApiService.request('initBaseInfo', params);
+            if (data) {
+                if(data.code === 0) {
+                    callback?.(true);
+                }
+            }
+        } catch (error) {
+            console.log(error);
+            this.loginToken = null;
+            callback?.(false);
+        }
+    });
+
+
+    uploadAvatar = flow(function* (this: MemberStore, url: string, uri: string, fileName: string, fileType: string, callback: (url: string) => void) {
+        try {
+            const { data } = yield ApiService.upload(url, uri, fileName, fileType);
+            if (data) {
+                if(data.code === 0) {
+                    callback?.(data.data);
+                }
+            }
+        } catch (error) {
+            console.log(error);
+            this.loginToken = null;
+            callback?.('');
+        }
+    });
 }
 
 export default new MemberStore();

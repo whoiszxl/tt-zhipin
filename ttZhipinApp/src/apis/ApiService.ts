@@ -100,8 +100,7 @@ class ApiService {
 
 
   //发起文件上传的请求
-  upload(url: string, uri: string, fileName: string, fileType: string, onUploadProgress: any): Promise<AxiosResponse<any, any>> {
-
+  upload(url: string, uri: string, fileName: string, fileType: string): Promise<AxiosResponse<any, any>> {
     const formData = new FormData();
     formData.append('file', {
       uri: Platform.OS === 'android' ? uri : uri.replace('file://', ''),
@@ -112,9 +111,7 @@ class ApiService {
     return this.axiosInstance.post(url, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
-      },
-
-      onUploadProgress
+      }
     });
   } 
 

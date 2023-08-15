@@ -19,11 +19,11 @@ public class InitBaseInfoCommand {
     @Schema(description = "身份状态")
     private String identityStatus;
 
-    @Pattern(regexp = "[1234]", message = "求职状态参数无效")
+    @Pattern(regexp = "[12345678]", message = "求职状态参数无效")
     @Schema(description = "求职状态")
     private String workStatus;
 
-    @Pattern(regexp = "[1234567]", message = "最高学历参数无效")
+    @Pattern(regexp = "[123456]", message = "最高学历参数无效")
     @Schema(description = "最高学历")
     private String highestQualification;
 
@@ -41,7 +41,7 @@ public class InitBaseInfoCommand {
     @Schema(description = "生日")
     private String birthday;
 
-
-
+    @Schema(description = "头像")
+    private String avatar;
 
 }

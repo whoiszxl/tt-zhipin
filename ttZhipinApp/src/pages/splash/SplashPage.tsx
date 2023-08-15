@@ -24,7 +24,8 @@ export default () => {
         if(data) {
           if(data.identityStatus === '' || data.workStatus === '' 
             || data.highestQualification === '' || data.highestQualificationType === '' 
-            || data.fullName === '' || data.gender === '' || data.birthday === '') {
+            || data.fullName === '' || data.gender === '' || data.birthday === ''
+            || data.avatar === '') {
               navigation.replace('InitMemberInfoPage', {memberInfo: data});
             }else {
               navigation.replace('TabPage');

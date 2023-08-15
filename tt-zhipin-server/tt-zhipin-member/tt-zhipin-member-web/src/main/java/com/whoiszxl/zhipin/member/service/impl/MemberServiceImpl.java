@@ -87,6 +87,16 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
             return;
         }
 
+        if(ObjUtil.isNotNull(initBaseInfoCommand.getAvatar())) {
+            appLoginMember.setAvatar(initBaseInfoCommand.getAvatar());
+            updateMember.setAvatar(initBaseInfoCommand.getAvatar());
+
+            tokenHelper.updateAppLoginMember(appLoginMember);
+            this.updateById(updateMember);
+            return;
+        }
+
+
         ExceptionCatcher.catchServiceEx("更新错误");
     }
 }
