@@ -10,6 +10,8 @@ import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import { GestureResponderEvent } from 'react-native';
 import { CommonColor } from '../../../common/CommonColor';
 import { calculateDistance } from '../../../utils/DistanceUtil';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 
 
@@ -20,6 +22,7 @@ const {width:SCREEN_WIDTH} = Dimensions.get('window');
 export default observer(() => {
   const insets = useSafeAreaInsets();
 
+  const navigation = useNavigation<StackNavigationProp<any>>();
 
   const store = useLocalStore(() => new HomeStore());
 
@@ -178,7 +181,11 @@ export default observer(() => {
 
       return (
         <>
-          <TouchableOpacity activeOpacity={1} style={styles.item} key={index}>
+          <TouchableOpacity onPress={() => {
+            //跳转到职位详情页
+            navigation.push('JobDetailPage', {id: item.id});
+
+          }} activeOpacity={1} style={styles.item} key={index}>
             <View style={styles.root}>
 
               {/* 职位名与薪资范围 */}
@@ -233,7 +240,6 @@ export default observer(() => {
   
       );
     }
-
 
   const renderRecommend = () => {
     return (

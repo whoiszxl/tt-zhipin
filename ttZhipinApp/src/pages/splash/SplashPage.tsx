@@ -21,7 +21,6 @@ export default () => {
   useEffect(() => {
     setTimeout( async () => {
       MemberStore.requestMemberInfo((data?:MemberInfoEntity) => {
-        console.log(data);
         if(data) {
           if(data.identityStatus === '' || data.workStatus === '' 
             || data.highestQualification === '' || data.highestQualificationType === '' 

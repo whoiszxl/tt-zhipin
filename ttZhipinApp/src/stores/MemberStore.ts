@@ -111,7 +111,6 @@ class MemberStore {
 
             const { data } = yield ApiService.request('initBaseInfo', params);
             if (data) {
-                console.log("data", data, params);
                 if(data.code === 0) {
                     callback?.(true);
                 }

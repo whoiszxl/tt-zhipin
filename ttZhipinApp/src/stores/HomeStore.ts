@@ -1,4 +1,4 @@
-import { action, observable } from "mobx";
+import { action, flow, observable } from "mobx";
 import ApiService from "../apis/ApiService";
 
 const SIZE = 10;
@@ -60,4 +60,54 @@ export default class HomeStore {
 
         
     }
+
+    //@ts-ignore
+    @observable jobDetail: JobEntity = {};
+
+    //@ts-ignore
+    @observable memberInfo: any = {};
+
+    //@ts-ignore
+    @observable detailRefreshing: boolean = false;
+
+
+    requestDetail = async (id:string) => {
+        
+        if(this.detailRefreshing) {
+            return;
+        }
+
+        try{
+            this.detailRefreshing = true;
+
+            const { data } = await ApiService.request('jobDetail', id);
+            
+            this.jobDetail = data.data;
+            this.memberInfo = JSON.parse(this.jobDetail.memberInfo);
+            this.detailRefreshing = false;
+        }catch(error) {
+            
+        }finally{
+            this.detailRefreshing = false;
+        }
+
+        
+    }
+
+
+
+    requestDetail2 = flow(function* (this: HomeStore, id: string, callback: (data?: JobEntity) => void) {
+        try {
+
+            const { data } = yield ApiService.request('jobDetail', id);
+            if (data) {
+                if(data.code === 0) {
+                    callback?.(data.data);
+                    this.memberInfo = data.data;
+                }
+            }
+        } catch (error) {
+            callback?.(undefined);
+        }
+    });
 }

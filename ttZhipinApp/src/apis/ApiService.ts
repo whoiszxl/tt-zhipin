@@ -65,6 +65,9 @@ class ApiService {
     }
 
     if(method === METHODS.GET) {
+        if(paramType === PARAM_TYPE.PATH) {
+          return this.get(finalUrl, null);
+        }
         return this.get(finalUrl, params);
     }
 
@@ -81,7 +84,7 @@ class ApiService {
 
 
   // 发起 GET 请求
-  get(url: string, params?: any): Promise<AxiosResponse<any, any>> {    
+  get(url: string, params?: any): Promise<AxiosResponse<any, any>> { 
     return this.axiosInstance.get(url, {params: params});
   }
 

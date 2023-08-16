@@ -33,6 +33,7 @@ type JobEntity = {
     replyCount: number;
     longitude: number;
     latitude: number;
+    locationImg: string;
     country: string;
     province: string;
     city: string;

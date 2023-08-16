@@ -15,6 +15,7 @@ import DiscoveryPage from './src/pages/worker/discovery/DiscoveryPage';
 import MessagePage from './src/pages/worker/message/MessagePage';
 import MinePage from './src/pages/worker/mine/MinePage';
 import InitMemberInfoPage from './src/pages/worker/init/InitMemberInfoPage';
+import JobDetailPage from './src/pages/worker/job/JobDetailPage';
 
 const Stack = createStackNavigator();
 
@@ -37,6 +38,7 @@ function App(): JSX.Element {
           <Stack.Screen options={{headerShown: false}} name='CheckSmsCaptchaPage' component={CheckSmsCaptchaPage}/>
           <Stack.Screen options={{headerShown: false}} name='TabPage' component={TabPage}/>
           <Stack.Screen options={{headerShown: false}} name='JobPage' component={JobPage}/>
+          <Stack.Screen options={{headerShown: false}} name='JobDetailPage' component={JobDetailPage}/>
           <Stack.Screen options={{headerShown: false}} name='InitMemberInfoPage' component={InitMemberInfoPage}/>
 
           <Stack.Screen options={{headerShown: false}} name='DiscoveryPage' component={DiscoveryPage}/>
