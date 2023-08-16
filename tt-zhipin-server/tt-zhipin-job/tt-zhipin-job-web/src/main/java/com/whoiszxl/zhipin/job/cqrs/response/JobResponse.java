@@ -78,6 +78,9 @@ public class JobResponse implements Serializable {
     @Schema(description = "工作地址纬度")
     private BigDecimal latitude;
 
+    @Schema(description = "工作地址地图静态图")
+    private String locationImg;
+
     @Schema(description = "国家")
     private String country;
 

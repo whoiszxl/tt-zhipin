@@ -17,6 +17,7 @@
         <module>tt-zhipin-discovery</module>
         <module>tt-zhipin-job</module>
         <module>tt-zhipin-file</module>
+        <module>tt-zhipin-tools/tt-zhipin-tools-map</module>
     </modules>
 
     <name>${project.artifactId}</name>
@@ -93,7 +94,8 @@
 
         <qrcode.version>3.2.1</qrcode.version>
         <encryption-tools.version>1.0.0</encryption-tools.version>
-
+        <retrofit2.version>2.9.0</retrofit2.version>
+        <okhttp.version>4.10.0</okhttp.version>
 
         <!-- 云服务器 -->
         <tencentcloud-sdk-java.version>3.1.711</tencentcloud-sdk-java.version>
@@ -387,6 +389,37 @@
                 <groupId>com.aliyun</groupId>
                 <artifactId>aliyun-java-sdk-ecs</artifactId>
                 <version>${aliyun-java-sdk-ecs.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp-sse</artifactId>
+                <version>${okhttp.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>logging-interceptor</artifactId>
+                <version>${okhttp.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.squareup.retrofit2</groupId>
+                <artifactId>retrofit</artifactId>
+                <version>${retrofit2.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.squareup.retrofit2</groupId>
+                <artifactId>converter-jackson</artifactId>
+                <version>${retrofit2.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.squareup.retrofit2</groupId>
+                <artifactId>adapter-rxjava2</artifactId>
+                <version>${retrofit2.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

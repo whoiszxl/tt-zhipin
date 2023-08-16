@@ -23,6 +23,7 @@ CREATE TABLE `jms_job` (
   `reply_count` int(6) DEFAULT '0' COMMENT '回复次数',
   `longitude` decimal(10,6) DEFAULT NULL COMMENT '工作地址经度',
   `latitude` decimal(10,6) DEFAULT NULL COMMENT '工作地址纬度',
+  `location_img` varchar(255) DEFAULT '' COMMENT '工作地址地图静态图',
   `country` varchar(64) DEFAULT '' COMMENT '国家',
   `province` varchar(64) DEFAULT '' COMMENT '省份',
   `city` varchar(64) DEFAULT '' COMMENT '城市',
