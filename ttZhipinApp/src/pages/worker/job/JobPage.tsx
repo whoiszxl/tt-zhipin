@@ -45,7 +45,9 @@ export default observer(() => {
       <Text style={{
         textAlign: 'center',
         color: '#999',
-        width: '100%'
+        width: '100%',
+        padding: 10,
+        paddingBottom: 20
       }}>已经滑到底部了</Text>
     );
   };
@@ -247,7 +249,7 @@ export default observer(() => {
           numColumns={1}
           refreshing={store.refreshing}
           onRefresh={onJobRefresh} 
-          onEndReachedThreshold={0.1}
+          onEndReachedThreshold={0.2}
           onEndReached={loadData}
           ListFooterComponent={MyFooter}
         />

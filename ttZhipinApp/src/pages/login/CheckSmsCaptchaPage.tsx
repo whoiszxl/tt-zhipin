@@ -55,9 +55,21 @@ export default () => {
     console.log(inputValues);
     MemberStore.requestSmsLogin(params.phone, inputValues.join(''), params.loginToken, (success: boolean) => {
       if(success) {
-        console.log("登录成功");
-        console.log("MemberStore.token: %s", MemberStore.token);
-        navigation.push('TabPage');
+        MemberStore.requestMemberInfo((data?:MemberInfoEntity) => {
+          console.log(data);
+          if(data) {
+            if(data.identityStatus === '' || data.workStatus === '' 
+              || data.highestQualification === '' || data.highestQualificationType === '' 
+              || data.fullName === '' || data.gender === '' || data.birthday === ''
+              || data.avatar === '') {
+                navigation.replace('InitMemberInfoPage', {memberInfo: data});
+              }else {
+                navigation.replace('TabPage');
+              }
+          }else if(data === undefined) {
+            navigation.replace('LoginPage');
+          }
+        });
       }else {
         console.log("登录失败");
       }

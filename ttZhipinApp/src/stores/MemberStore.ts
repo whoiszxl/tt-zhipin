@@ -70,10 +70,12 @@ class MemberStore {
             if (data) {
                 if(data.code === 0) {
                     callback?.(data.data);
+                }else {
+                    callback?.(undefined);
                 }
             }
         } catch (error) {
-            console.log(error);
+            console.log("error", error);
             this.loginToken = null;
             callback?.(undefined);
         }

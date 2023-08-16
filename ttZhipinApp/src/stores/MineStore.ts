@@ -27,7 +27,7 @@ export default class MineStore {
     //获取用户详细信息
     requestMemberDetail = async () => {
         try {
-            const { data } = await ApiService.request('memberDetail', {});
+            const { data } = await ApiService.request('memberInfo', {});
             this.memberInfo = data.data || {};
             return data;
         } catch (error) {

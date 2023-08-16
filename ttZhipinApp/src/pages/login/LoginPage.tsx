@@ -458,7 +458,7 @@ export default () => {
                 setPhone(text)
               }}/>
 
-            <Icon color={CommonColor.transparentGreyBg} name="close-circle" />
+            <Icon color={CommonColor.transparentGreyBg} onPress={() => {setPhone('')}} name="close-circle" />
 
           </View>
 

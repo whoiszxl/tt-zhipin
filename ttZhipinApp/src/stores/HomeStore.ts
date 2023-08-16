@@ -1,7 +1,7 @@
 import { action, observable } from "mobx";
 import ApiService from "../apis/ApiService";
 
-const SIZE = 20;
+const SIZE = 10;
 export default class HomeStore {
 
     page: number = 1;
