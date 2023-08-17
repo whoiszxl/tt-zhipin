@@ -18,6 +18,8 @@
         <module>tt-zhipin-tools-lock</module>
         <module>tt-zhipin-tools-common</module>
         <module>tt-zhipin-tools-email</module>
+        <module>tt-zhipin-tools-map</module>
+        <module>tt-zhipin-tools-gpt</module>
     </modules>
 
     <properties>

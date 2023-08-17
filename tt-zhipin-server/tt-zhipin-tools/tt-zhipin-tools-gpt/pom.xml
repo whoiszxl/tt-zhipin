@@ -10,15 +10,16 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.whoiszxl.zhipin.map</groupId>
-    <artifactId>tt-zhipin-tools-map</artifactId>
-    <description>地图依赖</description>
+    <groupId>com.whoiszxl.zhipin.gpt</groupId>
+    <artifactId>tt-zhipin-tools-gpt</artifactId>
+    <description>AI对话依赖</description>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
 
     <dependencies>
         <dependency>
@@ -54,7 +55,5 @@
             <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
-
-
     </dependencies>
 </project>

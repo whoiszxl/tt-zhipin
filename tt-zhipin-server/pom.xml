@@ -17,7 +17,6 @@
         <module>tt-zhipin-discovery</module>
         <module>tt-zhipin-job</module>
         <module>tt-zhipin-file</module>
-        <module>tt-zhipin-tools/tt-zhipin-tools-map</module>
     </modules>
 
     <name>${project.artifactId}</name>
