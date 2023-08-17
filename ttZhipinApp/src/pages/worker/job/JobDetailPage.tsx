@@ -10,7 +10,6 @@ import { CommonColor } from '../../../common/CommonColor';
 import DetailTitleBar from './components/DetailTitleBar';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { MapView, MapType } from "react-native-amap3d";
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
@@ -448,12 +447,157 @@ export default observer(() => {
       <>
         {/* HR信息与地址信息 */}
         <View style={styles.fourLine}>
-          <Image style={{height: 200, width: '100%', borderRadius: 5}} resizeMode='cover' source={{uri: jobEntity?.locationImg}} />
+          <Image style={{ height: 200, width: '100%', borderRadius: 5 }} resizeMode='cover' source={{ uri: jobEntity?.locationImg }} />
         </View>
       </>
 
     );
   }
+
+  const renderAnayLabel = () => {
+    const styles = StyleSheet.create({
+      root: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingBottom: 10
+      },
+      lineContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        height: 8,
+        marginTop: 4
+      },
+      segment: {
+        flex: 1,
+        height: '100%'
+      },
+
+      lineTextContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginTop: 4,
+        alignContent: 'center'
+      },
+
+      lineLabel: { 
+        flexDirection: 'row', 
+        justifyContent: 'center', 
+        width: '25%' 
+      },
+
+      lineLabelText: {
+        fontSize: 11
+      }
+    });
+
+    return (
+
+      <>
+        <View>
+          <View style={styles.root}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Text style={{ color: CommonColor.fontColor, fontSize: 14, fontWeight: 'bold' }}>你的竞争力分析</Text>
+            </View>
+            <Text style={{ color: CommonColor.deepGrey, fontSize: 12 }}>{'查看详细分析 >'}</Text>
+          </View>
+
+          <Text style={{ fontSize: 12, color: CommonColor.deepGrey }}>三个月内共 10 位打工仔沟通，你超过了 30% 的打工仔，优秀打工仔通常会 xx，建议你可以 xx</Text>
+          <Text style={{ fontSize: 11, color: CommonColor.fontColor, fontWeight: 'bold', paddingTop: 5 }}>你与职位匹配情况</Text>
+
+          <View style={styles.lineContainer}>
+            <View style={[styles.segment, { backgroundColor: 'rgba(66, 133, 244, 0.7)', borderTopLeftRadius: 5, borderBottomLeftRadius: 5 }]} />
+            <View style={[styles.segment, { backgroundColor: 'rgba(66, 133, 244, 0.75)', marginLeft: 1 }]} />
+            <View style={[styles.segment, { backgroundColor: 'rgba(66, 133, 244, 0.8)', marginLeft: 1 }]} />
+            <View style={[styles.segment, { backgroundColor: 'rgba(66, 133, 244, 0.85)', marginLeft: 1, borderTopRightRadius: 5, borderBottomRightRadius: 5 }]} />
+          </View>
+
+          <View style={styles.lineTextContainer}>
+            <View style={styles.lineLabel}>
+              <Text style={styles.lineLabelText}>一般</Text>
+            </View>
+            <View style={styles.lineLabel}>
+              <Text style={styles.lineLabelText}>良好</Text>
+            </View>
+            <View style={styles.lineLabel}>
+              <Text style={styles.lineLabelText}>优秀</Text>
+            </View>
+            <View style={styles.lineLabel}>
+              <Text style={styles.lineLabelText}>极好</Text>
+            </View>
+          </View>
+        </View>
+
+      </>
+
+    );
+  }
+
+  const renderSafeTipsLabel = () => {
+    const styles = StyleSheet.create({
+      root: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingBottom: 10
+      },
+      lineContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        height: 8,
+        marginTop: 4
+      },
+      segment: {
+        flex: 1,
+        height: '100%'
+      },
+
+      lineTextContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginTop: 4,
+        alignContent: 'center'
+      },
+
+      lineLabel: { 
+        flexDirection: 'row', 
+        justifyContent: 'center', 
+        width: '25%' 
+      },
+
+      lineLabelText: {
+        fontSize: 11
+      }
+    });
+
+    return (
+
+      <>
+        <View>
+          <View style={styles.root}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <AntDesign name="Safety" color={CommonColor.mainColor} size={16}/>
+
+              <Text style={{ color: CommonColor.fontColor, fontSize: 14, fontWeight: 'bold', paddingLeft: 4 }}>TT安全提示</Text>
+            </View>
+          </View>
+
+          <Text style={{ fontSize: 12, color: CommonColor.deepGrey }}>
+          TT直聘严禁用人单位和招聘者用户做出任何损害求职者合法权益的违法违规行为，包括但不限于扣押求职者证件、收取求职者财物、向求职者集资、让求职者入股、诱导求职者异地入职、异地参加培训、违法违规使用求职者简历等，您一旦发现此类行为，请立即举报。
+          </Text>
+
+          <Text style={{ fontSize: 12, color: CommonColor.mainColor }}>
+            {'了解更多打工安全防范知识 >'}
+          </Text>
+        </View>
+
+      </>
+
+    );
+  }
+
 
   return (
 
@@ -500,17 +644,6 @@ export default observer(() => {
               {/* HR信息 */}
               {renderHRLabel()}
 
-              <MapView
-          mapType={MapType.Navi}
-          initialCameraPosition={{
-            target: {
-              latitude: 39.91095,
-              longitude: 116.37296,
-            },
-            zoom: 8,
-          }}
-        />
-
               {/* 分割线 */}
               <View style={{ height: 0.5, backgroundColor: CommonColor.tagBg, marginTop: 15 }} />
 
@@ -526,26 +659,37 @@ export default observer(() => {
               {/* 公司地图 */}
               {renderMapLabel()}
 
-              <View style={{flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 20}}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                  <Icon size={12} style={{paddingRight: 2, color: CommonColor.normalGrey}} name='home'/>
-                  <Text style={{color: CommonColor.fontColor, fontSize: 12}}>距离我的住址 345 米</Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingBottom: 5 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Icon size={12} style={{ paddingRight: 2, color: CommonColor.normalGrey }} name='home' />
+                  <Text style={{ color: CommonColor.fontColor, fontSize: 12 }}>距离我的住址 345 米</Text>
                 </View>
-                <Text style={{color: CommonColor.mainColor, fontSize: 12}}>去修改</Text>
+                <Text style={{ color: CommonColor.mainColor, fontSize: 12 }}>去修改</Text>
               </View>
 
+              {/* 分割线 */}
+              <View style={{ height: 0.5, backgroundColor: CommonColor.tagBg, marginTop: 10, marginBottom: 20 }} />
 
 
+
+              {/* 竞争力分析 */}
+              {renderAnayLabel()}
+
+              {/* 分割线 */}
+              <View style={{ height: 0.5, backgroundColor: CommonColor.tagBg, marginTop: 20, marginBottom: 20 }} />
+
+              {/* 安全提示 */}
+              {renderSafeTipsLabel()}
 
             </View>
 
           </ScrollView>
 
           <View style={styles.buttonContainer}>
-                <TouchableOpacity activeOpacity={1} style={[styles.button, {width: buttonWidth}]}>
-                  <Text style={styles.buttonText}>立即沟通</Text>
-                </TouchableOpacity>
-              </View>
+            <TouchableOpacity activeOpacity={1} style={[styles.button, { width: buttonWidth }]}>
+              <Text style={styles.buttonText}>立即沟通</Text>
+            </TouchableOpacity>
+          </View>
         </>
       ) : (
         <Text>加载中</Text>
@@ -607,6 +751,7 @@ const styles = StyleSheet.create({
   content: {
     width: '100%',
     paddingHorizontal: 10,
+    paddingBottom: 80
   },
 
 
@@ -630,7 +775,7 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'center',
     alignItems: 'center'
-    
+
   },
   buttonText: {
     color: 'white', // 按钮文字颜色
