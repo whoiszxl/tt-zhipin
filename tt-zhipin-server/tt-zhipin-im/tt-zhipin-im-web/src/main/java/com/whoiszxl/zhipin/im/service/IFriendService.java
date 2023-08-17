@@ -1,7 +1,16 @@
 package com.whoiszxl.zhipin.im.service;
 
-import com.whoiszxl.zhipin.im.entity.Friend;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.whoiszxl.zhipin.im.cqrs.command.FriendAddCommand;
+import com.whoiszxl.zhipin.im.cqrs.command.FriendDeleteCommand;
+import com.whoiszxl.zhipin.im.cqrs.command.FriendRequestApproveCommand;
+import com.whoiszxl.zhipin.im.cqrs.query.FriendFetchOneQuery;
+import com.whoiszxl.zhipin.im.cqrs.query.FriendFetchQuery;
+import com.whoiszxl.zhipin.im.cqrs.query.FriendRequestListQuery;
+import com.whoiszxl.zhipin.im.entity.Friend;
+import com.whoiszxl.zhipin.im.entity.FriendRequest;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +22,60 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IFriendService extends IService<Friend> {
 
+    /**
+     * 好友批量添加
+     * @param command 批量添加命令
+     * @return 是否添加成功
+     */
+    Boolean friendAdd(FriendAddCommand command);
+
+
+    /**
+     * 删除好友
+     * @param command 删除好友命令
+     * @return 是否删除成功
+     */
+    Boolean friendDelete(FriendDeleteCommand command);
+
+    /**
+     * 全量拉取好友列表
+     * @param query 查询条件
+     * @return 好友列表
+     */
+    List<Friend> friendFetch(FriendFetchQuery query);
+
+    /**
+     * 拉取指定好友
+     * @param query 查询条件
+     * @return 好友详细信息
+     */
+    Friend friendFetchOne(FriendFetchOneQuery query);
+    
+    /**
+     * 保存好友关系
+     * @param command 好友添加命令
+     * @return 是否保存成功
+     */
+    boolean saveFriendRelation(FriendAddCommand command);
+
+    /**
+     * 新增或保存一条好友申请记录
+     * @param command 好友新增的命令
+     * @return 是否新增或保存成功
+     */
+    Boolean friendRequestSaveOrUpdate(FriendAddCommand command);
+
+    /**
+     * 好友请求审批
+     * @param command 审批命令
+     * @return 审批结果
+     */
+    Boolean friendRequestApprove(FriendRequestApproveCommand command);
+
+    /**
+     * 获取好友请求列表
+     * @param query 列表查询参数
+     * @return 好友请求列表
+     */
+    List<FriendRequest> friendRequestList(FriendRequestListQuery query);
 }

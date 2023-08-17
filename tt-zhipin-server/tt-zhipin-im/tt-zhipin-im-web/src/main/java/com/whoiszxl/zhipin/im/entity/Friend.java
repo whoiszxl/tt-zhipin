@@ -24,14 +24,11 @@ public class Friend implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "应用ID")
-    private Long appId;
-
     @Schema(description = "用户自身的ID")
-    private String fromAccountId;
+    private Long fromMemberId;
 
     @Schema(description = "用户好友的ID")
-    private String toAccountId;
+    private Long toMemberId;
 
     @Schema(description = "好友备注")
     private String remark;
@@ -50,17 +47,11 @@ public class Friend implements Serializable {
     private Long version;
 
     @Schema(description = "业务状态: 1-正常 2-删除 3-黑名单")
-    private Boolean status;
+    private Integer status;
 
     @Schema(description = "逻辑删除 1: 已删除， 0: 未删除")
     @TableLogic
-    private Boolean isDeleted;
-
-    @Schema(description = "创建者")
-    private String createdBy;
-
-    @Schema(description = "更新者")
-    private String updatedBy;
+    private Integer isDeleted;
 
     @Schema(description = "创建时间")
     private LocalDateTime createdAt;

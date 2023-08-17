@@ -34,33 +34,24 @@ public class GroupMessage implements Serializable {
     private Long contentId;
 
     @Schema(description = "消息所属用户的ID")
-    private String ownerAccountId;
+    private String ownerMemberId;
 
     @Schema(description = "消息类型")
-    private Boolean messageType;
+    private Integer messageType;
 
     @Schema(description = "消息序列号")
     private Long sequence;
-
-    @Schema(description = "应用ID")
-    private Long appId;
 
     @Schema(description = "乐观锁")
     @Version
     private Long version;
 
     @Schema(description = "业务状态")
-    private Boolean status;
+    private Integer status;
 
     @Schema(description = "逻辑删除 1: 已删除， 0: 未删除")
     @TableLogic
-    private Boolean isDeleted;
-
-    @Schema(description = "创建者")
-    private String createdBy;
-
-    @Schema(description = "更新者")
-    private String updatedBy;
+    private Integer isDeleted;
 
     @Schema(description = "创建时间")
     private LocalDateTime createdAt;

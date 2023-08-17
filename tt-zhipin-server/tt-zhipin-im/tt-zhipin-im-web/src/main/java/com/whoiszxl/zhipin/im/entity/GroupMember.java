@@ -31,19 +31,19 @@ public class GroupMember implements Serializable {
     private Long groupId;
 
     @Schema(description = "用户账号ID")
-    private String accountId;
+    private Long memberId;
 
     @Schema(description = "成员类型: 1-普通成员 2-群主")
-    private Boolean memberType;
+    private Integer memberType;
 
     @Schema(description = "群昵称")
     private String alias;
 
     @Schema(description = "成员是否被禁言: 1-不禁言 2-禁言")
-    private Boolean isMute;
+    private Integer isMute;
 
     @Schema(description = "加群方式: 1-扫码 2-群主邀请")
-    private Boolean joinType;
+    private Integer joinType;
 
     @Schema(description = "创建时间")
     private LocalDateTime joinAt;
@@ -54,25 +54,16 @@ public class GroupMember implements Serializable {
     @Schema(description = "序列号")
     private Long sequence;
 
-    @Schema(description = "应用ID")
-    private Long appId;
-
     @Schema(description = "乐观锁")
     @Version
     private Long version;
 
     @Schema(description = "群组状态 1-正常 2-解散")
-    private Boolean status;
+    private Integer status;
 
     @Schema(description = "逻辑删除 1: 已删除， 0: 未删除")
     @TableLogic
-    private Boolean isDeleted;
-
-    @Schema(description = "创建者")
-    private String createdBy;
-
-    @Schema(description = "更新者")
-    private String updatedBy;
+    private Integer isDeleted;
 
     @Schema(description = "创建时间")
     private LocalDateTime createdAt;

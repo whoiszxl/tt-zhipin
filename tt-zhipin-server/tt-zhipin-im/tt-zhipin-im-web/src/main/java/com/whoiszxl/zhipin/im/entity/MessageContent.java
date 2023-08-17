@@ -25,9 +25,6 @@ public class MessageContent implements Serializable {
     @Schema(description = "主键")
     private Long id;
 
-    @Schema(description = "应用ID")
-    private Long appId;
-
     @Schema(description = "实际消息体")
     private String messageContent;
 
@@ -35,7 +32,7 @@ public class MessageContent implements Serializable {
     private String extra;
 
     @Schema(description = "撤回状态: 1-已撤回 0-未撤回")
-    private Boolean removeStatus;
+    private Integer removeStatus;
 
     @Schema(description = "创建时间")
     private LocalDateTime createdAt;

@@ -1,39 +1,34 @@
-package com.whoiszxl.zhipin.im.entity;
+package com.whoiszxl.zhipin.im.cqrs.command;
 
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.Version;
+import com.whoiszxl.zhipin.im.cqrs.dto.AddMemberToGroupDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
- * <p>
- * 群组表
- * </p>
- *
+ * 群组创建命令
  * @author whoiszxl
- * @since 2023-08-17
  */
 @Data
-@TableName("im_group")
-@Schema(description = "群组表")
-public class Group implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+@Schema(description = "群组创建命令")
+public class GroupCreateCommand {
 
     @Schema(description = "主键")
     private Long id;
 
     @Schema(description = "群主ID")
+    @NotBlank(message = "群主ID不能为空")
     private String groupOwnerId;
 
     @Schema(description = "群组名称")
+    @NotBlank(message = "群组名称不能为空")
     private String groupName;
 
     @Schema(description = "群组类型")
+    @NotNull(message = "群组类型不能为空")
     private Integer groupType;
 
     @Schema(description = "是否禁言: 1-不禁言 2-禁言")
@@ -60,22 +55,7 @@ public class Group implements Serializable {
     @Schema(description = "序列号")
     private Long sequence;
 
-    @Schema(description = "乐观锁")
-    @Version
-    private Long version;
-
-    @Schema(description = "群组状态 1-正常 2-解散")
-    private Integer status;
-
-    @Schema(description = "逻辑删除 1: 已删除， 0: 未删除")
-    @TableLogic
-    private Integer isDeleted;
-
-    @Schema(description = "创建时间")
-    private LocalDateTime createdAt;
-
-    @Schema(description = "更新时间")
-    private LocalDateTime updatedAt;
-
+    @Schema(description = "群组创建时需要添加到群组的成员列表")
+    private List<AddMemberToGroupDto> memberList;
 
 }

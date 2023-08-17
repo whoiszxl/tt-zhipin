@@ -27,20 +27,17 @@ public class Message implements Serializable {
     @Schema(description = "消息内容ID")
     private Long contentId;
 
-    @Schema(description = "应用ID")
-    private Long appId;
-
     @Schema(description = "发送用户的ID")
-    private String fromAccountId;
+    private Long fromMemberId;
 
     @Schema(description = "接收用户的ID")
-    private String toAccountId;
+    private Long toMemberId;
 
     @Schema(description = "消息所属用户的ID")
     private Long ownerId;
 
     @Schema(description = "消息类型")
-    private Boolean messageType;
+    private Integer messageType;
 
     @Schema(description = "消息序列号")
     private Long sequence;
@@ -50,17 +47,11 @@ public class Message implements Serializable {
     private Long version;
 
     @Schema(description = "业务状态")
-    private Boolean status;
+    private Integer status;
 
     @Schema(description = "逻辑删除 1: 已删除， 0: 未删除")
     @TableLogic
-    private Boolean isDeleted;
-
-    @Schema(description = "创建者")
-    private String createdBy;
-
-    @Schema(description = "更新者")
-    private String updatedBy;
+    private Integer isDeleted;
 
     @Schema(description = "创建时间")
     private LocalDateTime createdAt;

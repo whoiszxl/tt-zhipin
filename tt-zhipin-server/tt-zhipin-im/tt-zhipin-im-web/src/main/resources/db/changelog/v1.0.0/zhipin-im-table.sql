@@ -31,7 +31,7 @@ CREATE TABLE `im_message_content` (
 
 CREATE TABLE `im_group` (
     `id` bigint(11) NOT NULL COMMENT '主键',
-    `group_owner_id` varchar(64) NOT NULL COMMENT '群主ID',
+    `group_owner_id` bigint(11) NOT NULL COMMENT '群主ID',
     `group_name` varchar(64) NOT NULL COMMENT '群组名称',
     `group_type` tinyint(1) NOT NULL DEFAULT '1' COMMENT '群组类型',
     `is_mute` tinyint(1) NOT NULL DEFAULT '1' COMMENT '是否禁言: 1-不禁言 2-禁言',
@@ -65,8 +65,6 @@ CREATE TABLE `im_group_member` (
     `version` bigint(20) unsigned NOT NULL DEFAULT '1' COMMENT '乐观锁',
     `status` tinyint(1) unsigned DEFAULT '1' COMMENT '群组状态 1-正常 2-解散',
     `is_deleted` tinyint(1) unsigned DEFAULT '0' COMMENT '逻辑删除 1: 已删除， 0: 未删除',
-    `created_by` varchar(64) NOT NULL DEFAULT '' COMMENT '创建者',
-    `updated_by` varchar(64) NOT NULL DEFAULT '' COMMENT '更新者',
     `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`) USING BTREE

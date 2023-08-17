@@ -1,26 +1,22 @@
-package com.whoiszxl.zhipin.im.entity;
+package com.whoiszxl.zhipin.im.cqrs.response;
 
-import com.baomidou.mybatisplus.annotation.TableLogic;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.Version;
+import com.whoiszxl.zhipin.im.cqrs.dto.AddMemberToGroupDto;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
+
 
 /**
- * <p>
- * 群组表
- * </p>
- *
+ * 群组信息返回实体
  * @author whoiszxl
- * @since 2023-08-17
  */
 @Data
-@TableName("im_group")
-@Schema(description = "群组表")
-public class Group implements Serializable {
+@AllArgsConstructor
+@Schema(description = "群组信息返回实体")
+public class GroupInfoResponse {
 
     private static final long serialVersionUID = 1L;
 
@@ -60,16 +56,8 @@ public class Group implements Serializable {
     @Schema(description = "序列号")
     private Long sequence;
 
-    @Schema(description = "乐观锁")
-    @Version
-    private Long version;
-
     @Schema(description = "群组状态 1-正常 2-解散")
     private Integer status;
-
-    @Schema(description = "逻辑删除 1: 已删除， 0: 未删除")
-    @TableLogic
-    private Integer isDeleted;
 
     @Schema(description = "创建时间")
     private LocalDateTime createdAt;
@@ -77,5 +65,7 @@ public class Group implements Serializable {
     @Schema(description = "更新时间")
     private LocalDateTime updatedAt;
 
+    @Schema(description = "更新时间")
+    private List<AddMemberToGroupDto> memberList;
 
 }
