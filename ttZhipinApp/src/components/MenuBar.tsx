@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ScrollView, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
 const MenuBar = ({ menus, activeMenu, onMenuPress }:any) => {
@@ -10,7 +10,7 @@ const MenuBar = ({ menus, activeMenu, onMenuPress }:any) => {
       contentContainerStyle={styles.menuContainer}
     >
       {menus.map((menu:any, index: number) => (
-        <LinearGradient
+        <LinearGradient key={index}
         colors={['rgba(255, 165, 0, 0.01)', 'rgba(255, 165, 0, 0.005)', 'rgba(255, 165, 0, 0.002)', 'white']} // 渐变色数组
         style={[styles.menuItem, activeMenu === index && styles.activeMenuItem]}
       >
@@ -18,11 +18,7 @@ const MenuBar = ({ menus, activeMenu, onMenuPress }:any) => {
           key={index}
           onPress={() => onMenuPress(index)}
         >
-          {menu}
-
-          
-        {/* 在这里放置您的内容 */}
-      
+          {menu}   
         </TouchableOpacity>
         </LinearGradient>
       ))}
