@@ -3,20 +3,13 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>tt-zhipin-server</artifactId>
-        <groupId>com.whoiszxl.zhipin</groupId>
+        <artifactId>tt-zhipin-im</artifactId>
+        <groupId>com.whoiszxl.zhipin.im</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.whoiszxl.zhipin.im</groupId>
-    <artifactId>tt-zhipin-im</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>tt-zhipin-im-core</module>
-        <module>tt-zhipin-im-netty-server</module>
-        <module>tt-zhipin-im-web</module>
-    </modules>
+    <artifactId>tt-zhipin-im-netty-server</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
