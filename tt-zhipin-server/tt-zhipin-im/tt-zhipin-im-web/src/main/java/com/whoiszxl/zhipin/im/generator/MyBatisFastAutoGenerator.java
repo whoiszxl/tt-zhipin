@@ -37,10 +37,11 @@ public class MyBatisFastAutoGenerator {
     private static final String[] DB_TABLES = new String[]{
             "im_message", "im_message_content",
             "im_group", "im_group_message",
-            "im_group_member", "im_friend", "im_friend_request"
+            "im_group_member", "im_friend", "im_friend_request",
+            "im_talk"
     };
 
-    private static final String DB_URL = "jdbc:mysql://106.13.7.251:3300/platform-server?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true&rewriteBatchedStatements=true&autoReconnect=true&maxReconnects=10&failOverReadOnly=false";
+    private static final String DB_URL = "jdbc:mysql://106.13.7.251:3300/tt-zhipin?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true&rewriteBatchedStatements=true&autoReconnect=true&maxReconnects=10&failOverReadOnly=false";
     private static final String DB_USERNAME = "root";
     private static final String DB_PASSWORD = "123456";
 

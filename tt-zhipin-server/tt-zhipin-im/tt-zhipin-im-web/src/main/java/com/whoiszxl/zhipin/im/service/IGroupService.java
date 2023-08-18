@@ -1,5 +1,10 @@
 package com.whoiszxl.zhipin.im.service;
 
+import com.whoiszxl.zhipin.im.cqrs.command.GroupCreateCommand;
+import com.whoiszxl.zhipin.im.cqrs.command.GroupMemberAddCommand;
+import com.whoiszxl.zhipin.im.cqrs.query.GroupInfoQuery;
+import com.whoiszxl.zhipin.im.cqrs.response.GroupInfoResponse;
+import com.whoiszxl.zhipin.im.cqrs.response.GroupJoinedListResponse;
 import com.whoiszxl.zhipin.im.entity.Group;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +18,30 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IGroupService extends IService<Group> {
 
+    /**
+     * 创建群组
+     * @param command 创建命令
+     * @return 是否创建成功
+     */
+    Boolean groupCreate(GroupCreateCommand command);
+
+    /**
+     * 获取群组信息
+     * @param query 查询参数
+     * @return 群组信息
+     */
+    GroupInfoResponse groupInfo(GroupInfoQuery query);
+
+    /**
+     * 成员加入群组列表查询
+     * @return 成员加入群组列表
+     */
+    GroupJoinedListResponse groupJoinedList();
+
+    /**
+     * 邀请朋友加入群组
+     * @param command 邀请命令
+     * @return 是否邀请成功
+     */
+    Boolean groupMemberAdd(GroupMemberAddCommand command);
 }

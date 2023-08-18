@@ -14,13 +14,15 @@ import com.whoiszxl.zhipin.im.cqrs.command.FriendDeleteCommand;
 import com.whoiszxl.zhipin.im.cqrs.command.FriendRequestApproveCommand;
 import com.whoiszxl.zhipin.im.cqrs.query.FriendFetchOneQuery;
 import com.whoiszxl.zhipin.im.cqrs.query.FriendFetchQuery;
-import com.whoiszxl.zhipin.im.cqrs.query.FriendRequestListQuery;
 import com.whoiszxl.zhipin.im.entity.Friend;
 import com.whoiszxl.zhipin.im.entity.FriendRequest;
 import com.whoiszxl.zhipin.im.mapper.FriendMapper;
 import com.whoiszxl.zhipin.im.service.IFriendRequestService;
 import com.whoiszxl.zhipin.im.service.IFriendService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.whoiszxl.zhipin.member.dto.MemberDTO;
+import com.whoiszxl.zhipin.member.feign.MemberFeignClient;
+import com.whoiszxl.zhipin.tools.common.entity.ResponseResult;
 import com.whoiszxl.zhipin.tools.common.exception.ExceptionCatcher;
 import com.whoiszxl.zhipin.tools.common.token.TokenHelper;
 import lombok.RequiredArgsConstructor;
@@ -46,14 +48,18 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend> impleme
     private final IFriendRequestService friendRequestService;
 
     private final TokenHelper tokenHelper;
+    
+    private final MemberFeignClient memberFeignClient;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean friendAdd(FriendAddCommand command) {
-        Long fromMemberId = tokenHelper.getMemberId();
+        Long fromMemberId = tokenHelper.getAppMemberId();
         FriendAddCommand.AddFriendItem addFriendItem = command.getAddFriendItem();
 
-        //1. TODO 校验被添加好友是否存在，从member服务获取
+        //1. 校验被添加好友是否存在，从member服务获取
+        MemberDTO toMemberDTO = memberFeignClient.getMemberInfoById(addFriendItem.getToMemberId()).getData();
+        Assert.isTrue(toMemberDTO != null, "被添加好友不存在");
         Integer friendVerificationStatus = 1;
 
         if(ObjUtil.isNotNull(friendVerificationStatus)
@@ -79,26 +85,34 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend> impleme
 
     @Override
     public boolean saveFriendRelation(FriendAddCommand command) {
-        Long fromMemberId = tokenHelper.getMemberId();
+        //获取好友关系
         FriendAddCommand.AddFriendItem addFriendItem = command.getAddFriendItem();
         Friend friend = this.lambdaQuery()
-                .eq(Friend::getFromMemberId, fromMemberId)
+                .eq(Friend::getFromMemberId, command.getFromMemberId())
                 .eq(Friend::getToMemberId, addFriendItem.getToMemberId()).one();
 
         //判断好友关系是否存在，不存在新增，存在则更新
         if(friend == null) {
+            //新增好友关系
             Friend saveFriend = BeanUtil.copyProperties(addFriendItem, Friend.class);
-            saveFriend.setFromMemberId(fromMemberId);
+            saveFriend.setFromMemberId(command.getFromMemberId());
             saveFriend.setStatus(FriendStatusEnum.VALID.getCode());
+            this.save(saveFriend);
+
+            //新增反向的好友关系
+            saveFriend.setFromMemberId(saveFriend.getToMemberId());
+            saveFriend.setToMemberId(command.getFromMemberId());
             return this.save(saveFriend);
         }else {
             if(ObjUtil.equal(friend.getStatus(), FriendStatusEnum.VALID.getCode())) {
                 ExceptionCatcher.catchServiceEx("已经添加了此好友");
             }
 
+            // 更新好友关系
             LambdaUpdateChainWrapper<Friend> friendLambdaUpdateChainWrapper = this.lambdaUpdate();
             friendLambdaUpdateChainWrapper.set(Friend::getStatus, FriendStatusEnum.VALID.getCode());
 
+            //更新添加来源，备注以及扩展信息
             if(StrUtil.isNotBlank(addFriendItem.getSource())) {
                 friendLambdaUpdateChainWrapper.set(Friend::getSource, addFriendItem.getSource());
             }
@@ -115,13 +129,21 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend> impleme
 
             boolean updateFlag = friendLambdaUpdateChainWrapper.update();
             Assert.isTrue(updateFlag, "好友添加失败");
+
+            //反向更新好友信息
+            friendLambdaUpdateChainWrapper
+                    .eq(Friend::getFromMemberId, friend.getToMemberId())
+                    .eq(Friend::getToMemberId, friend.getFromMemberId());
+            updateFlag = friendLambdaUpdateChainWrapper.update();
+            Assert.isTrue(updateFlag, "好友添加失败");
+
         }
         return true;
     }
 
     @Override
     public Boolean friendDelete(FriendDeleteCommand command) {
-        Long fromMemberId = tokenHelper.getMemberId();
+        Long fromMemberId = tokenHelper.getAppMemberId();
         Friend friend = this.lambdaQuery()
                 .eq(Friend::getFromMemberId, fromMemberId)
                 .eq(Friend::getToMemberId, command.getToMemberId()).one();
@@ -145,8 +167,8 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend> impleme
     }
 
     @Override
-    public List<Friend> friendFetch(FriendFetchQuery query) {
-        Long fromMemberId = tokenHelper.getMemberId();
+    public List<Friend> friendFetch() {
+        Long fromMemberId = tokenHelper.getAppMemberId();
         return this.lambdaQuery()
                 .eq(Friend::getFromMemberId, fromMemberId)
                 .eq(Friend::getStatus, FriendStatusEnum.VALID.getCode()).list();
@@ -154,7 +176,7 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend> impleme
 
     @Override
     public Friend friendFetchOne(FriendFetchOneQuery query) {
-        Long fromMemberId = tokenHelper.getMemberId();
+        Long fromMemberId = tokenHelper.getAppMemberId();
         return this.lambdaQuery()
                 .eq(Friend::getFromMemberId, fromMemberId)
                 .eq(Friend::getToMemberId, query.getToMemberId())
@@ -164,7 +186,7 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend> impleme
 
     @Override
     public Boolean friendRequestSaveOrUpdate(FriendAddCommand command) {
-        Long fromMemberId = tokenHelper.getMemberId();
+        Long fromMemberId = tokenHelper.getAppMemberId();
         FriendAddCommand.AddFriendItem addFriendItem = command.getAddFriendItem();
 
         FriendRequest friendRequest = friendRequestService.lambdaQuery()
@@ -203,7 +225,7 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend> impleme
     public Boolean friendRequestApprove(FriendRequestApproveCommand command) {
         Long id = command.getId();
         Integer status = command.getStatus();
-        Integer approveMemberId = command.getApproveMemberId();
+        Long approveMemberId = tokenHelper.getAppMemberId();
 
         FriendRequest friendRequest = friendRequestService.getById(id);
         Assert.isTrue(friendRequest != null, "好友申请记录不存在");
@@ -236,8 +258,8 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend> impleme
     }
 
     @Override
-    public List<FriendRequest> friendRequestList(FriendRequestListQuery query) {
-        Long memberId = tokenHelper.getMemberId();
+    public List<FriendRequest> friendRequestList() {
+        Long memberId = tokenHelper.getAppMemberId();
         return friendRequestService.lambdaQuery()
                 .eq(FriendRequest::getToMemberId, memberId).list();
     }

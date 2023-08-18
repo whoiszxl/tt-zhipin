@@ -52,6 +52,13 @@ public interface TokenHelper {
      */
     Long getMemberId();
 
+
+    /**
+     * 获取当前APP登录用户id
+     * @return 用户id
+     */
+    Long getAppMemberId();
+
     /**
      * 获取当前登录用户名
      * @return 用户名

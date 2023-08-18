@@ -6,7 +6,6 @@ import com.whoiszxl.zhipin.im.cqrs.command.FriendDeleteCommand;
 import com.whoiszxl.zhipin.im.cqrs.command.FriendRequestApproveCommand;
 import com.whoiszxl.zhipin.im.cqrs.query.FriendFetchOneQuery;
 import com.whoiszxl.zhipin.im.cqrs.query.FriendFetchQuery;
-import com.whoiszxl.zhipin.im.cqrs.query.FriendRequestListQuery;
 import com.whoiszxl.zhipin.im.cqrs.response.FriendImportMultiResultResponse;
 import com.whoiszxl.zhipin.im.entity.Friend;
 import com.whoiszxl.zhipin.im.entity.FriendRequest;
@@ -71,8 +70,8 @@ public class FriendController {
      */
     @PostMapping("/fetch")
     @Operation(summary = "拉取好友", description = "拉取全量好友数据")
-    public ResponseResult<List<Friend>> friendFetch(@Validated @RequestBody FriendFetchQuery query) {
-        List<Friend> friendList = friendService.friendFetch(query);
+    public ResponseResult<List<Friend>> friendFetch() {
+        List<Friend> friendList = friendService.friendFetch();
         return ResponseResult.buildSuccess(friendList);
     }
 
@@ -98,8 +97,8 @@ public class FriendController {
 
     @PostMapping("/request/list")
     @Operation(summary = "好友请求列表", description = "好友请求列表")
-    public ResponseResult<List<FriendRequest>> friendRequestList(@Validated @RequestBody FriendRequestListQuery query) {
-        List<FriendRequest> friendRequestList = friendService.friendRequestList(query);
+    public ResponseResult<List<FriendRequest>> friendRequestList() {
+        List<FriendRequest> friendRequestList = friendService.friendRequestList();
         return ResponseResult.buildSuccess(friendRequestList);
     }
 }

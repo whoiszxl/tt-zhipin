@@ -101,6 +101,11 @@ public class SaTokenHelper implements TokenHelper {
     }
 
     @Override
+    public Long getAppMemberId() {
+        return getAppLoginMember().getId();
+    }
+
+    @Override
     public String getUsername() {
         return getLoginMember().getUsername();
     }

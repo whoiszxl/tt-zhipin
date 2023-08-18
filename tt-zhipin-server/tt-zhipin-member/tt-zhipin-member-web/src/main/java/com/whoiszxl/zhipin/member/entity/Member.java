@@ -3,6 +3,7 @@ package com.whoiszxl.zhipin.member.entity;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -40,12 +41,14 @@ public class Member implements Serializable {
     private String fullName;
 
     @Schema(description = "参加工作时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime workDate;
 
     @Schema(description = "微信号")
     private String wxCode;
 
     @Schema(description = "生日")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime birthday;
 
     @Schema(description = "国家")
@@ -76,6 +79,7 @@ public class Member implements Serializable {
     private Long loginErrorCount;
 
     @Schema(description = "最后登录")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime lastLogin;
 
     @Schema(description = "身份状态(1:职场人 2:学生)")
@@ -105,9 +109,11 @@ public class Member implements Serializable {
     private Integer isDeleted;
 
     @Schema(description = "创建时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime createdAt;
 
     @Schema(description = "更新时间")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime updatedAt;
 
 

@@ -1,5 +1,6 @@
 package com.whoiszxl.zhipin.im.service;
 
+import com.whoiszxl.zhipin.im.cqrs.dto.AddMemberToGroupDto;
 import com.whoiszxl.zhipin.im.entity.GroupMember;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,4 +14,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IGroupMemberService extends IService<GroupMember> {
 
+    /**
+     * 添加成员到群组
+     * @param addMemberToGroupDto 添加参数
+     */
+    void addMemberToGroup(AddMemberToGroupDto addMemberToGroupDto);
 }

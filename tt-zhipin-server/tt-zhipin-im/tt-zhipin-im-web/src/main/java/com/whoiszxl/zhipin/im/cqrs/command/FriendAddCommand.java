@@ -16,7 +16,6 @@ import javax.validation.constraints.NotNull;
 public class FriendAddCommand extends BaseRequest {
 
     @Schema(description = "自身的账号ID")
-    @NotBlank(message = "自身的账号ID不能为空")
     private Long fromMemberId;
 
     @Schema(description = "好友ITEM信息")

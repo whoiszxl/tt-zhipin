@@ -6,7 +6,6 @@ import com.whoiszxl.zhipin.im.cqrs.command.FriendDeleteCommand;
 import com.whoiszxl.zhipin.im.cqrs.command.FriendRequestApproveCommand;
 import com.whoiszxl.zhipin.im.cqrs.query.FriendFetchOneQuery;
 import com.whoiszxl.zhipin.im.cqrs.query.FriendFetchQuery;
-import com.whoiszxl.zhipin.im.cqrs.query.FriendRequestListQuery;
 import com.whoiszxl.zhipin.im.entity.Friend;
 import com.whoiszxl.zhipin.im.entity.FriendRequest;
 
@@ -39,10 +38,9 @@ public interface IFriendService extends IService<Friend> {
 
     /**
      * 全量拉取好友列表
-     * @param query 查询条件
      * @return 好友列表
      */
-    List<Friend> friendFetch(FriendFetchQuery query);
+    List<Friend> friendFetch();
 
     /**
      * 拉取指定好友
@@ -74,8 +72,7 @@ public interface IFriendService extends IService<Friend> {
 
     /**
      * 获取好友请求列表
-     * @param query 列表查询参数
      * @return 好友请求列表
      */
-    List<FriendRequest> friendRequestList(FriendRequestListQuery query);
+    List<FriendRequest> friendRequestList();
 }

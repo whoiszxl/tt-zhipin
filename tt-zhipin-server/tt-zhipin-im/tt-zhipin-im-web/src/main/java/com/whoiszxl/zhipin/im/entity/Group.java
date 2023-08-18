@@ -28,7 +28,7 @@ public class Group implements Serializable {
     private Long id;
 
     @Schema(description = "群主ID")
-    private String groupOwnerId;
+    private Long groupOwnerId;
 
     @Schema(description = "群组名称")
     private String groupName;
@@ -43,10 +43,10 @@ public class Group implements Serializable {
     private String portrait;
 
     @Schema(description = "当前群成员数")
-    private Long memberCount;
+    private Integer memberCount;
 
     @Schema(description = "最大群成员数")
-    private Long maxMemberCount;
+    private Integer maxMemberCount;
 
     @Schema(description = "群公告")
     private String notice;

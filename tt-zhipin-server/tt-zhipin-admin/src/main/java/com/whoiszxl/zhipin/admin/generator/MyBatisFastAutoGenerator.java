@@ -38,7 +38,7 @@ public class MyBatisFastAutoGenerator {
             "ops_deploy"
     };
 
-    private static final String DB_URL = "jdbc:mysql://106.13.7.251:3300/platform-server?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true&rewriteBatchedStatements=true&autoReconnect=true&maxReconnects=10&failOverReadOnly=false";
+    private static final String DB_URL = "jdbc:mysql://106.13.7.251:3300/tt-zhipin?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf8&useSSL=false&allowMultiQueries=true&rewriteBatchedStatements=true&autoReconnect=true&maxReconnects=10&failOverReadOnly=false";
     private static final String DB_USERNAME = "root";
     private static final String DB_PASSWORD = "123456";
 

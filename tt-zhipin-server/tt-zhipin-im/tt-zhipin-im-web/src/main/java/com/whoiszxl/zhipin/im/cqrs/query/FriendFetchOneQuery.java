@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * 好友拉取查询条件
@@ -14,7 +15,7 @@ import javax.validation.constraints.NotBlank;
 public class FriendFetchOneQuery {
 
     @Schema(description = "好友账号的ID")
-    @NotBlank(message = "好友账号的ID不能为空")
+    @NotNull(message = "好友账号的ID不能为空")
     private Long toMemberId;
 
 }

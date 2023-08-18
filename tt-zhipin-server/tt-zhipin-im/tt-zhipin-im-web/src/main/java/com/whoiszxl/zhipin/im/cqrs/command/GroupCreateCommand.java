@@ -16,13 +16,6 @@ import java.util.List;
 @Schema(description = "群组创建命令")
 public class GroupCreateCommand {
 
-    @Schema(description = "主键")
-    private Long id;
-
-    @Schema(description = "群主ID")
-    @NotBlank(message = "群主ID不能为空")
-    private String groupOwnerId;
-
     @Schema(description = "群组名称")
     @NotBlank(message = "群组名称不能为空")
     private String groupName;
@@ -37,23 +30,11 @@ public class GroupCreateCommand {
     @Schema(description = "群组头像")
     private String portrait;
 
-    @Schema(description = "当前群成员数")
-    private Long memberCount;
-
-    @Schema(description = "最大群成员数")
-    private Long maxMemberCount;
-
-    @Schema(description = "群公告")
-    private String notice;
-
     @Schema(description = "加群审核类型: 1-任何人可加入 2-需要群主审批 3-禁止任何人加入")
     private Integer joinVerificationType;
 
     @Schema(description = "扩展信息")
     private String extra;
-
-    @Schema(description = "序列号")
-    private Long sequence;
 
     @Schema(description = "群组创建时需要添加到群组的成员列表")
     private List<AddMemberToGroupDto> memberList;

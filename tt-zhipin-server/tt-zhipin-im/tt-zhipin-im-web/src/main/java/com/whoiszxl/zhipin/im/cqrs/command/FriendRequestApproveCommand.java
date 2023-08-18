@@ -17,10 +17,6 @@ public class FriendRequestApproveCommand {
     @NotNull(message = "审批记录的主键ID不能为空")
     private Long id;
 
-    @Schema(description = "审批人账号ID")
-    @NotNull(message = "审批人账号ID不能为空")
-    private Integer approveMemberId;
-
     @Schema(description = "审批状态: 1-通过 2-拒绝")
     @NotNull(message = "审批状态不能为空")
     private Integer status;
