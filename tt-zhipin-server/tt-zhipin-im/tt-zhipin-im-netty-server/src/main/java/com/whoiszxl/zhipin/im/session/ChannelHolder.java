@@ -5,6 +5,7 @@ import com.whoiszxl.zhipin.im.bean.ChannelAttrDto;
 import com.whoiszxl.zhipin.im.constants.ConnectStatusEnum;
 import com.whoiszxl.zhipin.im.constants.FieldConstants;
 import com.whoiszxl.zhipin.im.constants.ImRedisKeysEnum;
+import com.whoiszxl.zhipin.im.entity.MemberSession;
 import com.whoiszxl.zhipin.tools.common.utils.RedisUtils;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -72,10 +73,13 @@ public class ChannelHolder {
     public static void logoutSession(RedisUtils redisUtils, ChannelHandlerContext ctx) {
         ChannelAttrDto channelAttrDto = ChannelHolder.getInfoFromChannel(ctx);
         ChannelHolder.remove(channelAttrDto);
+
         redisUtils.hDel(
                 String.format(ImRedisKeysEnum.MEMBER_SESSION_KEY.getPrefix(), channelAttrDto.getMemberId()),
                 String.valueOf(channelAttrDto.getClientType()));
         ctx.channel().close();
+
+        //TODO 发送消息提醒其他好友我已经下线了
     }
 
     /**
@@ -84,21 +88,22 @@ public class ChannelHolder {
      * @param ctx channel
      */
     public static void offlineSession(RedisUtils redisUtils, ChannelHandlerContext ctx) {
+        //拿到当前连接的基础属性: 用户ID、客户端类型、设备IMEI号 后移除对应的 channel
         ChannelAttrDto channelAttrDto = ChannelHolder.getInfoFromChannel(ctx);
         ChannelHolder.remove(channelAttrDto);
-        Object o = redisUtils.hGet(String.format(ImRedisKeysEnum.MEMBER_SESSION_KEY.getPrefix(), channelAttrDto.getMemberId()),
-                String.valueOf(channelAttrDto.getClientType()));
+
+        String key = String.format(ImRedisKeysEnum.MEMBER_SESSION_KEY.getPrefix(), channelAttrDto.getMemberId());
+        String field = String.format("%s:%s", channelAttrDto.getClientType(), channelAttrDto.getImei());
+        //从Redis中拿到对应的连接信息
+        Object o = redisUtils.hGet(key, field);
+
+        //如果不为空，则将session的连接状态更新为下线状态
         if(o != null) {
-            String json = (String) o;
-            MemberSession memberSession = JSONUtil.toBean(json, MemberSession.class);
+            MemberSession memberSession = JSONUtil.toBean((String) o, MemberSession.class);
             memberSession.setConnectStatus(ConnectStatusEnum.OFFLINE.getCode());
-            redisUtils.hPut(String.format(ImRedisKeysEnum.MEMBER_SESSION_KEY.getPrefix(), channelAttrDto.getMemberId()),
-                    String.valueOf(channelAttrDto.getClientType()), JSONUtil.toJsonStr(memberSession));
+            redisUtils.hPut(key, field, JSONUtil.toJsonStr(memberSession));
         }
 
-        redisUtils.hDel(
-                String.format(ImRedisKeysEnum.MEMBER_SESSION_KEY.getPrefix(), channelAttrDto.getMemberId()),
-                String.valueOf(channelAttrDto.getClientType()));
         ctx.channel().close();
     }
 }

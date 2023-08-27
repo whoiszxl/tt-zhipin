@@ -17,7 +17,7 @@ public class LogoutPack extends Packet {
     private String memberId;
 
     @Override
-    public Byte getCommand() {
+    public Integer getCommand() {
         return Command.LOGOUT;
     }
 }

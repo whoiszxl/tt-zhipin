@@ -18,7 +18,7 @@ public class AddFriendPack extends Packet {
 
 
     @Override
-    public Byte getCommand() {
+    public Integer getCommand() {
         return Command.ADD_FRIEND;
     }
 }

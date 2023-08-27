@@ -5,6 +5,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
 import com.whoiszxl.zhipin.im.constants.FriendRequestStatusEnum;
 import com.whoiszxl.zhipin.im.constants.FriendStatusEnum;
@@ -262,6 +263,14 @@ public class FriendServiceImpl extends ServiceImpl<FriendMapper, Friend> impleme
         Long memberId = tokenHelper.getAppMemberId();
         return friendRequestService.lambdaQuery()
                 .eq(FriendRequest::getToMemberId, memberId).list();
+    }
+
+    @Override
+    public boolean checkFriend(Long fromMemberId, Long toMemberId) {
+        long count = this.count(Wrappers.<Friend>lambdaQuery()
+                .eq(Friend::getFromMemberId, fromMemberId)
+                .eq(Friend::getToMemberId, toMemberId));
+        return count > 0;
     }
 
 }

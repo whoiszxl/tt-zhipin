@@ -1,7 +1,7 @@
 package com.whoiszxl.zhipin.im.codec;
 
 import cn.hutool.json.JSONUtil;
-import com.whoiszxl.zhipin.im.protocol.Message;
+import com.whoiszxl.zhipin.im.pack.MessagePack;
 import com.whoiszxl.zhipin.im.protocol.Packet;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -15,8 +15,8 @@ import java.util.List;
  * clientType
  * imei length
  * 接收客户端发送过来的二进制消息进行解码
- * [    byte   ] [    byte  ] [    byte   ] [    int   ] [    int   ] [    int    ]
- * [commandType] [clientType] [messageType] [tokenLength] [imeiLength] [bodyLength] [tokenData] [imeiData] [bodyData]
+ * [    int    ] [    byte  ] [    int   ] [    int   ] [    int    ]
+ * [command    ] [clientType] [tokenLength] [imeiLength] [bodyLength] [tokenData] [imeiData] [bodyData]
  * @author whoiszxl
  */
 public class MessageDecoder extends ByteToMessageDecoder {
@@ -35,9 +35,8 @@ public class MessageDecoder extends ByteToMessageDecoder {
         }
 
         //1. 获取消息头信息
-        byte commandType = in.readByte();
+        int command = in.readInt();
         byte clientType = in.readByte();
-        byte messageType = in.readByte();
         int tokenLength = in.readInt();
         int imeiLength = in.readInt();
         int bodyLength = in.readInt();
@@ -64,19 +63,18 @@ public class MessageDecoder extends ByteToMessageDecoder {
         String body = new String(bodyData);
 
         //4. 将获取的JSON消息体转为Packet对象，方面后续处理
-        Packet packet = JSONUtil.toBean(body, Packet.get(commandType));
+        Packet packet = JSONUtil.toBean(body, Packet.get(command));
 
         //5. 包装为Message返回
-        Message message = new Message();
-        message.setCommandType(commandType);
-        message.setClientType(clientType);
-        message.setToken(token);
-        message.setImei(imei);
-        message.setMessageType(messageType);
-        message.setMessagePacket(packet);
+        MessagePack messagePack = new MessagePack();
+        messagePack.setCommand(command);
+        messagePack.setClientType(clientType);
+        messagePack.setToken(token);
+        messagePack.setImei(imei);
+        messagePack.setDataPack(packet);
 
         // 标记读取到了什么位置
         in.markReaderIndex();
-        out.add(message);
+        out.add(messagePack);
     }
 }

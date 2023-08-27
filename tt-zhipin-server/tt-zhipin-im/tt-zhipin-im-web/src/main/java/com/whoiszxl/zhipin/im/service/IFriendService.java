@@ -75,4 +75,12 @@ public interface IFriendService extends IService<Friend> {
      * @return 好友请求列表
      */
     List<FriendRequest> friendRequestList();
+
+    /**
+     * 校验双方是否为好友
+     * @param fromMemberId 用户id
+     * @param toMemberId 用户id
+     * @return 是否为好友
+     */
+    boolean checkFriend(Long fromMemberId, Long toMemberId);
 }

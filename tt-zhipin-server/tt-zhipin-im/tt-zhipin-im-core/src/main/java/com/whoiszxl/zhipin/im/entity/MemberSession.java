@@ -1,4 +1,4 @@
-package com.whoiszxl.zhipin.im.session;
+package com.whoiszxl.zhipin.im.entity;
 
 import lombok.Builder;
 import lombok.Data;

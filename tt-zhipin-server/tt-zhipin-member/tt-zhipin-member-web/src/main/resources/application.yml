@@ -76,7 +76,7 @@ sa-token:
   # token前缀（例如填写 Bearer 实际传参 Authorization: Bearer xxxx-xxxx-xxxx-xxxx）
   token-prefix: Bearer
   # token有效期（单位：秒，默认 30 天，-1 代表永不过期）
-  timeout: 86400
+  timeout: -1
   # token临时有效期（单位：秒，指定时间内无操作就视为 token 过期）
   activity-timeout: -1
   # 是否打开自动续签（如果此值为 true，框架会在每次直接或间接调用 getLoginId() 时进行一次过期检查与续签操作）

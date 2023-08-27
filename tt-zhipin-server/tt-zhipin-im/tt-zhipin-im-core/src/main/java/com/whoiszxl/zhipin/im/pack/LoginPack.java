@@ -11,13 +11,9 @@ import lombok.Data;
 @Data
 public class LoginPack extends Packet {
 
-    /**
-     * 登录的账号ID
-     */
-    private String memberId;
-
+    private String token;
     @Override
-    public Byte getCommand() {
-        return Command.Login;
+    public Integer getCommand() {
+        return Command.LOGIN;
     }
 }

@@ -4,10 +4,12 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.ObjUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.whoiszxl.zhipin.im.constants.GroupMemberStatusEnum;
 import com.whoiszxl.zhipin.im.constants.GroupMemberTypeEnum;
 import com.whoiszxl.zhipin.im.cqrs.dto.AddMemberToGroupDto;
+import com.whoiszxl.zhipin.im.entity.Group;
 import com.whoiszxl.zhipin.im.entity.GroupMember;
 import com.whoiszxl.zhipin.im.mapper.GroupMapper;
 import com.whoiszxl.zhipin.im.mapper.GroupMemberMapper;
@@ -15,6 +17,7 @@ import com.whoiszxl.zhipin.im.service.IGroupMemberService;
 import com.whoiszxl.zhipin.member.dto.MemberDTO;
 import com.whoiszxl.zhipin.member.feign.MemberFeignClient;
 import com.whoiszxl.zhipin.tools.common.entity.ResponseResult;
+import com.whoiszxl.zhipin.tools.common.utils.LoggerUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -75,5 +78,22 @@ public class GroupMemberServiceImpl extends ServiceImpl<GroupMemberMapper, Group
             Assert.isTrue(saveFlag, "用户加群失败2");
 
         }
+    }
+
+    @Override
+    public boolean checkGroupMessageSendPermission(Long groupId, Long fromMemberId) {
+        Group group = groupMapper.selectById(groupId);
+        if(group == null) {
+            LoggerUtil.info("GroupMemberServiceImpl", "群消息发送校验失败");
+            return false;
+        }
+        GroupMember groupMember = this.getOne(Wrappers.<GroupMember>lambdaQuery()
+                .eq(GroupMember::getGroupId, groupId)
+                .eq(GroupMember::getMemberId, fromMemberId));
+        if(groupMember == null) {
+            LoggerUtil.info("GroupMemberServiceImpl", "群消息发送校验失败");
+            return false;
+        }
+        return true;
     }
 }

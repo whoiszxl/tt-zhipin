@@ -19,4 +19,13 @@ public interface IGroupMemberService extends IService<GroupMember> {
      * @param addMemberToGroupDto 添加参数
      */
     void addMemberToGroup(AddMemberToGroupDto addMemberToGroupDto);
+
+
+    /**
+     * 校验用户是否具有发送消息到群里的权限
+     * @param groupId 群组ID
+     * @param fromMemberId 发送用户ID
+     * @return
+     */
+    boolean checkGroupMessageSendPermission(Long groupId, Long fromMemberId);
 }

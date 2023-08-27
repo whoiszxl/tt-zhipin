@@ -16,6 +16,7 @@
         <module>tt-zhipin-im-core</module>
         <module>tt-zhipin-im-netty-server</module>
         <module>tt-zhipin-im-web</module>
+        <module>tt-zhipin-im-api</module>
     </modules>
 
     <properties>

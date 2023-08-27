@@ -1,6 +1,13 @@
 package com.whoiszxl.zhipin.im.server;
 
+import com.whoiszxl.zhipin.im.codec.WebSocketDecoder;
+import com.whoiszxl.zhipin.im.codec.WebSocketEncoder;
+import com.whoiszxl.zhipin.im.feign.PermissionCheckFeign;
+import com.whoiszxl.zhipin.im.handler.NettyServerHandler;
+import com.whoiszxl.zhipin.im.mq.KafkaProducerService;
+import com.whoiszxl.zhipin.im.mq.MqSenderService;
 import com.whoiszxl.zhipin.im.properties.ImNettyProperties;
+import com.whoiszxl.zhipin.tools.common.utils.RedisUtils;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -14,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.net.InetSocketAddress;
 import java.util.concurrent.Callable;
 
 /**
@@ -32,6 +38,15 @@ public class WebSocketServer implements Callable<Channel> {
 
     private final ImNettyProperties imNettyProperties;
 
+    private final RedisUtils redisUtils;
+
+    private final MqSenderService mqSenderService;
+
+    private final KafkaProducerService kafkaProducerService;
+
+    private final PermissionCheckFeign permissionCheckFeign;
+
+
     @Override
     public Channel call() {
         ChannelFuture channelFuture = null;
@@ -48,20 +63,30 @@ public class WebSocketServer implements Callable<Channel> {
                 protected void initChannel(SocketChannel ch) {
                     ChannelPipeline pipeline = ch.pipeline();
                     // HTTP 编解码器
-                    pipeline.addLast(new HttpServerCodec());
+                    pipeline.addLast("http-codec", new HttpServerCodec());
                     // 将多个 Http 消息转为单一的 FullHttpRequest 或 FullHttpResponse 对象
-                    pipeline.addLast(new HttpObjectAggregator(65536));
+                    pipeline.addLast("aggregator", new HttpObjectAggregator(65535));
                     // 写大数据流
-                    pipeline.addLast(new ChunkedWriteHandler());
+                    pipeline.addLast("http-chunked", new ChunkedWriteHandler());
                     // WebSocket 协议处理器，在这里处理握手、ping、pong 等消息
                     pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
+                    // 解码器，接收到客户端的消息后先进入此逻辑
+                    pipeline.addLast(new WebSocketDecoder());
+                    // 编码器，当业务处理完成后进入此逻辑完成编码返回到客户端的WebSocket中
+                    pipeline.addLast(new WebSocketEncoder());
 
                     // 自定义 WebSocket 消息处理器
-                    //pipeline.addLast(new WebSocketServerHandler());
+                    ch.pipeline().addLast(new NettyServerHandler(
+                            redisUtils,
+                            mqSenderService,
+                            imNettyProperties.getNodeId(),
+                            permissionCheckFeign));
+
+
                 }
             });
 
-            channelFuture = bootstrap.bind(new InetSocketAddress(imNettyProperties.getWebsocketPort())).syncUninterruptibly();
+            channelFuture = bootstrap.bind(imNettyProperties.getWebsocketPort());
             this.channel = channelFuture.channel();
         }catch (Exception e) {
             log.error("NettyServer|netty服务启动失败|", e);

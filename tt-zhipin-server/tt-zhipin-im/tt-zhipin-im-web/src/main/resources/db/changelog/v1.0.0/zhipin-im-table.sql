@@ -5,7 +5,7 @@
 
 DROP TABLE IF EXISTS `im_message`;
 CREATE TABLE `im_message` (
-    `id` bigint(11) NOT NULL COMMENT '消息内容ID',
+    `content_id` bigint(11) NOT NULL COMMENT '消息内容ID',
     `from_member_id` bigint(11) NOT NULL COMMENT '发送用户的ID',
     `to_member_id` bigint(11) NOT NULL COMMENT '接收用户的ID',
     `owner_id` bigint(11) NOT NULL COMMENT '消息所属用户的ID',
@@ -16,7 +16,6 @@ CREATE TABLE `im_message` (
     `is_deleted` tinyint(1) unsigned DEFAULT '0' COMMENT '逻辑删除 1: 已删除， 0: 未删除',
     `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`) USING BTREE,
     KEY `owner_id` (`owner_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC COMMENT='消息表';
 
@@ -130,9 +129,11 @@ CREATE TABLE IF NOT EXISTS `im_talk`(
     `id`                        bigint(11) NOT NULL COMMENT '主键',
     `talk_type`                 tinyint(2) NOT NULL COMMENT '对话类型: 1-单聊 2-群聊 3-ChatGPT 4-机器人',
     `from_member_id`            bigint(11) NOT NULL COMMENT '发起会话的用户ID',
+    `from_member_info`          json DEFAULT NULL COMMENT '发起会话的用户信息(字段冗余,避免跨服务查询): 头像|岗位|姓名',
     `to_member_id`              bigint(11) NOT NULL COMMENT '接收会话的用户ID',
     `mute_status`               tinyint(2) NOT NULL COMMENT '静音状态: 0-未静音 1-已静音',
     `top_status`                tinyint(2) NOT NULL COMMENT '置顶状态: 0-未置顶 1-已置顶',
+    `read_sequence`             bigint(20) unsigned NULL COMMENT '已读序列号，记录当前用户读到了哪里',
     `sequence`                  bigint(20) unsigned NULL COMMENT '序列号',
     `version`                   bigint(20) unsigned NOT NULL DEFAULT '1' COMMENT '乐观锁',
     `status`                    tinyint(2) UNSIGNED DEFAULT 1 COMMENT '审批状态: 1-通过 2-拒绝',

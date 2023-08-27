@@ -36,14 +36,14 @@ import java.net.InetAddress;
         "com.whoiszxl.zhipin.im.**",
         "com.whoiszxl.zhipin.tools.**"
 })
-public class ImApplication implements ApplicationRunner {
+public class ImWebApplication implements ApplicationRunner {
 
     private final ZhipinProperties properties;
 
     private final ServerProperties serverProperties;
 
     public static void main(String[] args) {
-        SpringApplication.run(ImApplication.class, args);
+        SpringApplication.run(ImWebApplication.class, args);
     }
 
     @Hidden

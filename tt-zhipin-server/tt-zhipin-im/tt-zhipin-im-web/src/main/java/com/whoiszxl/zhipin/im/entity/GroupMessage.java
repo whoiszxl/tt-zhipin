@@ -34,7 +34,7 @@ public class GroupMessage implements Serializable {
     private Long contentId;
 
     @Schema(description = "消息所属用户的ID")
-    private String ownerMemberId;
+    private Long ownerMemberId;
 
     @Schema(description = "消息类型")
     private Integer messageType;

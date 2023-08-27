@@ -1,11 +1,12 @@
 package com.whoiszxl.zhipin.im.server;
 
 import com.whoiszxl.zhipin.im.codec.MessageDecoder;
+import com.whoiszxl.zhipin.im.codec.MessageEncoder;
+import com.whoiszxl.zhipin.im.feign.PermissionCheckFeign;
 import com.whoiszxl.zhipin.im.handler.HeartBeatHandler;
 import com.whoiszxl.zhipin.im.handler.NettyServerHandler;
 import com.whoiszxl.zhipin.im.mq.MqSenderService;
 import com.whoiszxl.zhipin.im.properties.ImNettyProperties;
-import com.whoiszxl.zhipin.tools.common.token.TokenHelper;
 import com.whoiszxl.zhipin.tools.common.utils.RedisUtils;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -39,6 +40,8 @@ public class NettyServer implements Callable<Channel> {
 
     private final MqSenderService mqSenderService;
 
+    private final PermissionCheckFeign permissionCheckFeign;
+
     @Override
     public Channel call() {
         ChannelFuture channelFuture = null;
@@ -54,9 +57,14 @@ public class NettyServer implements Callable<Channel> {
                 @Override
                 protected void initChannel(SocketChannel ch) {
                     ch.pipeline().addLast(new MessageDecoder());
+                    ch.pipeline().addLast(new MessageEncoder());
                     ch.pipeline().addLast(new IdleStateHandler(0, 0, 1));
                     ch.pipeline().addLast(new HeartBeatHandler(imNettyProperties.getTimeoutMs(), redisUtils));
-                    ch.pipeline().addLast(new NettyServerHandler(redisUtils, mqSenderService, imNettyProperties.getNodeId()));
+                    ch.pipeline().addLast(new NettyServerHandler(
+                            redisUtils,
+                            mqSenderService,
+                            imNettyProperties.getNodeId(),
+                            permissionCheckFeign));
                 }
             });
 

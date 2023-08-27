@@ -33,6 +33,9 @@ public class Talk implements Serializable {
     @Schema(description = "发起会话的用户ID")
     private Long fromMemberId;
 
+    @Schema(description = "发起会话的用户信息")
+    private String fromMemberInfo;
+
     @Schema(description = "接收会话的用户ID")
     private Long toMemberId;
 
@@ -41,6 +44,9 @@ public class Talk implements Serializable {
 
     @Schema(description = "置顶状态: 0-未置顶 1-已置顶")
     private Integer topStatus;
+
+    @Schema(description = "已读序列号，记录当前用户读到了哪里")
+    private Long readSequence;
 
     @Schema(description = "序列号")
     private Long sequence;

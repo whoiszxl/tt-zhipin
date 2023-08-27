@@ -5,12 +5,18 @@ netty:
   timeoutMs: 2000
   nodeId: node001
 
---- # RocketMQ配置
-rocketmq:
-  enabled: true
-  name-server: 106.13.7.251:9876
-  im:
-    group: im-group
+--- # kafka配置  docker run -d --name kafka --network kafka-net -p 9092:9092 -e KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181 -e KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092 -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://106.13.7.251:9092 wurstmeister/kafka
+spring:
+  kafka:
+    bootstrap-servers: 106.13.7.251:9092
+    consumer:
+      group-id: my-group
+    producer:
+      batch-size: 16384
+      buffer-memory: 33554432
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      retries: 0
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
 
 zhipin:
   # 开启sa-token

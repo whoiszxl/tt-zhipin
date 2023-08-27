@@ -7,12 +7,18 @@ import com.whoiszxl.zhipin.im.bean.ChannelAttrDto;
 import com.whoiszxl.zhipin.im.constants.ConnectStatusEnum;
 import com.whoiszxl.zhipin.im.constants.FieldConstants;
 import com.whoiszxl.zhipin.im.constants.ImRedisKeysEnum;
+import com.whoiszxl.zhipin.im.constants.KafkaMQConstants;
+import com.whoiszxl.zhipin.im.dto.CheckGroupChatPermissionQuery;
+import com.whoiszxl.zhipin.im.dto.CheckPrivateChatPermissionQuery;
+import com.whoiszxl.zhipin.im.feign.PermissionCheckFeign;
 import com.whoiszxl.zhipin.im.mq.MqSenderService;
-import com.whoiszxl.zhipin.im.pack.LoginPack;
+import com.whoiszxl.zhipin.im.pack.GroupChatPack;
+import com.whoiszxl.zhipin.im.pack.PrivateChatPack;
 import com.whoiszxl.zhipin.im.protocol.Command;
-import com.whoiszxl.zhipin.im.protocol.Message;
-import com.whoiszxl.zhipin.im.session.MemberSession;
+import com.whoiszxl.zhipin.im.pack.MessagePack;
+import com.whoiszxl.zhipin.im.entity.MemberSession;
 import com.whoiszxl.zhipin.im.session.ChannelHolder;
+import com.whoiszxl.zhipin.tools.common.entity.ResponseResult;
 import com.whoiszxl.zhipin.tools.common.utils.RedisUtils;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -27,7 +33,7 @@ import java.net.InetAddress;
  * @author whoiszxl
  */
 @Slf4j
-public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
+public class NettyServerHandler extends SimpleChannelInboundHandler<MessagePack> {
 
     private final RedisUtils redisUtils;
 
@@ -35,16 +41,20 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
 
     private final String nodeId;
 
-    public NettyServerHandler(RedisUtils redisUtils, MqSenderService mqSenderService, String nodeId) {
+    private final PermissionCheckFeign permissionCheckFeign;
+
+    public NettyServerHandler(RedisUtils redisUtils, MqSenderService mqSenderService, String nodeId, PermissionCheckFeign permissionCheckFeign) {
         this.redisUtils = redisUtils;
         this.mqSenderService = mqSenderService;
         this.nodeId = nodeId;
+        this.permissionCheckFeign = permissionCheckFeign;
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext ctx, Message msg) throws Exception {
-        Byte commandType = msg.getCommandType();
+    protected void channelRead0(ChannelHandlerContext ctx, MessagePack msg) throws Exception {
+        Integer commandType = msg.getCommand();
 
+        //token鉴权，判断是否为合法用户
         String token = msg.getToken();
         Object loginIdByToken = StpUtil.getLoginIdByToken(token);
         if(loginIdByToken == null) {
@@ -53,12 +63,12 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
         }
         String memberId = (String)loginIdByToken;
 
-        if(ObjUtil.equal(Command.Login, commandType)) {
-            LoginPack loginPack = (LoginPack) msg.getMessagePacket();
-
+        if(ObjUtil.equal(Command.LOGIN, commandType)) {
+            log.info("用户[{}]开始进行登录操作，参数: {}", memberId, msg);
             //将账号相关信息设置到channel attr
             setInfoToChannel(ctx, memberId, msg.getClientType(), msg.getImei());
 
+            //构建memberSession对象，保存到Redis中，便于其他服务获取使用
             InetAddress localHost = InetAddress.getLocalHost();
             MemberSession memberSession = MemberSession.builder()
                     .memberId(memberId)
@@ -68,25 +78,63 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
                     .nodeHost(localHost.getHostAddress())
                     .connectStatus(ConnectStatusEnum.ONLINE.getCode()).build();
 
+            //将memberSession设置到Redis中
             redisUtils.hPut(
-                    String.format(ImRedisKeysEnum.MEMBER_SESSION_KEY.getPrefix(), loginPack.getMemberId()),
-                    String.valueOf(msg.getClientType()),
+                    String.format(ImRedisKeysEnum.MEMBER_SESSION_KEY.getPrefix(), memberId),
+                    String.format("%s:%s", msg.getClientType(), msg.getImei()),
                     JSONUtil.toJsonStr(memberSession));
 
+            //将当前的连接保存到本地的ConcurrentHashMap中
             ChannelAttrDto channelAttrDto = ChannelHolder.getInfoFromChannel(ctx);
             ChannelHolder.put(channelAttrDto, (NioSocketChannel) ctx.channel());
         }
 
-
+        //处理退出逻辑，删除HashMap里的连接和Redis中的session信息
         if(ObjUtil.equal(Command.LOGOUT, commandType)) {
             ChannelHolder.logoutSession(redisUtils, ctx);
         }
 
+        //发送心跳，就是设置 HEART_BEAT 为当前时间的时间戳。如果很长时间没有接收到心跳消息，则说明用户已经退出了APP，此时需要将用户的连接断开
         if(ObjUtil.equal(Command.HEART_BEAT, commandType)) {
-            mqSenderService.sendMessage("test_topic", "666");
-
             ctx.channel().attr(AttributeKey.valueOf(FieldConstants.HEART_BEAT))
                     .set(System.currentTimeMillis());
+        }
+
+        //发送私聊消息
+        if(ObjUtil.equal(Command.MessageCommand.PRIVATE_CHAT, commandType)) {
+            //校验是否有发送权限
+            PrivateChatPack privateChatPack = (PrivateChatPack) msg.getDataPack();
+            ResponseResult<Boolean> checkResult = permissionCheckFeign.checkPrivateChatPermission(CheckPrivateChatPermissionQuery
+                    .builder().fromMemberId(privateChatPack.getFromMemberId()).toMemberId(privateChatPack.getToMemberId()).build());
+
+            //发送MQ，将消息发送到web服务进行分发
+            if(checkResult.isOk()) {
+                mqSenderService.sendMessage(KafkaMQConstants.IM_NETTY_TO_MESSAGE_TOPIC, JSONUtil.toJsonStr(msg));
+                return;
+            }
+
+            //TODO 实现ack
+        }
+
+        //发送群聊消息
+        if(ObjUtil.equal(Command.GroupCommand.GROUP_CHAT, commandType)) {
+            //校验是否有发送权限
+            GroupChatPack groupChatPack = (GroupChatPack) msg.getDataPack();
+            ResponseResult<Boolean> checkResult = permissionCheckFeign.checkGroupChatPermission(CheckGroupChatPermissionQuery
+                    .builder().fromMemberId(groupChatPack.getFromMemberId()).groupId(groupChatPack.getGroupId()).build());
+
+            //发送MQ，将消息发送到web服务进行分发
+            if(checkResult.isOk()) {
+                mqSenderService.sendMessage(KafkaMQConstants.IM_NETTY_TO_GROUP_TOPIC, JSONUtil.toJsonStr(msg));
+                return;
+            }
+
+            //TODO 实现ack
+        }
+
+        //发送ACK消息
+        if(ObjUtil.equal(Command.MessageCommand.PRIVATE_CHAT_RECEIVE_ACK, commandType)) {
+            mqSenderService.sendMessage(KafkaMQConstants.IM_NETTY_TO_MESSAGE_TOPIC, JSONUtil.toJsonStr(msg));
         }
 
     }
@@ -100,5 +148,10 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<Message> {
         ctx.channel().attr(AttributeKey.valueOf(FieldConstants.MEMBER_ID)).set(memberId);
         ctx.channel().attr(AttributeKey.valueOf(FieldConstants.CLIENT_TYPE)).set(clientType);
         ctx.channel().attr(AttributeKey.valueOf(FieldConstants.IMEI)).set(imei);
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) {
+        ChannelHolder.offlineSession(redisUtils, ctx);
     }
 }

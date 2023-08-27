@@ -513,6 +513,16 @@ public class RedisUtils {
     }
 
     /**
+     * 获取zset集合的大小
+     *
+     * @param key
+     * @return
+     */
+    public Long zSize(String key) {
+        return redisTemplate.opsForZSet().zCard(key);
+    }
+
+    /**
      * 判断集合是否包含value
      *
      * @param key
@@ -564,6 +574,10 @@ public class RedisUtils {
      */
     public Long zRemove(String key, Object... values) {
         return redisTemplate.opsForZSet().remove(key, values);
+    }
+
+    public Long zRemoveRange(String key, long start, long end) {
+        return redisTemplate.opsForZSet().removeRange(key, start, end);
     }
 
     /**
@@ -630,5 +644,10 @@ public class RedisUtils {
 
     public String deserialize(byte[] body) {
         return redisTemplate.getDefaultSerializer().deserialize(body).toString();
+    }
+
+    public Set zrange(String key, int start, int end) {
+        Set range = redisTemplate.opsForZSet().range(key, start, end);
+        return range;
     }
 }
