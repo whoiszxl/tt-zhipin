@@ -14,6 +14,7 @@ import { CommonColor } from '../../../common/CommonColor';
 import { calculateDistance } from '../../../utils/DistanceUtil';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
+import MessageStore from '../../../stores/MessageStore';
 
 
 const {width:SCREEN_WIDTH} = Dimensions.get('window');
@@ -24,23 +25,23 @@ export default observer(() => {
 
   const navigation = useNavigation<StackNavigationProp<any>>();
 
-  const store = useLocalStore(() => new HomeStore());
+  const store = useLocalStore(() => new MessageStore());
 
   const [index, setIndex] = useState<number>(0);
 
 
 
   useEffect(() => {
-    store.requestLatestTest();
+    store.requestTalkList();
   }, []);
 
   const onJobRefresh = () => {
     store.resetPage();
-    store.requestLatestTest();
+    store.requestTalkList();
   };
 
   const loadData = () => {
-    store.requestLatestTest();
+    store.requestTalkList();
   };
 
   const MyFooter = () => {
@@ -50,81 +51,29 @@ export default observer(() => {
         color: '#999',
         width: '100%',
         padding: 10,
-        paddingBottom: 20
-      }}>已经滑到底部了</Text>
+        paddingBottom: 20,
+        fontSize: 12
+      }}>以上是30天内的联系人</Text>
     );
   };
 
 
 
     //首页职位item UI
-    const renderItem = ({item, index}: {item:JobEntity, index:number}) => {
-      const memberInfo = JSON.parse(item.memberInfo);
+    const renderItem = ({item, index}: {item:TalkEntity, index:number}) => {
+      const memberInfo = JSON.parse(item.fromMemberInfo);
       const styles = StyleSheet.create({
         root: {
           backgroundColor: 'white',
           width: '100%',
-          flexDirection: 'column'
+          flexDirection: 'column',
+          paddingVertical: 5
         },
 
         item: {
-          width: SCREEN_WIDTH - 10,
+          width: SCREEN_WIDTH,
           backgroundColor: 'white',
-          marginHorizontal: 5,
-          marginBottom: 6,
-          borderRadius: 6,
           overflow: 'hidden'
-        },
-
-        oneLine: {
-          flexDirection: 'row', // 将子组件排列在一行
-          alignItems: 'center', // 垂直居中对齐
-          justifyContent: 'space-between', // 在容器中水平分散对齐
-          paddingHorizontal: 12,
-          paddingTop: 10
-        },
-
-        oneLineJobName: {
-          fontWeight: 'bold',
-          fontSize: 14,
-          color: 'black'
-        },
-
-        oneLineJobSalary: {
-          fontWeight: '500',
-          fontSize: 12,
-          color: CommonColor.mainColor
-        },
-
-        twoLine: {
-          flexDirection: 'row', // 将子组件排列在一行
-          alignItems: 'center', // 垂直居中对齐
-          paddingHorizontal: 12,
-          paddingTop: 5
-        },
-
-        twoLineText: {
-          fontSize: 12,
-          color: CommonColor.deepGrey
-        },
-
-        threeLine: {
-          flexDirection: 'row', // 将子组件排列在一行
-          alignItems: 'center', // 垂直居中对齐
-          paddingHorizontal: 12,
-          paddingTop: 5
-        },
-
-        threeLineTag: {
-          backgroundColor: CommonColor.tagBg,
-          borderRadius: 5,
-          paddingVertical: 2,
-          paddingHorizontal: 4,
-          marginRight: 3
-        },
-        threeLineTagText: {
-          color: CommonColor.deepGrey,
-          fontSize: 10
         },
 
         fourLine: {
@@ -142,27 +91,51 @@ export default observer(() => {
         },
 
         fourLineHRAvatar: {
-          width: 18,
-          height: 18,
+          width: 40,
+          height: 40,
           resizeMode: 'cover',
           borderRadius: 100
         },
 
         fourLineHRText:{
-          color: CommonColor.fontColor,
+          paddingLeft: 5,
+          flexDirection: 'row',
+          alignItems: 'center',
+        },
+
+        fourLineName:{
+          fontSize: 13,
+          color: CommonColor.fontColor
+        },
+
+        fourLineCompanyAbbrName:{
           fontSize: 11,
-          paddingLeft: 5
+          paddingLeft: 4
         },
 
         fourLineHRReplyText:{
           color: CommonColor.normalGrey,
-          fontSize: 10,
-          paddingLeft: 5
+          fontSize: 11,
+          paddingLeft: 5,
+          paddingTop: 8
+        },
+
+        fourLineHRReplyText2: {
+          color: CommonColor.fontColor,
+          fontSize: 11,
+          paddingLeft: 5,
+          paddingTop: 8
+        },
+
+
+        messageTip: {
+          flexDirection: 'row'
         },
       
 
         fourLineAddress: {
-          flexDirection: 'row'
+          flexDirection: 'row',
+          paddingBottom: 20
         },
 
         fourLineAddressInfo: {
@@ -188,28 +161,6 @@ export default observer(() => {
           }} activeOpacity={1} style={styles.item} key={index}>
             <View style={styles.root}>
 
-              {/* 职位名与薪资范围 */}
-              <View style={styles.oneLine}>
-                <Text style={styles.oneLineJobName}>{item.jobName}</Text>
-                <Text style={styles.oneLineJobSalary}>{Math.floor(item.salaryRangeStart / 1000)} - {Math.floor(item.salaryRangeEnd / 1000)}K</Text>
-              </View>
-
-              {/* 公司信息 */}
-              <View style={styles.twoLine}>
-                <Text style={styles.twoLineText}>{item.companyResponse.companyAbbrName} </Text>
-                <Text style={styles.twoLineText}>{item.companyResponse.financingStage} </Text>
-                <Text style={styles.twoLineText}>{item.companyResponse.companyScale} </Text>
-              </View>
-
-              {/* 岗位标签 */}
-              <View style={styles.threeLine}>
-                {JSON.parse(item.jobTags).map((tag:any, index:number) => (
-                  <View key={index} style={styles.threeLineTag}>
-                    <Text style={styles.threeLineTagText}>{tag}</Text>
-                  </View>
-                ))}
-              </View>
-
               {/* HR信息与地址信息 */}
               <View style={styles.fourLine}>
                 
@@ -219,15 +170,21 @@ export default observer(() => {
 
                   <View style={{flexDirection: 'column'}}>
                     {/* HR信息 */}
-                    <Text style={styles.fourLineHRText}>{memberInfo.name + " · " + memberInfo.jobTitle}</Text>
-                    <Text style={styles.fourLineHRReplyText}>3分钟前回复</Text>
+                    <View style={styles.fourLineHRText}>
+                      <Text style={styles.fourLineName}>{memberInfo.name}</Text>
+                      <Text style={styles.fourLineCompanyAbbrName}>{'todo公司'  + "·" +  memberInfo.jobTitle}</Text>
+                    </View>
+
+                    <View style={styles.messageTip}>
+                      <Text style={styles.fourLineHRReplyText}>[新招呼]</Text>
+                      <Text style={styles.fourLineHRReplyText2}>您好，我是负责TT公司招聘的X老板...</Text>
+                    </View>
                   </View>
 
                 </View>
 
                 <View style={styles.fourLineAddress}>
-                  <Text style={styles.fourLineAddressDistance}>{calculateDistance(28.195666, 112.962398, item.latitude, item.longitude)}</Text>
-                  <Text style={styles.fourLineAddressInfo}>{item.district + " " + item.addressDetail}</Text>
+                  <Text style={styles.fourLineAddressInfo}>{item.createdAt}</Text>
                 </View>
               </View>
 
@@ -246,10 +203,10 @@ export default observer(() => {
       <>
         {/** 主页视频列表 */}
         <FlowList 
-          keyExtractor={(item: JobEntity) => `${item.id}`}
+          keyExtractor={(item: TalkEntity) => `${item.id}`}
           contentContainerStyle={styles.container} 
           style={styles.flatList} 
-          data={store.jobList} 
+          data={store.talkList} 
           extraData={[store.refreshing]}
           renderItem={renderItem} 
           numColumns={1}
@@ -309,7 +266,7 @@ export default observer(() => {
         }} onTabChanged={(tab: number) => { setIndex(tab); }}/>
       </View>
 
-      {index === 0 ? renderRecommend() : (index === 1 ? renderNearBy() : renderLatest())}
+      {index === 0 ? renderRecommend() : renderNearBy()}
     </View>
     
   );

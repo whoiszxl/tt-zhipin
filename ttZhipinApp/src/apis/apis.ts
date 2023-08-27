@@ -19,6 +19,9 @@ const apis = {
     /** 文件上传相关接口 */
     fileUpload: {url: '/file/api/file/upload', method: METHODS.POST}, //文件上传
 
+    /** IM相关接口 */
+    talkList: {url: '/im/talk/list', method: METHODS.GET}, //获取IM对话列表
+
 }
 
 export default apis;

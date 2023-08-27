@@ -98,3 +98,17 @@ type MemberInfoEntity = {
     location: string;
     browser: string;
 }
+
+
+type TalkEntity = {
+    id: number;
+    talkType: number;
+    fromMemberId: number;
+    fromMemberInfo: string;
+    toMemberId: number;
+    muteStatus: number;
+    topStatus: number;
+    readSequence: number;
+    sequence: number;
+    createdAt: string;
+}
