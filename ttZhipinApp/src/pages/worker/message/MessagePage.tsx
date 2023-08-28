@@ -15,6 +15,8 @@ import { calculateDistance } from '../../../utils/DistanceUtil';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import MessageStore from '../../../stores/MessageStore';
+import WebSocketUtil from '../../../utils/WebSocketUtil';
+import ChatWebSocket from '../../../stores/ChatWebSocket';
 
 
 const {width:SCREEN_WIDTH} = Dimensions.get('window');
@@ -29,11 +31,23 @@ export default observer(() => {
 
   const [index, setIndex] = useState<number>(0);
 
-
-
   useEffect(() => {
+    WebSocketUtil.connect();
+    WebSocketUtil.addListener('message', handleMessage);
+    WebSocketUtil.addListener('open', handleOpen);
+    
     store.requestTalkList();
   }, []);
+
+  const handleOpen = () => {
+    console.log('Received open message');
+    ChatWebSocket.login();
+  }
+
+  const handleMessage = (message: any) => {
+    console.log('Received message:', message);
+    // 在这里处理收到的消息
+  }
 
   const onJobRefresh = () => {
     store.resetPage();
@@ -156,7 +170,8 @@ export default observer(() => {
         <>
           <TouchableOpacity onPress={() => {
             //跳转到职位详情页
-            navigation.push('JobDetailPage', {id: item.id});
+            console.log(memberInfo);
+            navigation.push('ChatPage', {avatar: memberInfo.avatar, name: memberInfo.name, jobTitle: memberInfo.jobTitle});
 
           }} activeOpacity={1} style={styles.item} key={index}>
             <View style={styles.root}>
