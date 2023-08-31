@@ -17,6 +17,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import MessageStore from '../../../stores/MessageStore';
 import WebSocketUtil from '../../../utils/WebSocketUtil';
 import ChatWebSocket from '../../../stores/ChatWebSocket';
+import DatabaseHelper from '../../../utils/DatabaseHelper';
+import command from '../../../common/Command';
 
 
 const {width:SCREEN_WIDTH} = Dimensions.get('window');
@@ -40,13 +42,49 @@ export default observer(() => {
   }, []);
 
   const handleOpen = () => {
-    console.log('Received open message');
     ChatWebSocket.login();
   }
 
   const handleMessage = (message: any) => {
-    console.log('Received message:', message);
-    // 在这里处理收到的消息
+    const chat: PrivateChatMessage = JSON.parse(message);
+    console.log("接收到的消息:", chat);
+
+    if (chat.command === command.MessageCommand.PRIVATE_CHAT) {
+      //将消息持久化到本地数据库SQLite中
+      DatabaseHelper.executeQuery("INSERT INTO im_messages (owner_member_id, from_member_id, to_member_id, body) VALUES (?, ?, ?, ?)", [
+        chat.data.fromMemberId,
+        chat.data.fromMemberId,
+        chat.data.toMemberId,
+        message,
+      ])
+        .then(() => {
+          console.log('record add success');
+        })
+        .catch((error) => {
+          console.error('record add fail:', error);
+        });
+      return;
+    }
+
+    //接收到自己发送消息的ack，将ack消息存到数据库中
+    if(chat.command === command.MessageCommand.PRIVATE_CHAT_ACK) {
+      //将消息持久化到本地数据库SQLite中
+      DatabaseHelper.executeQuery("INSERT INTO im_messages (owner_member_id, from_member_id, to_member_id, body) VALUES (?, ?, ?, ?)", [
+        chat.data.toMemberId,
+        chat.data.fromMemberId,
+        chat.data.toMemberId,
+        message,
+      ])
+        .then(() => {
+          console.log('record add success');
+        })
+        .catch((error) => {
+          console.error('record add fail:', error);
+        });
+      return;
+    }
+
+
   }
 
   const onJobRefresh = () => {
@@ -170,8 +208,12 @@ export default observer(() => {
         <>
           <TouchableOpacity onPress={() => {
             //跳转到职位详情页
-            console.log(memberInfo);
-            navigation.push('ChatPage', {avatar: memberInfo.avatar, name: memberInfo.name, jobTitle: memberInfo.jobTitle});
+            navigation.push('ChatPage', {
+              memberId: item.fromMemberId,
+              avatar: memberInfo.avatar, 
+              name: memberInfo.name, 
+              jobTitle: memberInfo.jobTitle
+            });
 
           }} activeOpacity={1} style={styles.item} key={index}>
             <View style={styles.root}>

@@ -28,6 +28,8 @@ public class MessageHexBuildTest {
     Integer commandType = Command.LOGIN;
     byte clientType = 1;
 
+    String message = "您好，我是负责蜀国招聘的顾问姜维.我们正在寻访武将谋士，薪资open(一级将领可谈)，另有每月20-70两黄金的奖金，多地可选、多岗位招聘，看了您的简历觉得很匹配，方便详聊吗?";
+
     @Before
     public void init() throws IOException {
         user1_token = "dbfd226d-0cb4-4390-b49c-dab30cc9f97d";
@@ -75,6 +77,7 @@ public class MessageHexBuildTest {
 
     /**
      * 1 -> 2 的二进制消息：000007d10100000024000000080000004864626664323236642d306362342d343339302d623439632d646162333063633966393764696d65692d3130307b226d6573736167654964223a226d73672d303031222c2266726f6d4d656d6265724964223a312c22746f4d656d6265724964223a322c22626f6479223a2268656c6c6f2121227d
+     * 1 -> 4 的二进制消息：000007d10100000024000000080000012f64626664323236642d306362342d343339302d623439632d646162333063633966393764696d65692d3130307b226d6573736167654964223a226d73672d303031222c2266726f6d4d656d6265724964223a312c22746f4d656d6265724964223a342c22626f6479223a22e682a8e5a5bdefbc8ce68891e698afe8b49fe8b4a3e89c80e59bbde68b9be88198e79a84e9a1bee997aee5a79ce7bbb42ee68891e4bbace6ada3e59ca8e5afbbe8aebfe6ada6e5b086e8b08be5a3abefbc8ce896aae8b5846f70656e28e4b880e7baa7e5b086e9a286e58fafe8b08829efbc8ce58fa6e69c89e6af8fe69c8832302d3730e4b8a4e9bb84e98791e79a84e5a596e98791efbc8ce5a49ae59cb0e58fafe98089e38081e5a49ae5b297e4bd8de68b9be88198efbc8ce79c8be4ba86e682a8e79a84e7ae80e58e86e8a789e5be97e5be88e58cb9e9858defbc8ce696b9e4bebfe8afa6e8818ae590973f227d
      * @throws JSONException
      */
     @Test
@@ -82,8 +85,8 @@ public class MessageHexBuildTest {
         PrivateChatPack privateChatPack = PrivateChatPack.builder()
                 .messageId("msg-001")
                 .fromMemberId(1L)
-                .toMemberId(2L)
-                .body("hello!!")
+                .toMemberId(4L)
+                .body(message)
                 .build();
         String jsonData = JSONUtil.toJsonStr(privateChatPack);
         String message = build(user1_token, Command.MessageCommand.PRIVATE_CHAT, jsonData);

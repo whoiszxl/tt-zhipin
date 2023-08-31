@@ -8,6 +8,8 @@ import icon_close from '../../assets/icons/close.png';
 import MemberStore from "../../stores/MemberStore";
 import { CommonColor } from "../../common/CommonColor";
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import StorageUtil from "../../utils/StorageUtil";
+import { CommonConstant } from "../../common/CommonConstant";
 
 
 
@@ -64,6 +66,8 @@ export default () => {
               || data.avatar === '') {
                 navigation.replace('InitMemberInfoPage', {memberInfo: data});
               }else {
+                //将当前的用户信息保存到本地
+                StorageUtil.setItem(CommonConstant.MEMBER_INFO, JSON.stringify(data));
                 navigation.replace('TabPage');
               }
           }else if(data === undefined) {

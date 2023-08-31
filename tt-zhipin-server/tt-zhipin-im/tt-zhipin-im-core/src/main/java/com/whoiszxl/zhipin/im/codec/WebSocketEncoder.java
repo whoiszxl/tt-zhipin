@@ -25,10 +25,8 @@ public class WebSocketEncoder extends MessageToMessageEncoder<ChatMessage> {
         ExecutorBuilder.create().build();
         try {
             String s = JSONUtil.toJsonStr(msg);
-            ByteBuf byteBuf = Unpooled.directBuffer(9 + s.length());
+            ByteBuf byteBuf = Unpooled.directBuffer(4 + s.length());
             byte[] bytes = s.getBytes();
-            byteBuf.writeByte(msg.getAckStatus());
-            byteBuf.writeInt(msg.getCommand());
             byteBuf.writeInt(bytes.length);
             byteBuf.writeBytes(bytes);
             out.add(new BinaryWebSocketFrame(byteBuf));

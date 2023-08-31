@@ -21,7 +21,7 @@ public class MessageIdempotentService {
 
     public void setPrivateChatMessageCache(PrivateChatPack privateChatPack) {
         String key = String.format("%s:%s-%s", PRIVATE_CHAT_KEY_PREFIX, privateChatPack.getFromMemberId(), privateChatPack.getMessageId());
-        redisUtils.setEx(key, JSONUtil.toJsonStr(privateChatPack), 10, TimeUnit.MINUTES);
+        redisUtils.setEx(key, JSONUtil.toJsonStr(privateChatPack), 10, TimeUnit.SECONDS);
     }
 
     public PrivateChatPack getPrivateChatMessageCache(PrivateChatPack privateChatPack) {

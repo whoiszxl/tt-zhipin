@@ -68,7 +68,7 @@ public class ChatProducer {
 
     private boolean sendPacket(Long memberId, Integer command, Packet packet, MemberSession memberSession, AckStatusEnum ackStatusEnum) {
         ChatMessage<Object> chatMessage = ChatMessage.builder()
-                .toMemberId(memberId)
+                .toMemberId(String.valueOf(memberId))
                 .command(command)
                 .clientType(memberSession.getClientType())
                 .imei(memberSession.getImei())

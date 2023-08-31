@@ -21,10 +21,10 @@ import java.time.LocalDateTime;
 public class ChatMessage<T> implements Serializable {
 
     @Schema(description = "接收者")
-    private Long fromMemberId;
+    private String fromMemberId;
 
     @Schema(description = "接收者")
-    private Long toMemberId;
+    private String toMemberId;
 
     @Schema(description = "客户端类型")
     private byte clientType;

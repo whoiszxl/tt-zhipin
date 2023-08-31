@@ -5,6 +5,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { CommonColor } from '../../../../common/CommonColor';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 interface TopMenuBarProps {
     name: string;
@@ -13,6 +15,9 @@ interface TopMenuBarProps {
 
 const ChatTopMenu: React.FC<TopMenuBarProps> = ({ name, jobTitle }) => {
 
+    const navigation = useNavigation<StackNavigationProp<any>>();
+
+
     const insets = useSafeAreaInsets();
 
     return (
@@ -20,7 +25,7 @@ const ChatTopMenu: React.FC<TopMenuBarProps> = ({ name, jobTitle }) => {
 
             <View style={styles.topBar}>
                 <View style={styles.oneLine}>
-                    <Icon style={styles.leftText} size={20} color={CommonColor.fontColor} name='chevron-back-sharp'/>
+                    <Icon style={styles.leftText} size={20} color={CommonColor.fontColor} name='chevron-back-sharp' onPress={() => { navigation.goBack() }}/>
                     <Text style={styles.centerText}>{name + " · " + jobTitle}</Text>
                     <Icon style={styles.rightText} size={20} color={CommonColor.fontColor} name='menu'/>
                 </View>

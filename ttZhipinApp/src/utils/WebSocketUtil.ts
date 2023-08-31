@@ -2,7 +2,7 @@ import { Buffer } from 'buffer';
 
 
 class WebSocketUtils {
-    private socketUrl: string = "ws://server.natappfree.cc:35996/ws";
+    private socketUrl: string = "ws://server.natappfree.cc:45960/ws";
     private socket: WebSocket | null = null;
     private listeners: { eventType: string; callback: Function }[] = [];
 
@@ -18,8 +18,17 @@ class WebSocketUtils {
         };
 
         this.socket.onmessage = (event) => {
-            const message = event.data;
-            this.notifyListeners('message', message);
+            const data = event.data; // The binary data received from the server
+            const arrayBuffer = data instanceof ArrayBuffer ? data : data.buffer;
+
+            const uint32Array = new Uint32Array(arrayBuffer, 0, 1);
+            const messageLength = uint32Array[0];
+          
+            const messageBuffer = Buffer.from(arrayBuffer.slice(4, 4 + messageLength));
+            const messageText = messageBuffer.toString('utf-8');
+
+            this.notifyListeners('message', messageText);
+            this.notifyListeners('chatMessage', messageText);
         };
 
         this.socket.onclose = () => {
@@ -35,16 +44,17 @@ class WebSocketUtils {
         jsonData: string) {
     
         const data = this.build(userImei, userToken, userCommand, userClientType, jsonData);
-        console.log(data);
         if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-            console.log("调用 send");
             this.socket.send(data);
         }
         
     }
 
     addListener(eventType: string, callback: Function) {
-        this.listeners.push({ eventType, callback });
+        //this.listeners.push({ eventType, callback });
+        if (!this.listeners.some(listener => listener.eventType === eventType)) {
+            this.listeners.push({ eventType, callback });
+        }
     }
 
     removeListener(callback: Function) {

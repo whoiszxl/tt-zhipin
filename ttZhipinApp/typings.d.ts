@@ -112,3 +112,30 @@ type TalkEntity = {
     sequence: number;
     createdAt: string;
 }
+
+
+type MessageData = {
+    messageId: string;
+    fromMemberId: number;
+    toMemberId: number;
+    body: string;
+    sequence: number;
+  }
+  
+type PrivateChatMessage = {
+    toMemberId: number;
+    clientType: number;
+    command: number;
+    imei: string;
+    data: MessageData;
+    ackStatus: number;
+}
+
+
+type PrivateChatPack = {
+    messageId: string;
+    fromMemberId: number;
+    toMemberId: number;
+    body: string;
+}
+

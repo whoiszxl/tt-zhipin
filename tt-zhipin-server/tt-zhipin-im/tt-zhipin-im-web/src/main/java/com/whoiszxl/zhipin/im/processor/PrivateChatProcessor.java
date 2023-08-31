@@ -64,19 +64,6 @@ public class PrivateChatProcessor {
         //防止重复提交，保证消息幂等性，先从缓存中获取，如果缓存中存在说明已经发送成功了一次，在一定间隔时间内不允许再次发送
         PrivateChatPack privateChatCache = messageIdempotentService.getPrivateChatMessageCache(privateChatPack);
         if(privateChatCache != null) {
-            threadPoolExecutor.execute(() -> {
-                ack(privateChatCache, AckStatusEnum.SUCCESS);
-                //同步消息到当前用户的其他端
-                messagePack.setDataPack(privateChatCache);
-                chatProducer.sendToMemberOtherClient(fromMemberId, messagePack, privateChatCache, Command.MessageCommand.PRIVATE_CHAT);
-                //发送消息给目标用户的所有端，如果目标用户不在线，则直接发送ACK回发送用户的客户端
-                List<MemberSession> successSessionList = chatProducer.sendToMemberAllClient(
-                        toMemberId, privateChatCache, Command.MessageCommand.PRIVATE_CHAT, AckStatusEnum.SUCCESS);
-                if(CollUtil.isEmpty(successSessionList)) {
-                    receiveAck(messagePack, privateChatCache, AckStatusEnum.SUCCESS);
-                }
-            });
-
             return;
         }
 
