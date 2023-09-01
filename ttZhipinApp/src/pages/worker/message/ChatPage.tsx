@@ -92,7 +92,7 @@ export default function ChatPage() {
 
   const handleMessage = (message: any) => {
     const chat: PrivateChatMessage = JSON.parse(message);
-    console.log("接收到的消息:", chat);
+    console.log("ChatPage 接收到的消息:", chat);
 
     if (chat.command === command.MessageCommand.PRIVATE_CHAT) {
       //接收到其他人发送过来的消息，添加到message中
@@ -101,7 +101,7 @@ export default function ChatPage() {
         text: chat.data.body,
         createdAt: new Date(),
         user: {
-          _id: 1,
+          _id: chat.data.fromMemberId,
           avatar: params.avatar,
         },
       };
