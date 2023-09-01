@@ -16,6 +16,8 @@ import com.whoiszxl.zhipin.tools.common.entity.ResponseResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,6 +76,7 @@ public class ChatProducer {
                 .imei(memberSession.getImei())
                 .data(packet)
                 .ackStatus(ackStatusEnum.getCode())
+                .sendAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .build();
 
         return mqSenderService.sendMessage(KafkaMQConstants.IM_MESSAGE_TO_NETTY_TOPIC, JSONUtil.toJsonStr(chatMessage));

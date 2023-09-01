@@ -23,6 +23,11 @@ public class PrivateChatPack extends Packet {
     private String messageId;
 
     /**
+     * 内容ID
+     */
+    private String contentId;
+
+    /**
      * 发送者ID
      */
     private Long fromMemberId;

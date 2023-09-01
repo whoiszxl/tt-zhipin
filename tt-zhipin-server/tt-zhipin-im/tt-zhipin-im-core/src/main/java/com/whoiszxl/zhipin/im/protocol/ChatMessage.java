@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * 消息
@@ -42,7 +41,7 @@ public class ChatMessage<T> implements Serializable {
     private T data;
 
     @Schema(description = "发送时间")
-    private LocalDateTime sendAt;
+    private String sendAt;
 
     @Schema(description = "扩展信息")
     private String extra;

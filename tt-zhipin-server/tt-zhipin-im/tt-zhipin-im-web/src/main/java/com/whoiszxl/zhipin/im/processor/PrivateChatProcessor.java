@@ -74,6 +74,8 @@ public class PrivateChatProcessor {
         threadPoolExecutor.execute(() -> {
             //TODO 异步持久化消息
             Long contentId = messageService.savePrivateChatMessage(messagePack);
+            privateChatPack.setContentId(contentId.toString());
+
             //发送成功ack
             ack(privateChatPack, AckStatusEnum.SUCCESS);
             //同步消息到当前用户的其他端

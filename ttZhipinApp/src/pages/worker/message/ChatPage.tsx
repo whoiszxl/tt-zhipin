@@ -12,6 +12,7 @@ import command from '../../../common/Command';
 import ChatWebSocket from '../../../stores/ChatWebSocket';
 import StorageUtil from '../../../utils/StorageUtil';
 import { CommonConstant } from '../../../common/CommonConstant';
+import uuid from 'react-native-uuid';
 
 
 export default function ChatPage() {
@@ -19,72 +20,69 @@ export default function ChatPage() {
 
   const { params } = useRoute<any>();
 
-  const [currentId, setCurrentId] = useState<number>(0);
-  const [currentAvatar, setCurrentAvatar] = useState<string>('');
+  const [avatar, setAvatar] = useState<string>('https://shopzz.oss-cn-guangzhou.aliyuncs.com/other/a1.jpg');
+
 
 
   useEffect(() => {
     StorageUtil.getItem(CommonConstant.MEMBER_INFO).then(data => {
       console.log("获取到当前用户信息:", data);
-      
-      if(data !== null) {
+
+      if (data !== null) {
         const memberInfo = JSON.parse(data);
-        setCurrentId(memberInfo.id);
         console.log(memberInfo.id);
-        setCurrentAvatar(memberInfo.avatar);
+        setAvatar(memberInfo.avatar);
 
 
         //初次进入界面，获取全量聊天记录   TODO 增量拉取聊天记录待优化
-    DatabaseHelper.initializeDatabase('im.db')
-    .then(() => {
-      console.log('Database initialized');
-    })
-    .catch((error) => {
-      console.error('Error initializing database:', error);
-    });
+        DatabaseHelper.initializeDatabase(CommonConstant.IM_DB_NAME)
+          .then(() => {
+            console.log('Database initialized');
+          })
+          .catch((error) => {
+            console.error('Error initializing database:', error);
+          });
 
-    //初始化私聊消息表
-    DatabaseHelper.executeQuery("CREATE TABLE IF NOT EXISTS im_messages (id INTEGER PRIMARY KEY AUTOINCREMENT, owner_member_id INTEGER, from_member_id INTEGER, to_member_id INTEGER, body TEXT);")
-    .then(() => {
-      console.log('Table initialized');
-    })
-    .catch((error) => {
-      console.error('Error initializing Table:', error);
-    });
+        //初始化私聊消息表
+        DatabaseHelper.executeQuery("CREATE TABLE IF NOT EXISTS " + CommonConstant.IM_PRIVATE_CHAT_TABLE + " (id INTEGER PRIMARY KEY AUTOINCREMENT, content_id INTEGER UNIQUE, owner_member_id INTEGER, from_member_id INTEGER, to_member_id INTEGER, body TEXT);")
+          .then(() => {
+            console.log('Table initialized');
+          })
+          .catch((error) => {
+            console.error('Error initializing Table:', error);
+          });
 
-    WebSocketUtil.addListener('chatMessage', handleMessage);
-    WebSocketUtil.addListener('close', handleClose);
+        WebSocketUtil.addListener('chatMessage', handleMessage);
+        WebSocketUtil.addListener('close', handleClose);
 
-    //加载本地数据库消息到UI中
-    DatabaseHelper.executeSQL('SELECT * FROM im_messages where owner_member_id = ' + params.memberId + ' order by id desc')
-      .then((data) => {
-        var messageList: IMessage[] = [];
-        data.forEach(e => {
-          const obj = JSON.parse(e.body);
-          var newMessage: IMessage = {
-            _id: Math.round(Math.random() * 1000000),
-            text: obj.data.body,
-            createdAt: new Date(),
-            user: {
-              _id: obj.data.fromMemberId,
-              avatar: obj.data.fromMemberId.toString() === memberInfo.id.toString() ? memberInfo.avatar : params.avatar,
-            },
-          };
+        //加载本地数据库消息到UI中
+        DatabaseHelper.executeSQL('SELECT * FROM ' + CommonConstant.IM_PRIVATE_CHAT_TABLE + ' where owner_member_id = ' + params.memberId + ' order by id desc')
+          .then((data) => {
+            var messageList: IMessage[] = [];
+            data.forEach(e => {
+              const obj = JSON.parse(e.body);
+              var newMessage: IMessage = {
+                _id: uuid.v4().toString(),
+                text: obj.data.body,
+                createdAt: new Date(obj.sendAt),
+                user: {
+                  _id: obj.data.fromMemberId,
+                  avatar: obj.data.fromMemberId.toString() === memberInfo.id.toString() ? memberInfo.avatar : params.avatar,
+                },
+              };
 
-          messageList.push(newMessage);
-        });
-        setMessages(previousMessages => GiftedChat.append(previousMessages, messageList))
-    })
-    .catch((error) => {
-      console.error('Error initializing Table:', error);
-    });
-
-
+              messageList.push(newMessage);
+            });
+            setMessages(previousMessages => GiftedChat.append(previousMessages, messageList))
+          })
+          .catch((error) => {
+            console.error('Error initializing Table:', error);
+          });
       }
-        
+
     });
 
-    
+
   }, []);
 
   const handleClose = () => {
@@ -97,9 +95,9 @@ export default function ChatPage() {
     if (chat.command === command.MessageCommand.PRIVATE_CHAT) {
       //接收到其他人发送过来的消息，添加到message中
       var newMessage = {
-        _id: Math.round(Math.random() * 1000000),
+        _id: uuid.v4().toString(),
         text: chat.data.body,
-        createdAt: new Date(),
+        createdAt: new Date(chat.sendAt),
         user: {
           _id: chat.data.fromMemberId,
           avatar: params.avatar,
@@ -174,6 +172,20 @@ export default function ChatPage() {
     );
   };
 
+  const renderCustomDay  = (props:any) => {
+    // 从props中获取日期
+    const { currentMessage } = props;
+    const date = currentMessage.createdAt;
+
+    // 自定义日期格式
+    const formattedDate = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+
+    return (
+      <View style={{ alignItems: 'center', marginVertical: 10 }}>
+        <Text style={{ color: 'gray' }}>{formattedDate}</Text>
+      </View>
+    );
+  }
   
 
   const renderTime = () => null;
@@ -199,8 +211,7 @@ export default function ChatPage() {
         renderInputToolbar={renderInputToolbar}
         user={{
           _id: 4,
-          name: '邓艾',
-          avatar: 'https://tt-zhipin-oss.oss-cn-shenzhen.aliyuncs.com/image/default3.png',
+          avatar: avatar,
         }}
         alignTop={true}
       />

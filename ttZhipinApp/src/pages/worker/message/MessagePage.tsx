@@ -1,8 +1,6 @@
 import { StyleSheet, Text, View, Dimensions, Image } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import HomeStore from '../../../stores/HomeStore';
 import { useLocalStore, observer } from 'mobx-react';
-import Icon from 'react-native-vector-icons/Ionicons';
 import Feather from 'react-native-vector-icons/Feather';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import FlowList from '../../../components/flowlist/FlowList.js';
@@ -11,7 +9,6 @@ import TitleBar from './components/TitleBar';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import { GestureResponderEvent } from 'react-native';
 import { CommonColor } from '../../../common/CommonColor';
-import { calculateDistance } from '../../../utils/DistanceUtil';
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import MessageStore from '../../../stores/MessageStore';
@@ -19,6 +16,7 @@ import WebSocketUtil from '../../../utils/WebSocketUtil';
 import ChatWebSocket from '../../../stores/ChatWebSocket';
 import DatabaseHelper from '../../../utils/DatabaseHelper';
 import command from '../../../common/Command';
+import { CommonConstant } from '../../../common/CommonConstant';
 
 
 const {width:SCREEN_WIDTH} = Dimensions.get('window');
@@ -51,7 +49,8 @@ export default observer(() => {
 
     if (chat.command === command.MessageCommand.PRIVATE_CHAT) {
       //将消息持久化到本地数据库SQLite中
-      DatabaseHelper.executeQuery("INSERT INTO im_messages (owner_member_id, from_member_id, to_member_id, body) VALUES (?, ?, ?, ?)", [
+      DatabaseHelper.executeQuery("INSERT INTO " + CommonConstant.IM_PRIVATE_CHAT_TABLE + " (content_id, owner_member_id, from_member_id, to_member_id, body) VALUES (?, ?, ?, ?, ?)", [
+        chat.data.contentId,
         chat.data.fromMemberId,
         chat.data.fromMemberId,
         chat.data.toMemberId,
@@ -69,7 +68,8 @@ export default observer(() => {
     //接收到自己发送消息的ack，将ack消息存到数据库中
     if(chat.command === command.MessageCommand.PRIVATE_CHAT_ACK) {
       //将消息持久化到本地数据库SQLite中
-      DatabaseHelper.executeQuery("INSERT INTO im_messages (owner_member_id, from_member_id, to_member_id, body) VALUES (?, ?, ?, ?)", [
+      DatabaseHelper.executeQuery("INSERT INTO " + CommonConstant.IM_PRIVATE_CHAT_TABLE + " (content_id, owner_member_id, from_member_id, to_member_id, body) VALUES (?, ?, ?, ?, ?)", [
+        chat.data.contentId,
         chat.data.toMemberId,
         chat.data.fromMemberId,
         chat.data.toMemberId,

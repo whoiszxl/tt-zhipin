@@ -115,6 +115,7 @@ type TalkEntity = {
 
 
 type MessageData = {
+    contentId: string;
     messageId: string;
     fromMemberId: number;
     toMemberId: number;
@@ -129,6 +130,7 @@ type PrivateChatMessage = {
     imei: string;
     data: MessageData;
     ackStatus: number;
+    sendAt: string;
 }
 
 
