@@ -67,6 +67,7 @@ export default observer(() => {
       store.requestOfflineMessageList(finalRes + 1, (setList: PrivateChatMessage[]) => {
         console.log("获取到离线消息，需要将离线消息持久化到本地数据库:", setList);
   
+        if(setList.length !== 0) {
         //遍历所有离线消息，并持久化到APP本地
         setList.forEach(element => {
   
@@ -95,6 +96,7 @@ export default observer(() => {
         console.log("这波离线消息最新的序列号", lastElement.data.sequence);
   
         StorageUtil.setItem(CommonConstant.OFFLINE_MESSAGE_SEQ, lastElement.data.sequence.toString());
+        }
       });
     });
     
@@ -291,7 +293,7 @@ export default observer(() => {
                     {/* HR信息 */}
                     <View style={styles.fourLineHRText}>
                       <Text style={styles.fourLineName}>{memberInfo.name}</Text>
-                      <Text style={styles.fourLineCompanyAbbrName}>{'todo公司'  + "·" +  memberInfo.jobTitle}</Text>
+                      <Text style={styles.fourLineCompanyAbbrName}>{memberInfo.companyAbbrName  + "·" +  memberInfo.jobTitle}</Text>
                     </View>
 
                     <View style={styles.messageTip}>

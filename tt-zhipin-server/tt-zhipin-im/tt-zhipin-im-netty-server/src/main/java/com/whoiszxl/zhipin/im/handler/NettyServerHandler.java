@@ -102,10 +102,15 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<MessagePack>
 
         //发送私聊消息
         if(ObjUtil.equal(Command.MessageCommand.PRIVATE_CHAT, commandType)) {
-            //校验是否有发送权限
             PrivateChatPack privateChatPack = (PrivateChatPack) msg.getDataPack();
             privateChatPack.setFromMemberId(Long.valueOf(memberId));
+            //校验是否是机器人消息
+            if(privateChatPack.getToMemberId() == -1L) {
+                mqSenderService.sendMessage(KafkaMQConstants.IM_NETTY_TO_GPT_TOPIC, JSONUtil.toJsonStr(msg));
+                return;
+            }
 
+            //校验是否有发送权限
             ResponseResult<Boolean> checkResult = permissionCheckFeign.checkPrivateChatPermission(CheckPrivateChatPermissionQuery
                     .builder()
                     .fromMemberId(privateChatPack.getFromMemberId())

@@ -25,6 +25,7 @@ export default function ChatPage() {
 
 
   useEffect(() => {
+    console.log("接收到跳转页面带过来的参数", params);
     StorageUtil.getItem(CommonConstant.MEMBER_INFO).then(data => {
       console.log("获取到当前用户信息:", data);
 
@@ -51,7 +52,6 @@ export default function ChatPage() {
         const sql = 'SELECT * FROM ' + CommonConstant.IM_PRIVATE_CHAT_TABLE + ' where owner_member_id = ' + params.memberId + ' order by id desc';
         DatabaseHelper.executeSQL(sql)
           .then((data) => {
-            console.log("查询结果：", data);
             var messageList: IMessage[] = [];
             data.forEach(e => {
               const obj = JSON.parse(e.body);
@@ -99,6 +99,8 @@ export default function ChatPage() {
           avatar: params.avatar,
         },
       };
+
+      console.log("接收到消息：", newMessage);
       setMessages((prevMessages) => [newMessage, ...prevMessages]);
       return;
     }

@@ -1,11 +1,13 @@
 package com.whoiszxl.zhipin.im.cqrs.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 @Schema(description = "对话框列表返回实体")
 public class TalkResponse {
 

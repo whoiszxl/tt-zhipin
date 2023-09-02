@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWrapper;
+import com.whoiszxl.zhipin.im.constants.AckStatusEnum;
+import com.whoiszxl.zhipin.im.constants.TalkTypeEnum;
 import com.whoiszxl.zhipin.im.cqrs.command.TalkAddCommand;
 import com.whoiszxl.zhipin.im.cqrs.command.TalkDeleteCommand;
 import com.whoiszxl.zhipin.im.cqrs.query.TalkQuery;
@@ -102,7 +104,22 @@ public class TalkServiceImpl extends ServiceImpl<TalkMapper, Talk> implements IT
                 .eq(Talk::getToMemberId, tokenHelper.getAppMemberId());
         IPage<Talk> talkPage = this.page(talkQuery.toPage(), queryWrapper);
         PageResponse<TalkResponse> pageResponse = PageResponse.convert(talkPage, TalkResponse.class);
+
+        //添加一个ChatGPT助手返回
+
+        pageResponse.getList().add(0, buildGptTalk());
+
         return pageResponse;
+
+
+    }
+
+    private TalkResponse buildGptTalk() {
+        return TalkResponse.builder()
+                .talkType(TalkTypeEnum.GPT_CHAT.getCode())
+                .fromMemberInfo("{\"name\": \"TT智能问答\", \"avatar\": \"https://shopzz.oss-cn-guangzhou.aliyuncs.com/other/a1.jpg\", \"jobTitle\": \"机器人\", \"companyAbbrName\": \"TT直聘\"}")
+                .fromMemberId(-1L)
+                .build();
     }
 
     private boolean checkTalkBoxExist(Long memberId, Long toMemberId) {

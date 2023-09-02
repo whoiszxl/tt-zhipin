@@ -24,12 +24,12 @@ public enum TalkTypeEnum {
     /**
      * CHAT GPT
      */
-    GPT_CHAT(2, "CHAT GPT"),
+    GPT_CHAT(3, "CHAT GPT"),
 
     /**
      * 机器人
      */
-    ROBOT_CHAT(2, "机器人"),
+    ROBOT_CHAT(4, "机器人"),
     ;
 
     private final Integer code;
