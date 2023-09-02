@@ -10,6 +10,8 @@ import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { CommonConstant } from '../../../../common/CommonConstant';
 import StorageUtil from '../../../../utils/StorageUtil';
+import DatabaseHelper from '../../../../utils/DatabaseHelper';
+import { Alert } from 'react-native';
 
 export interface MineSideMenuRef {
     show: () => void;
@@ -42,6 +44,10 @@ export default forwardRef((props: any, ref) => {
             {icon: 'md-call-outline', title: '我的客服', onPress: () => {}},
             {icon: 'md-settings-outline', title: '设置', onPress: () => {}},
             {icon: 'ellipsis-horizontal-outline', title: '更多功能', onPress: () => {}},
+            {icon: 'nuclear-outline', title: '清除聊天记录', onPress: () => {
+                DatabaseHelper.deleteMessage(CommonConstant.IM_PRIVATE_CHAT_TABLE);
+                StorageUtil.removeItem(CommonConstant.OFFLINE_MESSAGE_SEQ);
+            }},
             {icon: 'exit-outline', title: '退出登录', onPress: () => {
                 StorageUtil.removeItem(CommonConstant.TOKEN);
                 navigation.reset({

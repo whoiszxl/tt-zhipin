@@ -62,6 +62,29 @@ export default class MessageStore {
 
 
 
+    requestOfflineMessageList = flow(function* (this: MessageStore, clientSequence: number, callback: (success: PrivateChatMessage[]) => void) {
+        try {
+            const params = {
+                clientSequence: clientSequence
+            };
+
+            const { data } = yield ApiService.request('offlineMessageList', params);
+            if (data) {
+                if(data.code !== 0) {
+                    callback?.([]);
+                    return;
+                }
+                callback?.(data.data);
+            } else {
+                callback?.([]);
+            }
+        } catch (error) {
+            callback?.([]);
+        }
+    });
+
+
+
 
 }
 

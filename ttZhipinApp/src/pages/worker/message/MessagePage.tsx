@@ -17,6 +17,7 @@ import ChatWebSocket from '../../../stores/ChatWebSocket';
 import DatabaseHelper from '../../../utils/DatabaseHelper';
 import command from '../../../common/Command';
 import { CommonConstant } from '../../../common/CommonConstant';
+import StorageUtil from '../../../utils/StorageUtil';
 
 
 const {width:SCREEN_WIDTH} = Dimensions.get('window');
@@ -37,6 +38,67 @@ export default observer(() => {
     WebSocketUtil.addListener('open', handleOpen);
     
     store.requestTalkList();
+
+    DatabaseHelper.initializeDatabase(CommonConstant.IM_DB_NAME)
+    .then(() => {
+      console.log('Database initialized');
+
+      DatabaseHelper.executeQuery("CREATE TABLE IF NOT EXISTS " + CommonConstant.IM_PRIVATE_CHAT_TABLE + " (id INTEGER PRIMARY KEY AUTOINCREMENT, content_id INTEGER UNIQUE, owner_member_id INTEGER, from_member_id INTEGER, to_member_id INTEGER, body TEXT);")
+      .then(() => {
+        console.log('Table initialized');
+      })
+      .catch((error) => {
+        console.error('Error initializing Table:', error);
+      });
+
+    })
+    .catch((error) => {
+      console.error('Error initializing database:', error);
+    });
+
+    //获取离线消息
+
+    StorageUtil.getItem(CommonConstant.OFFLINE_MESSAGE_SEQ).then(res => {
+      var finalRes:number = 0;
+      if(res !== null) {
+        finalRes = parseInt(res); 
+      }
+
+      store.requestOfflineMessageList(finalRes + 1, (setList: PrivateChatMessage[]) => {
+        console.log("获取到离线消息，需要将离线消息持久化到本地数据库:", setList);
+  
+        //遍历所有离线消息，并持久化到APP本地
+        setList.forEach(element => {
+  
+          try {
+            //将消息持久化到本地数据库SQLite中
+            DatabaseHelper.executeQuery("INSERT INTO " + CommonConstant.IM_PRIVATE_CHAT_TABLE + " (content_id, owner_member_id, from_member_id, to_member_id, body) VALUES (?, ?, ?, ?, ?)", [
+              element.data.contentId,
+              element.data.fromMemberId,
+              element.data.fromMemberId,
+              element.data.toMemberId,
+              JSON.stringify(element),
+            ])
+              .then((res) => {
+                console.log('record add success', res);
+              })
+              .catch((error) => {
+                console.error('record add fail:', error);
+              });
+          } catch (error) {
+            console.log("error输出:", error);
+          }
+        });
+        
+        //记录最后的序列号
+        const lastElement = setList[setList.length - 1];
+        console.log("这波离线消息最新的序列号", lastElement.data.sequence);
+  
+        StorageUtil.setItem(CommonConstant.OFFLINE_MESSAGE_SEQ, lastElement.data.sequence.toString());
+      });
+    });
+    
+
   }, []);
 
   const handleOpen = () => {

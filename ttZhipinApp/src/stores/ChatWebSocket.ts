@@ -21,6 +21,7 @@ export default class ChatWebSocket {
         const token = await StorageUtil.getItem(CommonConstant.TOKEN);
 
         const privateChatPack: PrivateChatPack = {
+            contentId: "-1",
             messageId: uuid.v4().toString(),
             fromMemberId: -1,
             toMemberId: toMemberId,

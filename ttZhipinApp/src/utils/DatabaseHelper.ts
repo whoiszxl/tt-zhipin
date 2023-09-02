@@ -1,4 +1,6 @@
 import SQLite, { ResultSet } from 'react-native-sqlite-storage';
+import { CommonConstant } from '../common/CommonConstant';
+import { Alert } from 'react-native';
 
 class DatabaseHelper {
   private static database: SQLite.SQLiteDatabase | null = null;
@@ -161,6 +163,22 @@ class DatabaseHelper {
             reject(error);
           }
         );
+      });
+    });
+  }
+
+
+  static deleteMessage(tableName:string): void {
+    this.database!.transaction((tx) => {
+      tx.executeSql('DELETE FROM ' + tableName + ";", [], (tx, results) => {
+        if (results.rowsAffected > 0) {
+          Alert.prompt('成功删除了 ' + results.rowsAffected + ' 行数据');
+        } else {
+          console.log('没有删除任何数据');
+        }
+      },
+      (error) => {
+        console.log('删除数据时发生错误: ' + JSON.stringify(error));
       });
     });
   }

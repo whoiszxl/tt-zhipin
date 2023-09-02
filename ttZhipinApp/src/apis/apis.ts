@@ -21,6 +21,9 @@ const apis = {
 
     /** IM相关接口 */
     talkList: {url: '/im/talk/list', method: METHODS.GET}, //获取IM对话列表
+    offlineMessageList: {url: '/im/message/offline/list', method: METHODS.POST}, //获取离线消息列表
+
+    
 
 }
 

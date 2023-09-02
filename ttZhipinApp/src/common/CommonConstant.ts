@@ -6,5 +6,9 @@ export const CommonConstant = {
 
 
     IM_DB_NAME: 'im.db',
-    IM_PRIVATE_CHAT_TABLE: 'im_messages'
+    IM_PRIVATE_CHAT_TABLE: 'im_messages',
+
+
+    //seq
+    OFFLINE_MESSAGE_SEQ: "offline_message_seq"
 };

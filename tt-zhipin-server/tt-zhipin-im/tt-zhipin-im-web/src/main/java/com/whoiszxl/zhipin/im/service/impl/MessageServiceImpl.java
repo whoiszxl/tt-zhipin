@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.json.JSONUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.whoiszxl.zhipin.im.cqrs.query.OfflineListQuery;
 import com.whoiszxl.zhipin.im.entity.GroupMessage;
 import com.whoiszxl.zhipin.im.entity.Message;
 import com.whoiszxl.zhipin.im.entity.MessageContent;
@@ -11,6 +12,7 @@ import com.whoiszxl.zhipin.im.mapper.MessageMapper;
 import com.whoiszxl.zhipin.im.pack.GroupChatPack;
 import com.whoiszxl.zhipin.im.pack.MessagePack;
 import com.whoiszxl.zhipin.im.pack.PrivateChatPack;
+import com.whoiszxl.zhipin.im.protocol.ChatMessage;
 import com.whoiszxl.zhipin.im.service.IGroupMessageService;
 import com.whoiszxl.zhipin.im.service.IMessageContentService;
 import com.whoiszxl.zhipin.im.service.IMessageService;
@@ -22,6 +24,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -100,19 +106,34 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
     @Override
     public void saveOfflineMessage(MessagePack messagePack, Long contentId) {
         PrivateChatPack privateChatPack = (PrivateChatPack) messagePack.getDataPack();
+
+        ChatMessage<Object> chatMessage = ChatMessage.builder()
+                .toMemberId(String.valueOf(privateChatPack.getToMemberId()))
+                .command(privateChatPack.getCommand())
+                .clientType((byte) 0)
+                .imei("todo")
+                .data(privateChatPack)
+                .sendAt(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+                .build();
+
         String key = String.format("%s:%s", "offlineMessage", privateChatPack.getToMemberId());
         Long size = redisUtils.zSize(key);
         if(size > offlineMessageMaxCount) {
             redisUtils.zRemoveRange(key, 0, 0);
         }
 
-        redisUtils.zAdd(key, JSONUtil.toJsonStr(privateChatPack), contentId);
+        redisUtils.zAdd(key, JSONUtil.toJsonStr(chatMessage), privateChatPack.getSequence());
     }
 
     @Override
-    public Set listOfflineMessage() {
+    public List<ChatMessage> listOfflineMessage(OfflineListQuery query) {
         String key = String.format("%s:%s", "offlineMessage", tokenHelper.getAppMemberId());
-        return redisUtils.zrange(key, 0, -1);
+        Set<String> setList = redisUtils.zRangeByScore(key, Double.parseDouble(query.getClientSequence()));
+        List<ChatMessage> chatMessages = new ArrayList<>();
+        for (String s : setList) {
+            chatMessages.add(JSONUtil.toBean(s, ChatMessage.class));
+        }
+        return chatMessages;
     }
 
     private GroupMessage buildGroupMessage(GroupChatPack groupChatPack, long contentId) {

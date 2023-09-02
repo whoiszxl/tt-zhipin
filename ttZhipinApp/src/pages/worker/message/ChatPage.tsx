@@ -33,15 +33,7 @@ export default function ChatPage() {
         console.log(memberInfo.id);
         setAvatar(memberInfo.avatar);
 
-
         //初次进入界面，获取全量聊天记录   TODO 增量拉取聊天记录待优化
-        DatabaseHelper.initializeDatabase(CommonConstant.IM_DB_NAME)
-          .then(() => {
-            console.log('Database initialized');
-          })
-          .catch((error) => {
-            console.error('Error initializing database:', error);
-          });
 
         //初始化私聊消息表
         DatabaseHelper.executeQuery("CREATE TABLE IF NOT EXISTS " + CommonConstant.IM_PRIVATE_CHAT_TABLE + " (id INTEGER PRIMARY KEY AUTOINCREMENT, content_id INTEGER UNIQUE, owner_member_id INTEGER, from_member_id INTEGER, to_member_id INTEGER, body TEXT);")
@@ -56,11 +48,14 @@ export default function ChatPage() {
         WebSocketUtil.addListener('close', handleClose);
 
         //加载本地数据库消息到UI中
-        DatabaseHelper.executeSQL('SELECT * FROM ' + CommonConstant.IM_PRIVATE_CHAT_TABLE + ' where owner_member_id = ' + params.memberId + ' order by id desc')
+        const sql = 'SELECT * FROM ' + CommonConstant.IM_PRIVATE_CHAT_TABLE + ' where owner_member_id = ' + params.memberId + ' order by id desc';
+        DatabaseHelper.executeSQL(sql)
           .then((data) => {
+            console.log("查询结果：", data);
             var messageList: IMessage[] = [];
             data.forEach(e => {
               const obj = JSON.parse(e.body);
+              
               var newMessage: IMessage = {
                 _id: uuid.v4().toString(),
                 text: obj.data.body,
@@ -76,7 +71,7 @@ export default function ChatPage() {
             setMessages(previousMessages => GiftedChat.append(previousMessages, messageList))
           })
           .catch((error) => {
-            console.error('Error initializing Table:', error);
+            console.error('加载本地数据库消息到UI中执行错误:', error, sql);
           });
       }
 
@@ -86,6 +81,7 @@ export default function ChatPage() {
   }, []);
 
   const handleClose = () => {
+    WebSocketUtil.connect();
   }
 
   const handleMessage = (message: any) => {

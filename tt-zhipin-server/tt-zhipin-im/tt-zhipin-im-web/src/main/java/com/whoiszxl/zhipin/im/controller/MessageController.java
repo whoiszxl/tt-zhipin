@@ -1,21 +1,19 @@
 package com.whoiszxl.zhipin.im.controller;
 
 
-import com.whoiszxl.zhipin.im.cqrs.command.GroupCreateCommand;
-import com.whoiszxl.zhipin.im.cqrs.response.FriendImportMultiResultResponse;
+import com.whoiszxl.zhipin.im.cqrs.query.OfflineListQuery;
+import com.whoiszxl.zhipin.im.protocol.ChatMessage;
 import com.whoiszxl.zhipin.im.service.IMessageService;
 import com.whoiszxl.zhipin.tools.common.entity.ResponseResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * <p>
@@ -35,9 +33,9 @@ public class MessageController {
 
     @PostMapping("/offline/list")
     @Operation(summary = "获取离线消息列表", description = "messageService")
-    public ResponseResult<Set> offlineList() {
-        Set set = messageService.listOfflineMessage();
-        return ResponseResult.buildSuccess(set);
+    public ResponseResult<List<ChatMessage>> offlineList(@RequestBody OfflineListQuery query) {
+        List<ChatMessage> result = messageService.listOfflineMessage(query);
+        return ResponseResult.buildSuccess(result);
     }
 }
 

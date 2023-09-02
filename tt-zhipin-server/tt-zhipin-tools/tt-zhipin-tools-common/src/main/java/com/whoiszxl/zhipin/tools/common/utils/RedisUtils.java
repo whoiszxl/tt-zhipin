@@ -646,8 +646,11 @@ public class RedisUtils {
         return redisTemplate.getDefaultSerializer().deserialize(body).toString();
     }
 
-    public Set zrange(String key, int start, int end) {
-        Set range = redisTemplate.opsForZSet().range(key, start, end);
-        return range;
+    public Set zRange(String key, int start, int end) {
+        return redisTemplate.opsForZSet().range(key, start, end);
+    }
+
+    public Set zRangeByScore(String key, double minScore) {
+        return redisTemplate.opsForZSet().rangeByScore(key, minScore, Double.POSITIVE_INFINITY);
     }
 }

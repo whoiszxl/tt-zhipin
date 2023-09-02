@@ -2,7 +2,7 @@ import { Buffer } from 'buffer';
 
 
 class WebSocketUtils {
-    private socketUrl: string = "ws://server.natappfree.cc:45960/ws";
+    private socketUrl: string = "ws://server.natappfree.cc:39830/ws";
     private socket: WebSocket | null = null;
     private listeners: { eventType: string; callback: Function }[] = [];
 

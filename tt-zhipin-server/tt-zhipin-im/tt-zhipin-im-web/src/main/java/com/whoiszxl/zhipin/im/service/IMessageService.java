@@ -1,10 +1,13 @@
 package com.whoiszxl.zhipin.im.service;
 
+import com.whoiszxl.zhipin.im.cqrs.query.OfflineListQuery;
 import com.whoiszxl.zhipin.im.entity.Message;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.whoiszxl.zhipin.im.pack.MessagePack;
+import com.whoiszxl.zhipin.im.pack.PrivateChatPack;
 import com.whoiszxl.zhipin.im.protocol.ChatMessage;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -40,6 +43,6 @@ public interface IMessageService extends IService<Message> {
     /**
      * 获取离线消息列表
      */
-    Set listOfflineMessage();
+    List<ChatMessage> listOfflineMessage(OfflineListQuery query);
 
 }

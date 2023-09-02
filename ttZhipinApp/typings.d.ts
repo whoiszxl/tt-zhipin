@@ -136,6 +136,7 @@ type PrivateChatMessage = {
 
 type PrivateChatPack = {
     messageId: string;
+    contentId: string;
     fromMemberId: number;
     toMemberId: number;
     body: string;
