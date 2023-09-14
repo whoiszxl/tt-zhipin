@@ -486,7 +486,54 @@ docker run -d --name kafka-ui \
 
 ## ElasticSearch环境搭建
 
+1. 拉取Elasticsearch镜像
 
+```bash
+docker pull elasticsearch:7.6.2
+```
+
+2. 创建并运行Elasticsearch容器
+
+```bash 
+docker run -p 9200:9200 -p 9300:9300 -e "discovery.type=single-node" elasticsearch:7.6.2
+```
+使用`-p` 参数将容器的9200和9300端口映射到宿主机,Expose出来给外部访问。`-e`参数设置discovery.type为single-node,配置为单节点模式。
+
+这样Elasticsearch就可以通过http://localhost:9200访问了。
+
+3. 修改内存设置
+
+默认情况下,Elasticsearch使用2GB内存。可以通过指定ES_JAVA_OPTS环境变量来修改内存设置:
+
+```bash
+docker run -d -p 9200:9200 -p 9300:9300 -e ES_JAVA_OPTS="-Xms512m -Xmx512m" -e "discovery.type=single-node" elasticsearch:7.6.2
+```
+这将限制Elasticsearch使用512MB内存。
+
+
+4. 测试访问
+
+使用浏览器访问9200端口，http://IP:9200/，得到如下结果便说明Elasticsearch安装成功了。
+
+```json
+{
+  "name": "dd743099319b",
+  "cluster_name": "docker-cluster",
+  "cluster_uuid": "9nuJhcy2T_O8vqsTkBRJJg",
+  "version": {
+    "number": "7.6.2",
+    "build_flavor": "default",
+    "build_type": "docker",
+    "build_hash": "ef48eb35cf30adf4db14086e8aabd07ef6fb113f",
+    "build_date": "2020-03-26T06:34:37.794943Z",
+    "build_snapshot": false,
+    "lucene_version": "8.4.0",
+    "minimum_wire_compatibility_version": "6.8.0",
+    "minimum_index_compatibility_version": "6.0.0-beta1"
+  },
+  "tagline": "You Know, for Search"
+}
+```
 
 
 ## LogStash环境搭建
