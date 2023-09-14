@@ -64,26 +64,26 @@ public class TalkServiceImpl extends ServiceImpl<TalkMapper, Talk> implements IT
     @Override
     public Boolean add(TalkAddCommand command) {
         //当用户对头头发起聊天请求的时候，便创建两个对话框，一个是用户的，一个是头头的
-        Long memberId = tokenHelper.getAppMemberId();
+        Long fromMemberId = command.getFromMemberId();
         Long toMemberId = command.getToMemberId();
         //校验用户是否存在对话框，不存在则创建
-        boolean existFlag = checkTalkBoxExist(memberId, toMemberId);
+        boolean existFlag = checkTalkBoxExist(fromMemberId, toMemberId);
         if(!existFlag) {
             Talk talk = new Talk();
             talk.setId(IdUtil.getSnowflakeNextId());
-            talk.setFromMemberId(memberId);
+            talk.setFromMemberId(fromMemberId);
             talk.setToMemberId(toMemberId);
             talk.setTalkType(command.getTalkType());
             this.save(talk);
         }
 
         //校验头头是否存在对话框，不存在则创建
-        existFlag = checkTalkBoxExist(toMemberId, memberId);
+        existFlag = checkTalkBoxExist(toMemberId, fromMemberId);
         if(!existFlag) {
             Talk talk = new Talk();
             talk.setId(IdUtil.getSnowflakeNextId());
             talk.setFromMemberId(toMemberId);
-            talk.setToMemberId(memberId);
+            talk.setToMemberId(fromMemberId);
             talk.setTalkType(command.getTalkType());
             this.save(talk);
         }

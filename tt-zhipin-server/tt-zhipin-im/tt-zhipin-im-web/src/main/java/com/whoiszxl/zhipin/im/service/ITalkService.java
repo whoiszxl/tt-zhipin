@@ -30,7 +30,6 @@ public interface ITalkService extends IService<Talk> {
 
     /**
      * 添加对话框
-     * @param command 添加命令
      * @return 是否添加成功
      */
     Boolean add(TalkAddCommand command);

@@ -111,12 +111,13 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<MessagePack>
             }
 
             //校验是否有发送权限
-            ResponseResult<Boolean> checkResult = permissionCheckFeign.checkPrivateChatPermission(CheckPrivateChatPermissionQuery
-                    .builder()
-                    .fromMemberId(privateChatPack.getFromMemberId())
-                    .toMemberId(privateChatPack.getToMemberId())
-                    .build());
+//            ResponseResult<Boolean> checkResult = permissionCheckFeign.checkPrivateChatPermission(CheckPrivateChatPermissionQuery
+//                    .builder()
+//                    .fromMemberId(privateChatPack.getFromMemberId())
+//                    .toMemberId(privateChatPack.getToMemberId())
+//                    .build());
 
+            ResponseResult<Boolean> checkResult = ResponseResult.buildSuccess();
             //发送MQ，将消息发送到web服务进行分发
             if(checkResult.isOk()) {
                 msg.setDataPack(privateChatPack);

@@ -3,11 +3,15 @@ package com.whoiszxl.zhipin.im.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.whoiszxl.zhipin.im.constants.TalkTypeEnum;
+import com.whoiszxl.zhipin.im.cqrs.command.TalkAddCommand;
 import com.whoiszxl.zhipin.im.cqrs.query.OfflineListQuery;
 import com.whoiszxl.zhipin.im.entity.GroupMessage;
 import com.whoiszxl.zhipin.im.entity.Message;
 import com.whoiszxl.zhipin.im.entity.MessageContent;
+import com.whoiszxl.zhipin.im.entity.Talk;
 import com.whoiszxl.zhipin.im.mapper.MessageMapper;
 import com.whoiszxl.zhipin.im.pack.GroupChatPack;
 import com.whoiszxl.zhipin.im.pack.MessagePack;
@@ -16,6 +20,7 @@ import com.whoiszxl.zhipin.im.protocol.ChatMessage;
 import com.whoiszxl.zhipin.im.service.IGroupMessageService;
 import com.whoiszxl.zhipin.im.service.IMessageContentService;
 import com.whoiszxl.zhipin.im.service.IMessageService;
+import com.whoiszxl.zhipin.im.service.ITalkService;
 import com.whoiszxl.zhipin.tools.common.token.TokenHelper;
 import com.whoiszxl.zhipin.tools.common.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +52,8 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
 
     private final IGroupMessageService groupMessageService;
 
+    private final ITalkService talkService;
+
     private final TokenHelper tokenHelper;
 
     private final RedisUtils redisUtils;
@@ -58,6 +65,19 @@ public class MessageServiceImpl extends ServiceImpl<MessageMapper, Message> impl
     @Transactional
     public Long savePrivateChatMessage(MessagePack messagePack) {
         PrivateChatPack privateChatPack = (PrivateChatPack) messagePack.getDataPack();
+
+        //判断是否存在聊天框，不存在则创建
+        Talk talk = talkService.getOne(Wrappers.<Talk>lambdaQuery()
+                .eq(Talk::getFromMemberId, privateChatPack.getFromMemberId())
+                .eq(Talk::getToMemberId, privateChatPack.getToMemberId()));
+        if(talk == null) {
+            talkService.add(TalkAddCommand.builder()
+                    .fromMemberId(privateChatPack.getFromMemberId())
+                    .toMemberId(privateChatPack.getToMemberId())
+                    .talkType(TalkTypeEnum.PRIVATE_CHAT.getCode())
+                    .build());
+        }
+
 
         // 消息体持久化
         long contentId = IdUtil.getSnowflakeNextId();
