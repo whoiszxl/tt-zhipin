@@ -598,6 +598,7 @@ export default observer(() => {
     );
   }
 
+  const parsedMemberInfo = memberInfo ? JSON.parse(memberInfo) : null;
 
   return (
 
@@ -686,7 +687,15 @@ export default observer(() => {
           </ScrollView>
 
           <View style={styles.buttonContainer}>
-            <TouchableOpacity activeOpacity={1} style={[styles.button, { width: buttonWidth }]}>
+            <TouchableOpacity activeOpacity={1} style={[styles.button, { width: buttonWidth }]} onPress={() => {
+                //跳转到职位详情页
+                navigation.push('ChatPage', {
+                  memberId: store.memberInfo.memberId,
+                  avatar: parsedMemberInfo.avatar, 
+                  name: parsedMemberInfo.name, 
+                  jobTitle: parsedMemberInfo.jobTitle
+                });
+            }}>
               <Text style={styles.buttonText}>立即沟通</Text>
             </TouchableOpacity>
           </View>

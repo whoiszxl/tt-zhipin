@@ -545,7 +545,7 @@ export default observer(() => {
       },
 
       levelupButton: {
-        backgroundColor: 'rgba(255, 165, 0, 0.8)', 
+        backgroundColor: '#ffbc66', 
         borderRadius: 120,
         paddingHorizontal: 10,
         paddingVertical: 2
@@ -554,7 +554,7 @@ export default observer(() => {
       levelupButtonText: {
         color: 'black',
         fontWeight: 'bold',
-        fontSize: 11
+        fontSize: 10
       }
     });
 
@@ -677,8 +677,8 @@ export default observer(() => {
       <View style={styles.root}>
         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '50%'}}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Icon name='refresh' size={15} color={CommonColor.mainColor}/>
-            <Text style={{fontSize: 12, fontWeight: 'bold', color: CommonColor.fontColor}}>简历刷新</Text>
+            <Icon name='refresh' size={14} color={CommonColor.mainColor}/>
+            <Text style={{fontSize: 11, fontWeight: 'bold', color: CommonColor.fontColor, paddingLeft: 2}}>简历刷新</Text>
           </View>
 
           <Text style={{fontSize: 10, color: CommonColor.normalGrey, paddingRight: 10}}>{'提升曝光 >'}</Text>
@@ -686,8 +686,8 @@ export default observer(() => {
         <Text style={{color: CommonColor.normalGrey}}>|</Text>
         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '50%', paddingLeft: 10}}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <Icon name='trending-up' size={15} color={CommonColor.mainColor}/>
-            <Text style={{fontSize: 12, fontWeight: 'bold', color: CommonColor.fontColor}}>竞争力分析</Text>
+            <Icon name='trending-up' size={14} color={CommonColor.mainColor}/>
+            <Text style={{fontSize: 11, fontWeight: 'bold', color: CommonColor.fontColor, paddingLeft: 2}}>竞争力分析</Text>
           </View>
 
           <Text style={{fontSize: 10, color: CommonColor.normalGrey}}>{'洞悉竞争 >'}</Text>
@@ -787,6 +787,11 @@ export default observer(() => {
       subTitle: {
         fontSize: 10,
         color: CommonColor.normalGrey
+      },
+
+      functionIcon: {
+        color: '#314486',
+        fontSize: 22
       }
     });
 
@@ -803,25 +808,25 @@ export default observer(() => {
 
         <View style={styles.customMenuLayout}>
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
-            <Icon size={25} color={'#2e87a9'} name='newspaper'/>
+            <Icon style={styles.functionIcon} name='newspaper'/>
             <Text style={styles.mainTitle}>在线简历</Text>
             <Text style={styles.subTitle}>立即修改</Text>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
-            <Icon size={25} color={'#2e87a9'} name='folder-open-sharp'/>
+            <Icon style={styles.functionIcon} name='folder-open-sharp'/>
             <Text style={styles.mainTitle}>附件简历</Text>
             <Text style={styles.subTitle}>制作/上传</Text>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
-            <Icon size={25} color={'#2e87a9'} name='heart-circle'/>
+            <Icon style={styles.functionIcon} name='heart-circle'/>
             <Text style={styles.mainTitle}>求职意向</Text>
             <Text style={styles.subTitle}>选择你的意向</Text>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
-            <Icon size={25} color={'#2e87a9'} name='game-controller-sharp'/>
+            <Icon style={styles.functionIcon} name='game-controller-sharp'/>
             <Text style={styles.mainTitle}>道具商城</Text>
             <Text style={styles.subTitle}>T币/其他</Text>
           </View>
@@ -928,6 +933,11 @@ export default observer(() => {
       otherTitle: {
         fontSize: 10,
         color: CommonColor.deepGrey
+      },
+
+      otherFunctionIcon: {
+        fontSize: 22,
+        color: '#5e5e5e'
       }
     });
 
@@ -944,22 +954,22 @@ export default observer(() => {
 
         <View style={styles.customMenuLayout}>
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
-            <Icon size={25} color={CommonColor.deepGrey} name='server-outline'/>
+            <Icon style={styles.otherFunctionIcon} name='server-outline'/>
             <Text style={styles.otherTitle}>面试刷题</Text>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
-            <Icon size={25} color={CommonColor.deepGrey} name='search-circle-outline'/>
+            <Icon style={styles.otherFunctionIcon} name='search-circle-outline'/>
             <Text style={styles.otherTitle}>薪酬查询</Text>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
-            <Icon size={25} color={CommonColor.deepGrey} name='sunny-outline'/>
+            <Icon style={styles.otherFunctionIcon} name='sunny-outline'/>
             <Text style={styles.otherTitle}>高薪机会</Text>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
-            <Icon size={25} color={CommonColor.deepGrey} name='earth-outline'/>
+            <Icon style={styles.otherFunctionIcon} name='earth-outline'/>
             <Text style={styles.otherTitle}>规则中心</Text>
           </View>
 
@@ -968,22 +978,22 @@ export default observer(() => {
 
         <View style={styles.customMenuLayout}>
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
-            <Icon size={25} color={CommonColor.deepGrey} name='nutrition-outline'/>
+            <Icon style={styles.otherFunctionIcon} name='nutrition-outline'/>
             <Text style={styles.otherTitle}>众裁庭</Text>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
-            <Icon size={25} color={CommonColor.deepGrey} name='color-filter-outline'/>
+            <Icon style={styles.otherFunctionIcon} name='color-filter-outline'/>
             <Text style={styles.otherTitle}>我的客服</Text>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
-            <Icon size={25} color={CommonColor.deepGrey} name='cog-outline'/>
+            <Icon style={styles.otherFunctionIcon} name='cog-outline'/>
             <Text style={styles.otherTitle}>防骗指南</Text>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
-            <Icon size={25} color={CommonColor.deepGrey} name='newspaper-outline'/>
+            <Icon style={styles.otherFunctionIcon} name='newspaper-outline'/>
             <Text style={styles.otherTitle}>隐私规则</Text>
           </View>
 
@@ -992,22 +1002,22 @@ export default observer(() => {
 
         <View style={styles.customMenuLayout}>
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
-            <Icon size={25} color={CommonColor.deepGrey} name='planet-outline'/>
+            <Icon style={styles.otherFunctionIcon} name='planet-outline'/>
             <Text style={styles.otherTitle}>精选公司</Text>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
-            <Icon size={25} color={CommonColor.deepGrey} name='pricetags-outline'/>
+            <Icon style={styles.otherFunctionIcon} name='pricetags-outline'/>
             <Text style={styles.otherTitle}>TT公益</Text>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
-            <Icon size={25} color={CommonColor.deepGrey} name='rocket-outline'/>
+            <Icon style={styles.otherFunctionIcon} name='rocket-outline'/>
             <Text style={styles.otherTitle}>关于</Text>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
-            <Icon size={25} color={CommonColor.deepGrey} name='person-outline'/>
+            <Icon style={styles.otherFunctionIcon} name='person-outline'/>
             <Text style={styles.otherTitle}>个人主页</Text>
           </View>
 

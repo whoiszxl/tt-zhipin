@@ -94,20 +94,21 @@ export default () => {
 
             <Tab.Navigator tabBar={(props) => <MyTabBar {...props} />}>
 
+                {/* lazy为false，在首页访问的时候会自动加载页面，消息页面必须自动加载，否则会导致进入聊天界面时本地数据库未初始化 */}
                 <Tab.Screen name="JobPage" component={JobPage} options={{
-                    title: '职位', headerShown: false, 
+                    title: '职位', headerShown: false, lazy: false
                 }}/>
 
                 <Tab.Screen name="DiscoveryPage" component={DiscoveryPage} options={{
-                    title: '发现', headerShown: false
+                    title: '发现', headerShown: false, lazy: false
                 }}/>
 
                 <Tab.Screen name="MessagePage" component={MessagePage} options={{
-                    title: '消息', headerShown: false
+                    title: '消息', headerShown: false, lazy: false
                 }}/>
 
                 <Tab.Screen name="MinePage" component={MinePage} options={{
-                    title: '我的', headerShown: false
+                    title: '我的', headerShown: false, lazy: false
                 }}/>
             </Tab.Navigator>
 
