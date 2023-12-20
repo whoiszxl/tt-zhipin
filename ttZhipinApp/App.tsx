@@ -17,6 +17,8 @@ import MinePage from './src/pages/worker/mine/MinePage';
 import InitMemberInfoPage from './src/pages/worker/init/InitMemberInfoPage';
 import JobDetailPage from './src/pages/worker/job/JobDetailPage';
 import ChatPage from './src/pages/worker/message/ChatPage';
+import OnlineResumePage from './src/pages/worker/onlineResume/OnlineResumePage';
+
 
 const Stack = createStackNavigator();
 
@@ -47,6 +49,8 @@ function App(): JSX.Element {
           <Stack.Screen options={{headerShown: false}} name='MinePage' component={MinePage}/>
           <Stack.Screen options={{headerShown: false}} name='ChatPage' component={ChatPage}/>
 
+
+          <Stack.Screen options={{headerShown: false}} name='OnlineResumePage' component={OnlineResumePage}/>
 
         </Stack.Navigator>
       </NavigationContainer>

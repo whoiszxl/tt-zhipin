@@ -12,6 +12,9 @@ const apis = {
 
     memberInfo: {url: '/member/api/member/info', method: METHODS.GET}, //获取用户信息
     initBaseInfo: {url: '/member/api/member/init/base-info', method: METHODS.POST}, //初始化用户的基本信息
+
+    /** 在线简历相关接口 */
+    onlineResumeInfo: {url: '/member/api/online/resume/info', method: METHODS.POST}, // 获取用户的在线简历信息
     
 
     logout: {url: '/member/api/member/logout', method: METHODS.POST}, //登出接口
@@ -24,7 +27,6 @@ const apis = {
     offlineMessageList: {url: '/im/message/offline/list', method: METHODS.POST}, //获取离线消息列表
 
     
-
 }
 
 export default apis;

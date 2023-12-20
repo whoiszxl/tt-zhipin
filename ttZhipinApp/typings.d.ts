@@ -142,3 +142,80 @@ type PrivateChatPack = {
     body: string;
 }
 
+
+
+type ResumeData = {
+    memberInfoResponse: MemberInfoResponse;
+    workExpectDtoList: WorkExpectDto[];
+    workExperienceDtoList: WorkExperienceDto[];
+    projectExperienceDtoList: ProjectExperienceDto[];
+    eduExperienceDtoList: EduExperienceDto[];
+    qualificationList: string[];
+}
+
+type MemberInfoResponse = {
+    id: string;
+    phone: string;
+    email: string;
+    password: string;
+    fullName: string;
+    workDate: string;
+    wxCode: string;
+    birthday: string;
+    country: string;
+    province: string;
+    city: string;
+    district: string;
+    gender: number;
+    avatar: string;
+    ip: string;
+    loginCount: string;
+    loginErrorCount: string;
+    lastLogin: string;
+    identityStatus: number;
+    workStatus: number;
+    highestQualification: number;
+    highestQualificationType: number;
+    isToutou: number;
+    status: number;
+    token: string;
+    location: string;
+    browser: string;
+  }
+  
+  type WorkExpectDto = {
+    type: number;
+    city: string;
+    job: string;
+    salaryRangeStart: number;
+    salaryRangeEnd: number;
+    industryArr: string[];
+  }
+  
+  type WorkExperienceDto = {
+    companyFullName: string;
+    industry: string;
+    workDateStart: string;
+    workDateEnd: string;
+    jobName: string;
+    workDetail: string;
+  }
+  
+  type ProjectExperienceDto = {
+    projectName: string;
+    projectRole: string;
+    projectDateStart: string;
+    projectDateEnd: string;
+    projectResult: string;
+    projectLink: string;
+  }
+  
+  type EduExperienceDto = {
+    schoolName: string;
+    educationAttainment: string;
+    major: string;
+    yearStart: number;
+    yearEnd: number;
+    schoolExp: string;
+    paper: string;
+  }

@@ -808,9 +808,12 @@ export default observer(() => {
 
         <View style={styles.customMenuLayout}>
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
-            <Icon style={styles.functionIcon} name='newspaper'/>
-            <Text style={styles.mainTitle}>在线简历</Text>
-            <Text style={styles.subTitle}>立即修改</Text>
+            <TouchableOpacity onPress={() => { navigation.push("OnlineResumePage") }} style={{alignItems: 'center'}}>
+              <Icon style={styles.functionIcon} name='newspaper'/>
+              <Text style={styles.mainTitle}>在线简历</Text>
+              <Text style={styles.subTitle}>立即修改</Text>
+            </TouchableOpacity>
+            
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>

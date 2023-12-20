@@ -13,7 +13,7 @@ class ApiService {
   private axiosInstance: AxiosInstance;
 
   // 接口base路径
-  private baseURL = 'https://40722186u9.oicp.vip/';
+  private baseURL = 'https://40722wj189.imdo.co/';
 
   constructor() {
     // 创建axios实例，指定接口base路径以及超时时间
