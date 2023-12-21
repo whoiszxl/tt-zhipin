@@ -20,6 +20,13 @@ class DateUtil {
       
         return ageInYears;
       }
+
+      static formatWorkDate(inputDate: string): string {
+        const dateObject = new Date(inputDate);
+        const year = dateObject.getFullYear();
+        const month = (dateObject.getMonth() + 1).toString().padStart(2, '0'); // 月份从0开始，需要加1
+        return `${year}.${month}`;
+      }
 }
 
 

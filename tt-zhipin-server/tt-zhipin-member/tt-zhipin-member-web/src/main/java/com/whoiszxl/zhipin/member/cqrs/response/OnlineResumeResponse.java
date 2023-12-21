@@ -31,4 +31,7 @@ public class OnlineResumeResponse {
     @Schema(description = "资格证书列表")
     private List<String> qualificationList;
 
+    @Schema(description = "个人优势")
+    private String advantage;
+
 }

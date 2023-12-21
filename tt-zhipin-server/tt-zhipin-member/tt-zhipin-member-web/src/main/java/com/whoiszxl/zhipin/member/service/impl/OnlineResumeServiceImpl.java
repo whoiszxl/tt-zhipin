@@ -71,6 +71,8 @@ public class OnlineResumeServiceImpl implements IOnlineResumeService {
             response.setQualificationList(qualificationList);
         }
 
+        response.setAdvantage(memberExp.getAdvantage());
+
         return response;
     }
 

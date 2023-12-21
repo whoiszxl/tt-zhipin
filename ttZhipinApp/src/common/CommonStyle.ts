@@ -7,4 +7,11 @@ export const CommonStyle = StyleSheet.create({
     p4: { padding:4 },
     p5: { padding:5 },
 
+
+    pl1: {paddingLeft: 1},
+    pl2: {paddingLeft: 2},
+    pl5: {paddingLeft: 5},
+    pl10: {paddingLeft: 10},
+    pl20: {paddingLeft: 20},
+    pl30: {paddingLeft: 30},
 });

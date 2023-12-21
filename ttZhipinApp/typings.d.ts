@@ -151,6 +151,7 @@ type ResumeData = {
     projectExperienceDtoList: ProjectExperienceDto[];
     eduExperienceDtoList: EduExperienceDto[];
     qualificationList: string[];
+    advantage: string;
 }
 
 type MemberInfoResponse = {
