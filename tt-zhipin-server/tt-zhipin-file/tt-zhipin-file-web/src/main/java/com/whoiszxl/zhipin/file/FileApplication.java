@@ -2,13 +2,11 @@ package com.whoiszxl.zhipin.file;
 
 import cn.dev33.satoken.annotation.SaIgnore;
 import cn.hutool.extra.spring.EnableSpringUtil;
-import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClientBuilder;
-import com.whoiszxl.zhipin.file.properties.AliOssProperties;
 import com.whoiszxl.zhipin.tools.common.properties.ZhipinProperties;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.dromara.x.file.storage.spring.EnableFileStorage;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
@@ -27,6 +25,7 @@ import java.net.InetAddress;
  * @author whoiszxl
  */
 @Slf4j
+@EnableFileStorage
 @RestController
 @SpringBootApplication
 @RequiredArgsConstructor

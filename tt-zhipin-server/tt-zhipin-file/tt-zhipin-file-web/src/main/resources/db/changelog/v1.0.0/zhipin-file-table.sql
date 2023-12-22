@@ -3,25 +3,32 @@
 -- changeset whoiszxl:1
 -- comment 初始化file表结构
 
+DROP TABLE IF EXISTS `fms_file`;
 CREATE TABLE `fms_file` (
-     `id` bigint(11) NOT NULL AUTO_INCREMENT COMMENT '品牌主键id',
-    `platform_type` tinyint(3) NOT NULL DEFAULT '1' COMMENT '平台类型: 1-阿里云 2-七牛云 3-百度云 4-AmazonS3 5-minio',
-    `biz_id` bigint(11) NOT NULL DEFAULT '1' COMMENT '业务ID',
-    `biz_type` tinyint(3) NOT NULL DEFAULT '1' COMMENT '业务类型: 1-简历 2-头像 3-公司图片 4-公司视频',
-    `data_type` tinyint(3) NOT NULL DEFAULT '2' COMMENT '数据类型: 1-目录 2-图片 3-视频 4-音频 5-文档 6-其他',
-    `original_file_name` varchar(256) NOT NULL COMMENT '原始文件名',
-    `final_file_name` varchar(256) NOT NULL COMMENT '最终文件名',
-    `relative_path` varchar(256) NOT NULL COMMENT '相对路径',
-    `url` varchar(256) NOT NULL COMMENT '访问地址',
-    `md5` varchar(256) DEFAULT NULL COMMENT 'md5值',
-    `ext` varchar(16) NOT NULL COMMENT '文件后缀',
-    `size` bigint(11) NOT NULL COMMENT '文件大小',
-    `created_year` varchar(4) NOT NULL COMMENT '创建年份: yyyy',
-    `created_month` varchar(8) NOT NULL COMMENT '创建年月: yyyy-MM',
-    `created_day` varchar(10) NOT NULL COMMENT '创建年月日: yyyy-MM-dd',
-    `version` bigint(11) unsigned NOT NULL DEFAULT '1' COMMENT '乐观锁',
-    `is_deleted` tinyint(3) DEFAULT '0' COMMENT '逻辑删除 1: 已删除, 0: 未删除',
-    `created_at` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updated_at` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文件表';
+    `id`                varchar(32)  NOT NULL COMMENT '文件id',
+    `member_id`         bigint(11) NOT NULL COMMENT '文件所属用户ID',
+    `url`               varchar(512) NOT NULL COMMENT '文件访问地址',
+    `size`              bigint(20)   DEFAULT NULL COMMENT '文件大小，单位字节',
+    `filename`          varchar(256) DEFAULT NULL COMMENT '文件名称',
+    `original_filename` varchar(256) DEFAULT NULL COMMENT '原始文件名',
+    `base_path`         varchar(256) DEFAULT NULL COMMENT '基础存储路径',
+    `path`              varchar(256) DEFAULT NULL COMMENT '存储路径',
+    `ext`               varchar(32)  DEFAULT NULL COMMENT '文件扩展名',
+    `content_type`      varchar(128) DEFAULT NULL COMMENT 'MIME类型',
+    `platform`          varchar(32)  DEFAULT NULL COMMENT '存储平台',
+    `th_url`            varchar(512) DEFAULT NULL COMMENT '缩略图访问路径',
+    `th_filename`       varchar(256) DEFAULT NULL COMMENT '缩略图名称',
+    `th_size`           bigint(20)   DEFAULT NULL COMMENT '缩略图大小，单位字节',
+    `th_content_type`   varchar(128) DEFAULT NULL COMMENT '缩略图MIME类型',
+    `object_id`         varchar(32)  DEFAULT NULL COMMENT '文件所属对象id',
+    `object_type`       varchar(32)  DEFAULT NULL COMMENT '文件所属对象类型，例如用户头像，评价图片',
+    `metadata`          text COMMENT '文件元数据',
+    `user_metadata`     text COMMENT '文件用户元数据',
+    `th_metadata`       text COMMENT '缩略图元数据',
+    `th_user_metadata`  text COMMENT '缩略图用户元数据',
+    `attr`              text COMMENT '附加属性',
+    `file_acl`          varchar(32)  DEFAULT NULL COMMENT '文件ACL',
+    `th_file_acl`       varchar(32)  DEFAULT NULL COMMENT '缩略图文件ACL',
+    `create_time`       datetime     DEFAULT NULL COMMENT '创建时间',
+    PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 ROW_FORMAT = DYNAMIC COMMENT ='文件记录表';

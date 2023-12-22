@@ -1,6 +1,7 @@
 package com.whoiszxl.zhipin.file.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.whoiszxl.zhipin.file.cqrs.response.UploadResponse;
 import com.whoiszxl.zhipin.file.entity.FmsFile;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,12 +17,11 @@ public interface FileService extends IService<FmsFile> {
 
     /**
      * 上传文件
-     * @param bizId
-     * @param bizType
+     * @param objectType
      * @param file
      * @return
      */
-    String upload(Long id, String bizId, Integer bizType, MultipartFile file);
+    UploadResponse upload(String objectId, String objectType, MultipartFile file);
 
     /**
      * 批量删除文件

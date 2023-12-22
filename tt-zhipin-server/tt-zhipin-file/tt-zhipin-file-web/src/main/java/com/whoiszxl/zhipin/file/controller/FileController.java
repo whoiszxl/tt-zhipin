@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.whoiszxl.zhipin.file.cqrs.query.FmsFileQuery;
 import com.whoiszxl.zhipin.file.cqrs.response.FmsFileResponse;
+import com.whoiszxl.zhipin.file.cqrs.response.UploadResponse;
 import com.whoiszxl.zhipin.file.entity.FmsFile;
 import com.whoiszxl.zhipin.file.service.FileService;
 import com.whoiszxl.zhipin.tools.common.entity.ResponseResult;
@@ -41,19 +42,17 @@ public class FileController {
     @SaCheckLogin
     @PostMapping("/upload")
     @Operation(summary = "上传文件", description = "上传文件")
-    public ResponseResult<String> upload(
+    public ResponseResult<UploadResponse> upload(
             @RequestParam(value = "file") MultipartFile file,
-            @RequestParam(value = "id", required = false) Long id,
-            @RequestParam(value = "bizId", required = false) String bizId,
-            @RequestParam(value = "bizType", required = false) Integer bizType
-            ) {
+            @RequestParam(value = "objectId", required = false) String objectId,
+            @RequestParam(value = "objectType", required = false) String objectType) {
 
         if(file.isEmpty()) {
             return ResponseResult.buildError("文件内容为空");
         }
 
-        String url = fileService.upload(id, bizId, bizType, file);
-        return ResponseResult.buildSuccess(url);
+        UploadResponse response = fileService.upload(objectId, objectType, file);
+        return ResponseResult.buildSuccess(response);
     }
 
     @SaCheckLogin
@@ -69,17 +68,14 @@ public class FileController {
     @Operation(summary = "分页获取文件列表", description = "分页获取文件列表")
     public ResponseResult<PageResponse<FmsFileResponse>> list(@RequestBody @Validated FmsFileQuery query) {
         LambdaQueryWrapper<FmsFile> wrapper = new LambdaQueryWrapper<>();
-        if(query.getPlatformType() != null) {
-            wrapper.like(FmsFile::getPlatformType, query.getPlatformType());
+        if(query.getPlatform() != null) {
+            wrapper.like(FmsFile::getPlatform, query.getPlatform());
         }
-        if(StringUtils.isNotBlank(query.getBizId())) {
-            wrapper.eq(FmsFile::getBizId, query.getBizId());
+        if(StringUtils.isNotBlank(query.getObjectId())) {
+            wrapper.eq(FmsFile::getObjectId, query.getObjectId());
         }
-        if(query.getBizType() != null) {
-            wrapper.like(FmsFile::getBizType, query.getBizType());
-        }
-        if(query.getDataType() != null) {
-            wrapper.like(FmsFile::getDataType, query.getDataType());
+        if(query.getObjectType() != null) {
+            wrapper.like(FmsFile::getObjectType, query.getObjectType());
         }
 
         IPage<FmsFile> result = fileService.page(new Page<>(query.getPage(), query.getSize()), wrapper);

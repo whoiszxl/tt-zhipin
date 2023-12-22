@@ -1,21 +1,28 @@
 package com.whoiszxl.zhipin.file.service.impl;
 
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.whoiszxl.zhipin.file.cqrs.command.FileDeleteCommand;
+import com.whoiszxl.zhipin.file.cqrs.response.UploadResponse;
 import com.whoiszxl.zhipin.file.entity.FmsFile;
 import com.whoiszxl.zhipin.file.mapper.FileMapper;
 import com.whoiszxl.zhipin.file.service.FileService;
-import com.whoiszxl.zhipin.file.strategy.FileStrategy;
 import com.whoiszxl.zhipin.tools.common.exception.ExceptionCatcher;
+import com.whoiszxl.zhipin.tools.common.token.TokenHelper;
+import com.whoiszxl.zhipin.tools.common.utils.StrPoolUtil;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.ArrayUtils;
+import org.dromara.x.file.storage.core.FileInfo;
+import org.dromara.x.file.storage.core.FileStorageService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
+
+import static com.whoiszxl.zhipin.tools.common.utils.DateUtils.DEFAULT_MONTH_FORMAT_SLASH;
 
 /**
  * <p>
@@ -29,46 +36,44 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FileServiceImpl extends ServiceImpl<FileMapper, FmsFile> implements FileService {
 
-    private final FileStrategy fileStrategy;
+    private final FileStorageService fileStorageService;
+
+    private final TokenHelper tokenHelper;
+
+    private static final String FILE_SPLIT = ".";
+
+    private static final Integer MAX_SIZE = 5 * 1024 * 1024;
 
     @Override
-    public String upload(Long id, String bizId, Integer bizType, MultipartFile file) {
-        FmsFile fmsFile = fileStrategy.upload(file);
-
-        fmsFile.setBizId(bizId);
-        fmsFile.setBizType(bizType);
-
-        if(id != null && id > 0) {
-            fmsFile.setId(id);
-            updateById(fmsFile);
-        }else {
-            save(fmsFile);
+    public UploadResponse upload(String objectId, String objectType, MultipartFile file) {
+        // 基础校验
+        if(!Objects.requireNonNull(file.getOriginalFilename()).contains(FILE_SPLIT)) {
+            ExceptionCatcher.catchServiceEx("禁止上传无后缀文件");
+        }
+        if(file.getSize() >= MAX_SIZE) {
+            ExceptionCatcher.catchServiceEx("禁止上传大于5MB的文件");
         }
 
-        return fmsFile.getUrl();
+        Long memberId = tokenHelper.getAppMemberId();
+        Assert.isTrue(memberId != null, "请先登录");
+
+        // 文件上传
+        String relativePath = Paths.get(LocalDate.now().format(DateTimeFormatter.ofPattern(DEFAULT_MONTH_FORMAT_SLASH))).toString();
+        String relativeFileName = relativePath + StrPoolUtil.SLASH;
+        relativeFileName = StrUtil.replace(relativeFileName, "\\\\", StrPoolUtil.SLASH);
+        relativeFileName = StrUtil.replace(relativeFileName, "\\", StrPoolUtil.SLASH);
+
+        FileInfo fileInfo = fileStorageService.of(file)
+                .setPath(relativeFileName)
+                .setObjectId(objectId)
+                .setObjectType(objectType)
+                .upload();
+        UploadResponse uploadResponse = BeanUtil.copyProperties(fileInfo, UploadResponse.class);
+        return uploadResponse;
     }
 
     @Override
     public void delete(Long[] ids) {
-        if(ArrayUtils.isEmpty(ids)) {
-            ExceptionCatcher.catchServiceEx("传参无效");
-        }
-
-        List<FmsFile> fileList = list(Wrappers.<FmsFile>lambdaQuery().in(FmsFile::getId, ids));
-        if(fileList.isEmpty()) {
-            ExceptionCatcher.catchServiceEx("传参无效");
-        }
-
-        removeByIds(Arrays.asList(ids));
-
-        List<FileDeleteCommand> fileDeleteCommandList = fileList.stream().map(file -> {
-            FileDeleteCommand deleteCommand = new FileDeleteCommand();
-            deleteCommand.setRelativePath(file.getRelativePath());
-            deleteCommand.setFinalFileName(file.getFinalFileName());
-            deleteCommand.setId(file.getId());
-            return deleteCommand;
-        }).collect(Collectors.toList());
-
-        fileStrategy.delete(fileDeleteCommandList);
+        //TODO 对象存储文件批量删除
     }
 }

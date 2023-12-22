@@ -17,15 +17,12 @@ import lombok.Data;
 public class FmsFileQuery extends PageQuery {
 
     @Schema(description = "平台类型: 1-阿里云 2-七牛云 3-百度云 4-AmazonS3")
-    private Integer platformType;
+    private Integer platform;
 
     @Schema(description = "业务ID")
-    private String bizId;
+    private String objectId;
 
     @Schema(description = "业务类型: 1-商品 2-会员 3-wms")
-    private Integer bizType;
-
-    @Schema(description = "数据类型: 1-目录 2-图片 3-视频 4-音频 5-文档 6-其他")
-    private Integer dataType;
+    private Integer objectType;
 
 }

@@ -251,22 +251,45 @@ security:
     - /webSocket/**
     - /favicon.ico
 
-
 --- ### 文件上传配置
-tt-zhipin-file:
-  active: oss
-  oss:
-    domainUrl: ${DOMAIN_URL:}
-    accessKey: ${ACCESS_KEY:LTAI5t8p7bCmxE9h9sRsaDrX}
-    secretKey: ${SECRET_KEY:itO65qI2cjeJ4kAaBf2nMZPVsFSZNM}
-    endpoint: ${ENDPOINT:oss-cn-shenzhen.aliyuncs.com}
-    bucketName: ${BUCKET_NAME:tt-zhipin-oss}
+dromara:
+  x-file-storage: #文件存储配置
+    default-platform: qiniu-kodo-1 #默认使用的存储平台
+    thumbnail-suffix: ".min.jpg" #缩略图后缀，例如【.min.jpg】【.png】
+    #对应平台的配置写在这里，注意缩进要对齐
 
-  minio:
-    domainUrl:
-    accessKey: ${ACCESS_KEY:ttzhipin}
-    secretKey: ${SECRET_KEY:ttzhipin123456}
-    endpoint: ${ENDPOINT:http://106.13.7.251:9000}
-    bucketName: ${BUCKET_NAME:tt-zhipin-minio}
-
-
+    aliyun-oss:
+      - platform: aliyun-oss-1 # 存储平台标识
+        enable-storage: true  # 启用存储
+        access-key: ${dromara.aliyun-oss.access-key:??}
+        secret-key: ${dromara.aliyun-oss.secret-key:??}
+        end-point: ${dromara.aliyun-oss.end-point:http://oss-cn-shenzhen.aliyuncs.com}
+        bucket-name: ${dromara.aliyun-oss.bucket-name:tt-zhipin-oss}
+        domain: ${dromara.aliyun-oss.domain:http://s627xcreb.hn-bkt.clouddn.com/} # 访问域名，注意“/”结尾，例如：https://abc.oss-cn-shanghai.aliyuncs.com/
+        base-path: ${dromara.aliyun-oss.base-path:tt-zhipin/} # 基础路径
+    qiniu-kodo:
+      - platform: qiniu-kodo-1 # 存储平台标识
+        enable-storage: true  # 启用存储
+        access-key: ${dromara.qiniu-kodo.access-key:??}
+        secret-key: ${dromara.qiniu-kodo.secret-key:??}
+        bucket-name: ${dromara.qiniu-kodo.bucket-name:tt-zhipin}
+        domain: ${dromara.qiniu-kodo.domain:http://s627xcreb.hn-bkt.clouddn.com/} # 访问域名，注意“/”结尾，例如：http://abc.hn-bkt.clouddn.com/
+        base-path: ${dromara.qiniu-kodo.base-path:tt-zhipin/} # 基础路径
+    tencent-cos:
+      - platform: tencent-cos-1 # 存储平台标识
+        enable-storage: true  # 启用存储
+        secret-id: ${dromara.tencent-cos.secret-id:??} # --dromara.tencent-cos.secret-id=xxxxx --dromara.tencent-cos.secret-key=xxxxx
+        secret-key: ${dromara.tencent-cos.secret-key:??} #
+        region: ${dromara.tencent-cos.region:ap-guangzhou} #存仓库所在地域
+        bucket-name: ${dromara.tencent-cos.bucket-name:tt-zhipin-1251404446}
+        domain: ${dromara.tencent-cos.domain:https://tt-zhipin-1251404446.cos.ap-guangzhou.myqcloud.com/} # 访问域名，注意“/”结尾，例如：https://abc.cos.ap-nanjing.myqcloud.com/
+        base-path: ${dromara.tencent-cos.base-path:tt-zhipin/} # 基础路径
+    minio:
+      - platform: minio-1 # 存储平台标识
+        enable-storage: true  # 启用存储
+        access-key: ${dromara.minio.access-key:admin}
+        secret-key: ${dromara.minio.secret-key:admin123}
+        end-point: ${dromara.minio.end-point:http://60.204.215.165:9000}
+        bucket-name: ${dromara.minio.bucket-name:tt-zhipin-666}
+        domain: ${dromara.minio.domain:http://60.204.215.165:9000/tt-zhipin-666/} # 访问域名，注意“/”结尾，例如：http://minio.abc.com/abc/
+        base-path: ${dromara.minio.base-path:tt-zhipin/} # 基础路径
