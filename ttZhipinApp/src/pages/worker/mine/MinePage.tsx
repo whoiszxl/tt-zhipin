@@ -817,9 +817,11 @@ export default observer(() => {
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
-            <Icon style={styles.functionIcon} name='folder-open-sharp'/>
-            <Text style={styles.mainTitle}>附件简历</Text>
-            <Text style={styles.subTitle}>制作/上传</Text>
+            <TouchableOpacity onPress={() => { navigation.push("AttachmentResumePage") }} style={{alignItems: 'center'}}>
+              <Icon style={styles.functionIcon} name='folder-open-sharp'/>
+              <Text style={styles.mainTitle}>附件简历</Text>
+              <Text style={styles.subTitle}>制作/上传</Text>
+            </TouchableOpacity>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>

@@ -18,6 +18,9 @@ import InitMemberInfoPage from './src/pages/worker/init/InitMemberInfoPage';
 import JobDetailPage from './src/pages/worker/job/JobDetailPage';
 import ChatPage from './src/pages/worker/message/ChatPage';
 import OnlineResumePage from './src/pages/worker/onlineResume/OnlineResumePage';
+import AttachmentResumePage from './src/pages/worker/attachmentResume/AttachmentResumePage';
+import PdfViewPage from './src/pages/worker/attachmentResume/PdfViewPage';
+
 
 
 const Stack = createStackNavigator();
@@ -51,7 +54,10 @@ function App(): JSX.Element {
 
 
           <Stack.Screen options={{headerShown: false}} name='OnlineResumePage' component={OnlineResumePage}/>
+          <Stack.Screen options={{headerShown: false}} name='AttachmentResumePage' component={AttachmentResumePage}/>
+          <Stack.Screen options={{headerShown: false}} name='PdfViewPage' component={PdfViewPage}/>
 
+          
         </Stack.Navigator>
       </NavigationContainer>
 

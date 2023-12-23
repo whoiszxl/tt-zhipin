@@ -11,6 +11,7 @@ export const CommonColor = {
     line: '#e5e5e5',
     transparentGreyBg: 'rgba(169, 169, 169, 0.4)',
     wxColor: '#07c160',
-    chatBg: '#f6f6f6'
+    chatBg: '#f6f6f6',
+    zhipinBg: 'F6F6F8'
 
 };

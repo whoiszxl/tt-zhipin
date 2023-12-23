@@ -13,7 +13,7 @@ class ApiService {
   private axiosInstance: AxiosInstance;
 
   // 接口base路径
-  private baseURL = 'http://jewqiz.natappfree.cc/';
+  private baseURL = 'https://40722wj189.imdo.co/';
 
   constructor() {
     // 创建axios实例，指定接口base路径以及超时时间
@@ -107,13 +107,13 @@ class ApiService {
     const formData = new FormData();
     formData.append('file', {
       uri: Platform.OS === 'android' ? uri : uri.replace('file://', ''),
-      name: fileName,
+      name: encodeURI(fileName),
       type: fileType
     });
 
     return this.axiosInstance.post(url, formData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'multipart/form-data;charset=utf-8',
       }
     });
   } 

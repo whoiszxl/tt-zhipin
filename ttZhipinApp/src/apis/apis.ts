@@ -15,6 +15,15 @@ const apis = {
 
     /** 在线简历相关接口 */
     onlineResumeInfo: {url: '/member/api/online/resume/info', method: METHODS.POST}, // 获取用户的在线简历信息
+
+    memberAttachmentResumeList: {url: '/member/api/member-attachment-resume/list', method: METHODS.GET}, // 获取附件简历列表
+    memberAttachmentResumeSave: {url: '/member/api/member-attachment-resume/save', method: METHODS.POST}, // 保存用户附件简历
+    memberAttachmentResumeDelete: {
+        url: '/member/api/member-attachment-resume/delete/', 
+        method: METHODS.POST, 
+        paramType: PARAM_TYPE.PATH}, // 删除用户附件简历
+
+    
     
 
     logout: {url: '/member/api/member/logout', method: METHODS.POST}, //登出接口

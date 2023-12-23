@@ -220,3 +220,17 @@ type MemberInfoResponse = {
     schoolExp: string;
     paper: string;
   }
+  
+
+  type AttachmentResume = {
+    id: string;
+    memberId: string;
+    filename: string;
+    url: string;
+    status: number;
+    version: string;
+    isDeleted: number;
+    createdAt: string;
+    updatedAt: string;
+  }
+  

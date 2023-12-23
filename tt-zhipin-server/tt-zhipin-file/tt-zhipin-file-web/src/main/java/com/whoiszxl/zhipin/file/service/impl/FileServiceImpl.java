@@ -12,11 +12,16 @@ import com.whoiszxl.zhipin.tools.common.exception.ExceptionCatcher;
 import com.whoiszxl.zhipin.tools.common.token.TokenHelper;
 import com.whoiszxl.zhipin.tools.common.utils.StrPoolUtil;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.CharSet;
+import org.bouncycastle.util.encoders.UTF8;
 import org.dromara.x.file.storage.core.FileInfo;
 import org.dromara.x.file.storage.core.FileStorageService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -63,11 +68,16 @@ public class FileServiceImpl extends ServiceImpl<FileMapper, FmsFile> implements
         relativeFileName = StrUtil.replace(relativeFileName, "\\\\", StrPoolUtil.SLASH);
         relativeFileName = StrUtil.replace(relativeFileName, "\\", StrPoolUtil.SLASH);
 
-        FileInfo fileInfo = fileStorageService.of(file)
-                .setPath(relativeFileName)
-                .setObjectId(objectId)
-                .setObjectType(objectType)
-                .upload();
+        FileInfo fileInfo = null;
+        try {
+            fileInfo = fileStorageService.of(file, URLDecoder.decode(file.getOriginalFilename(), "UTF-8"))
+                    .setPath(relativeFileName)
+                    .setObjectId(objectId)
+                    .setObjectType(objectType)
+                    .upload();
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
         UploadResponse uploadResponse = BeanUtil.copyProperties(fileInfo, UploadResponse.class);
         return uploadResponse;
     }

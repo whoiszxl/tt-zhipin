@@ -88,3 +88,18 @@ CREATE TABLE `ums_member_complaint`(
     `updated_at`                        datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB CHARSET = utf8mb4 COMMENT '会员投诉表';
+
+
+DROP TABLE IF EXISTS `ums_member_attachment_resume`;
+CREATE TABLE `ums_member_attachment_resume`(
+    `id`                                bigint(11) NOT NULL COMMENT '主键ID',
+    `member_id`                         bigint(11) NOT NULL COMMENT '用户ID',
+    `filename`                          varchar(256) NOT NULL COMMENT '文件名',
+    `url`                               varchar(256) NOT NULL COMMENT '访问地址',
+    `status`                            tinyint(2) DEFAULT 1 COMMENT '状态(0:无效 1:有效)',
+    `version`                           bigint(11) unsigned NOT NULL DEFAULT '1' COMMENT '乐观锁',
+    `is_deleted`                        tinyint(3) DEFAULT 0 COMMENT '逻辑删除 1: 已删除, 0: 未删除',
+    `created_at`                        datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updated_at`                        datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB CHARSET = utf8mb4 COMMENT '会员附件简历表';
