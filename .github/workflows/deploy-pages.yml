@@ -50,12 +50,15 @@ jobs:
 
       - name: Install dependencies
         run: pnpm i --frozen-lockfile
+        working-directory: ./docs
 
       - name: Build
         run: pnpm build
+        working-directory: ./docs
 
       - name: Deploy GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
+        working-directory: ./docs
         with:
           BRANCH: pages
           FOLDER: docs/.vitepress/dist
