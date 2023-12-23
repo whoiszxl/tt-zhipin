@@ -5,6 +5,6 @@ export const metaData = {
   locale: 'zh_CN',
   title: 'tt-zhipin微服务招聘',
   description: '一个使用SpringCloud Alibaba开发的招聘项目',
-  site,
+  site: "https://whoiszxl.github.io/tt-zhipin/",
   image: `${site}/logo.jpg`
 }
