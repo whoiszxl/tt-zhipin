@@ -1,11 +1,11 @@
 {
   "private": true,
   "type": "module",
-  "scripts": {
-    "dev": "vitepress dev docs",
-    "build": "vitepress build docs",
-    "preview": "vitepress preview docs"
-  },
+  "scripts": { 
+    "dev": "node collect-article-data.mjs && vitepress dev docs", 
+    "preview": "node collect-article-data.mjs && vitepress preview docs", 
+    "build": "node collect-article-data.mjs && vitepress build docs" 
+  }, 
   "devDependencies": {
     "@arco-design/web-vue": "^2.53.3",
     "@types/blueimp-md5": "^2.18.2",
