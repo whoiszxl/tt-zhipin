@@ -1,6 +1,9 @@
 import DefaultTheme from 'vitepress/theme'
-import { sync } from 'fast-glob'
+import fg from 'fast-glob';
+
 import matter from 'gray-matter'
+
+const sync = fg.sync;
 
 export const sidebar: DefaultTheme.Config['sidebar'] = {
 
