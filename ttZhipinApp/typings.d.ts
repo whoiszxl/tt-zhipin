@@ -9,6 +9,32 @@ declare module '*.js';
 
 declare module 'react-native-refreshable-listview';
 
+type BossMemberEntity = {
+  id: string;
+  phone: string;
+  email: string;
+  fullName: string;
+  workDate: string;
+  wxCode: string;
+  birthday: string;
+  country: string;
+  province: string;
+  city: string;
+  district: string;
+  gender: number;
+  avatar: string;
+  ip: string;
+  loginCount: string;
+  loginErrorCount: string;
+  lastLogin: string;
+  identityStatus: number;
+  workStatus: number;
+  highestQualification: number;
+  highestQualificationType: number;
+  isToutou: number;
+};
+
+
 type JobEntity = {
     id: string;
     memberInfo: string;

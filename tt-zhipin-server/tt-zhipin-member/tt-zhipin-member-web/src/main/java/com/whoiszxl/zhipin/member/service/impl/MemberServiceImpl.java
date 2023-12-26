@@ -1,21 +1,24 @@
 package com.whoiszxl.zhipin.member.service.impl;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.ObjUtil;
 import com.whoiszxl.zhipin.member.cqrs.command.InitBaseInfoCommand;
 import com.whoiszxl.zhipin.member.entity.Member;
+import com.whoiszxl.zhipin.member.entity.MemberToutou;
+import com.whoiszxl.zhipin.member.enums.ToutouStatusEnum;
 import com.whoiszxl.zhipin.member.mapper.MemberMapper;
 import com.whoiszxl.zhipin.member.service.IMemberService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.whoiszxl.zhipin.member.service.IMemberToutouService;
 import com.whoiszxl.zhipin.tools.common.exception.ExceptionCatcher;
 import com.whoiszxl.zhipin.tools.common.token.TokenHelper;
 import com.whoiszxl.zhipin.tools.common.token.entity.AppLoginMember;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
@@ -31,6 +34,8 @@ import java.time.LocalDateTime;
 public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> implements IMemberService {
 
     private final TokenHelper tokenHelper;
+
+    private final IMemberToutouService memberToutouService;
 
     @Override
     public void initBaseInfo(InitBaseInfoCommand initBaseInfoCommand) {
@@ -98,5 +103,27 @@ public class MemberServiceImpl extends ServiceImpl<MemberMapper, Member> impleme
 
 
         ExceptionCatcher.catchServiceEx("更新错误");
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Boolean becomeBoss() {
+        Long memberId = tokenHelper.getAppMemberId();
+        Member member = this.getById(memberId);
+        if(ToutouStatusEnum.YES.getCode().equals(member.getIsToutou())) {
+            ExceptionCatcher.catchServiceEx("已经是头头了");
+        }
+
+        // 更新头头状态
+        member.setIsToutou(ToutouStatusEnum.YES.getCode());
+        boolean flag = this.updateById(member);
+        Assert.isTrue(flag, "更新状态失败");
+
+        // 向头头表同步字段
+        MemberToutou memberToutou = BeanUtil.copyProperties(member, MemberToutou.class);
+        flag = memberToutouService.save(memberToutou);
+        Assert.isTrue(flag, "新增头头失败");
+
+        return true;
     }
 }

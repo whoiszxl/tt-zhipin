@@ -15,7 +15,6 @@ import { ImageBackground } from 'react-native';
 import StorageUtil from '../../../utils/StorageUtil';
 import { CommonConstant } from '../../../common/CommonConstant';
 import MineStore from '../../../stores/MineStore';
-import MineSideMenu, { MineSideMenuRef } from './components/MineSideMenu';
 import { CommonColor } from '../../../common/CommonColor';
 import MenuBar from '../../../components/MenuBar';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -33,8 +32,6 @@ export default observer(() => {
   const store = useLocalStore(() => new MineStore());
 
   const navigation = useNavigation<StackNavigationProp<any>>();
-
-  const mineSideMenuRef = useRef<MineSideMenuRef>(null);
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -97,7 +94,7 @@ export default observer(() => {
 
         
         <Ionicons style={{paddingLeft: 10}} name="menu-outline" size={18} color={'white'} onPress={() => {
-              mineSideMenuRef.current?.show();  
+
         }} />
       </View>
     );
@@ -561,8 +558,8 @@ export default observer(() => {
   
         <ImageBackground style={styles.root} imageStyle={styles.backgroundImage} source={require('../../../assets/images/mine_bg3.jpg')} resizeMode='cover'>
               <View style={{paddingLeft: 10, paddingBottom: 10}}>
-                <Text style={styles.mainTitle}>升级VIP 加速提升简历曝光</Text>
-                <Text style={styles.subTitle}>搭配“竞争力分析”等9大权益，效果翻倍</Text>
+                <Text style={styles.mainTitle}>想提升招聘效率，快升级VIP</Text>
+                <Text style={styles.subTitle}>提供多项专属特权，效果翻倍</Text>
               </View>
 
               <View style={{paddingRight: 10, paddingBottom: 10}}>
@@ -677,19 +674,19 @@ export default observer(() => {
         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '50%'}}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Icon name='refresh' size={14} color={CommonColor.mainColor}/>
-            <Text style={{fontSize: 11, fontWeight: 'bold', color: CommonColor.fontColor, paddingLeft: 2}}>简历刷新</Text>
+            <Text style={{fontSize: 11, fontWeight: 'bold', color: CommonColor.fontColor, paddingLeft: 2}}>置顶职位</Text>
           </View>
 
-          <Text style={{fontSize: 10, color: CommonColor.normalGrey, paddingRight: 10}}>{'提升曝光 >'}</Text>
+          <Text style={{fontSize: 10, color: CommonColor.normalGrey, paddingRight: 10}}>{'牛人直通卡 >'}</Text>
         </View>
         <Text style={{color: CommonColor.normalGrey}}>|</Text>
         <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '50%', paddingLeft: 10}}>
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Icon name='trending-up' size={14} color={CommonColor.mainColor}/>
-            <Text style={{fontSize: 11, fontWeight: 'bold', color: CommonColor.fontColor, paddingLeft: 2}}>竞争力分析</Text>
+            <Text style={{fontSize: 11, fontWeight: 'bold', color: CommonColor.fontColor, paddingLeft: 2}}>群发消息</Text>
           </View>
 
-          <Text style={{fontSize: 10, color: CommonColor.normalGrey}}>{'洞悉竞争 >'}</Text>
+          <Text style={{fontSize: 10, color: CommonColor.normalGrey}}>{'一键群发Pro >'}</Text>
         </View>
       </View>
     );
@@ -751,7 +748,6 @@ export default observer(() => {
         width: '100%',
         flexDirection: 'row',
         paddingTop: 10,
-        paddingLeft: 10,
         alignItems: 'center',
         paddingBottom: 10
       },
@@ -809,8 +805,7 @@ export default observer(() => {
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
             <TouchableOpacity onPress={() => { navigation.push("OnlineResumePage") }} style={{alignItems: 'center'}}>
               <Icon style={styles.functionIcon} name='newspaper'/>
-              <Text style={styles.mainTitle}>在线简历</Text>
-              <Text style={styles.subTitle}>立即修改</Text>
+              <Text style={styles.mainTitle}>招聘数据</Text>
             </TouchableOpacity>
             
           </View>
@@ -818,21 +813,18 @@ export default observer(() => {
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
             <TouchableOpacity onPress={() => { navigation.push("AttachmentResumePage") }} style={{alignItems: 'center'}}>
               <Icon style={styles.functionIcon} name='folder-open-sharp'/>
-              <Text style={styles.mainTitle}>附件简历</Text>
-              <Text style={styles.subTitle}>制作/上传</Text>
+              <Text style={styles.mainTitle}>招聘社区</Text>
             </TouchableOpacity>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
             <Icon style={styles.functionIcon} name='heart-circle'/>
-            <Text style={styles.mainTitle}>求职意向</Text>
-            <Text style={styles.subTitle}>选择你的意向</Text>
+            <Text style={styles.mainTitle}>招聘道具</Text>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
             <Icon style={styles.functionIcon} name='game-controller-sharp'/>
-            <Text style={styles.mainTitle}>道具商城</Text>
-            <Text style={styles.subTitle}>T币/其他</Text>
+            <Text style={styles.mainTitle}>公司主页</Text>
           </View>
         </View>
 
@@ -897,7 +889,6 @@ export default observer(() => {
         width: '100%',
         flexDirection: 'row',
         paddingTop: 10,
-        paddingLeft: 10,
         alignItems: 'center',
         paddingBottom: 10,
       },
@@ -959,22 +950,22 @@ export default observer(() => {
         <View style={styles.customMenuLayout}>
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
             <Icon style={styles.otherFunctionIcon} name='server-outline'/>
-            <Text style={styles.otherTitle}>面试刷题</Text>
+            <Text style={styles.otherTitle}>规则中心</Text>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
             <Icon style={styles.otherFunctionIcon} name='search-circle-outline'/>
-            <Text style={styles.otherTitle}>薪酬查询</Text>
+            <Text style={styles.otherTitle}>我的权益</Text>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
             <Icon style={styles.otherFunctionIcon} name='sunny-outline'/>
-            <Text style={styles.otherTitle}>高薪机会</Text>
+            <Text style={styles.otherTitle}>钱包/发票</Text>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
             <Icon style={styles.otherFunctionIcon} name='earth-outline'/>
-            <Text style={styles.otherTitle}>规则中心</Text>
+            <Text style={styles.otherTitle}>个人主页</Text>
           </View>
 
         
@@ -983,17 +974,17 @@ export default observer(() => {
         <View style={styles.customMenuLayout}>
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
             <Icon style={styles.otherFunctionIcon} name='nutrition-outline'/>
-            <Text style={styles.otherTitle}>众裁庭</Text>
-          </View>
-
-          <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
-            <Icon style={styles.otherFunctionIcon} name='color-filter-outline'/>
             <Text style={styles.otherTitle}>我的客服</Text>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
+            <Icon style={styles.otherFunctionIcon} name='color-filter-outline'/>
+            <Text style={styles.otherTitle}>我的勋章</Text>
+          </View>
+
+          <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
             <Icon style={styles.otherFunctionIcon} name='cog-outline'/>
-            <Text style={styles.otherTitle}>防骗指南</Text>
+            <Text style={styles.otherTitle}>帮助反馈</Text>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
@@ -1007,22 +998,22 @@ export default observer(() => {
         <View style={styles.customMenuLayout}>
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
             <Icon style={styles.otherFunctionIcon} name='planet-outline'/>
-            <Text style={styles.otherTitle}>精选公司</Text>
+            <Text style={styles.otherTitle}>众裁厅</Text>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
             <Icon style={styles.otherFunctionIcon} name='pricetags-outline'/>
-            <Text style={styles.otherTitle}>TT公益</Text>
+            <Text style={styles.otherTitle}>开发票</Text>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
             <Icon style={styles.otherFunctionIcon} name='rocket-outline'/>
-            <Text style={styles.otherTitle}>关于</Text>
+            <Text style={styles.otherTitle}>企业管理</Text>
           </View>
 
           <View style={{flexDirection: 'column', flex:1, alignItems: 'center'}}>
             <Icon style={styles.otherFunctionIcon} name='person-outline'/>
-            <Text style={styles.otherTitle}>个人主页</Text>
+            <Text style={styles.otherTitle}>薪酬查询</Text>
           </View>
 
         
@@ -1047,10 +1038,6 @@ export default observer(() => {
       {renderInfo()}
 
       {/** 在线简历诊断栏目 */}
-      {renderOnlineResumeReport()}
-
-
-      {/** 在线简历诊断栏目 */}
       {renderCounterLabel()}
 
       {renderVIPLabel()}
@@ -1063,8 +1050,6 @@ export default observer(() => {
 
       {/** 其他功能 */}
       {renderOtherFunction()}
-
-      <MineSideMenu ref={mineSideMenuRef} />
 
       <Modal animationType='fade' transparent={true} visible={modalVisible} onRequestClose={closeModal}>
         <View style={styles.modalContainer}>

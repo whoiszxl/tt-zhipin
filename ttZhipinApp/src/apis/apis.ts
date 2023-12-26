@@ -35,6 +35,9 @@ const apis = {
     talkList: {url: '/im/talk/list', method: METHODS.GET}, //获取IM对话列表
     offlineMessageList: {url: '/im/message/offline/list', method: METHODS.POST}, //获取离线消息列表
 
+
+
+    toutouWorkerList: {url: '/member/api/boss/member/list', method: METHODS.POST}, //获取打工人列表
     
 }
 

@@ -20,4 +20,10 @@ public interface IMemberService extends IService<Member> {
      */
     void initBaseInfo(InitBaseInfoCommand initBaseInfoCommand);
 
+    /**
+     * 成为 boss
+     * @return
+     */
+    Boolean becomeBoss();
+
 }
