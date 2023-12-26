@@ -72,7 +72,7 @@ services:
     - ./config/elk/logstash.yml:/usr/share/logstash/config/logstash.yml
     - ./config/elk/pipeline:/usr/share/logstash/pipeline
     ports:
-    - "5044:5044"
+    - "6666:6666"
     - "5000:5000/tcp"
     - "5000:5000/udp"
     - "9600:9600"
