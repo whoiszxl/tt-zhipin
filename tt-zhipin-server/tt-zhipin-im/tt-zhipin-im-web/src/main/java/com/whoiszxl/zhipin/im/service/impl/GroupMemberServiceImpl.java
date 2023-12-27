@@ -19,6 +19,7 @@ import com.whoiszxl.zhipin.member.feign.MemberFeignClient;
 import com.whoiszxl.zhipin.tools.common.entity.ResponseResult;
 import com.whoiszxl.zhipin.tools.common.utils.LoggerUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -32,6 +33,7 @@ import java.time.LocalDateTime;
  * @since 2023-08-17
  */
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class GroupMemberServiceImpl extends ServiceImpl<GroupMemberMapper, GroupMember> implements IGroupMemberService {
 
@@ -84,14 +86,14 @@ public class GroupMemberServiceImpl extends ServiceImpl<GroupMemberMapper, Group
     public boolean checkGroupMessageSendPermission(Long groupId, Long fromMemberId) {
         Group group = groupMapper.selectById(groupId);
         if(group == null) {
-            LoggerUtil.info("GroupMemberServiceImpl", "群消息发送校验失败");
+            LoggerUtil.info(log, "GroupMemberServiceImpl", "群消息发送校验失败");
             return false;
         }
         GroupMember groupMember = this.getOne(Wrappers.<GroupMember>lambdaQuery()
                 .eq(GroupMember::getGroupId, groupId)
                 .eq(GroupMember::getMemberId, fromMemberId));
         if(groupMember == null) {
-            LoggerUtil.info("GroupMemberServiceImpl", "群消息发送校验失败");
+            LoggerUtil.info(log, "GroupMemberServiceImpl", "群消息发送校验失败");
             return false;
         }
         return true;

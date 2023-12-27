@@ -19,6 +19,7 @@ import com.whoiszxl.zhipin.job.service.ICompanyService;
 import com.whoiszxl.zhipin.job.service.IJobService;
 import com.whoiszxl.zhipin.tools.common.entity.PageQuery;
 import com.whoiszxl.zhipin.tools.common.entity.response.PageResponse;
+import com.whoiszxl.zhipin.tools.common.utils.LoggerUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -46,6 +47,7 @@ public class JobServiceImpl extends ServiceImpl<JobMapper, Job> implements IJobS
 
     @Override
     public PageResponse<JobResponse> latestList(JobQuery query) {
+        LoggerUtil.info(log, "JobServiceImpl", "获取首页职位推荐列表", query);
         LambdaQueryWrapper<Job> wrapper = Wrappers.<Job>lambdaQuery();
         if(StrUtil.isNotBlank(query.getEducationAttainment())) {
             wrapper.eq(Job::getEducationAttainment, query.getEducationAttainment());

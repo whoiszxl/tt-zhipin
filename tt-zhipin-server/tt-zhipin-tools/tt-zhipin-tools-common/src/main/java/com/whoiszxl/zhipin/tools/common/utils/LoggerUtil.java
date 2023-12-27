@@ -2,11 +2,11 @@ package com.whoiszxl.zhipin.tools.common.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
 
 /**
  * 日志输出工具
  */
-@Slf4j
 public class LoggerUtil {
 
     /**
@@ -21,7 +21,7 @@ public class LoggerUtil {
      * @param params 日志参数
      * @return 格式化后的日志
      */
-    public static String format(String module, String desc, Object... params) {
+    private static String format(String module, String desc, Object... params) {
         if(params != null && params.length > 0) {
             String paramsStr = StringUtils.join(params, ",");
             return String.format(FORMAT, module, desc, paramsStr);
@@ -30,20 +30,28 @@ public class LoggerUtil {
     }
 
 
-    public static void info(String module, String desc, Object... params) {
-        log.info(format(module, desc, params));
+    public static void info(Logger logger, String module, String desc, Object... params) {
+        if(logger.isInfoEnabled()) {
+            logger.info(format(module, desc, params));
+        }
     }
 
-    public static void warn(String module, String desc, Object... params) {
-        log.warn(format(module, desc, params));
+    public static void warn(Logger logger, String module, String desc, Object... params) {
+        if(logger.isWarnEnabled()) {
+            logger.warn(format(module, desc, params));
+        }
     }
 
-    public static void debug(String module, String desc, Object... params) {
-        log.debug(format(module, desc, params));
+    public static void debug(Logger logger, String module, String desc, Object... params) {
+        if(logger.isDebugEnabled()) {
+            logger.debug(format(module, desc, params));
+        }
     }
 
-    public static void error(String module, String desc, Object... params) {
-        log.error(format(module, desc, params));
+    public static void error(Logger logger, String module, String desc, Object... params) {
+        if(logger.isErrorEnabled()) {
+            logger.error(format(module, desc, params));
+        }
     }
 
 }
